@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>签到活动交互原型</title>
+<style>
+:root{--bg:#0b0d0c;--panel:#161918;--card:#1b1e1d;--line:#2a2e2c;--fg:#f2f4ef;--mute:#8d938c;--green:#84e04a;--green-ink:#0e1a06;--gold:#f6c344;--warn:#ff7a4d;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.5 -apple-system,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.wrap{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;align-items:flex-start;padding:24px 16px}
+.phone{position:relative;width:390px;max-width:100%;height:844px;border-radius:28px;overflow:hidden;background:#121413;border:1px solid #2a2e2c;display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:12px;padding:14px 14px 10px}
+.logo{font-size:22px;font-weight:900;color:var(--green);letter-spacing:-1px;line-height:1}.logo small{font-size:14px;font-weight:700;margin-left:2px}
+.search{flex:1;height:36px;border-radius:18px;background:#26292a;display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--mute);font-size:13px}
+.rank{font-size:13px;color:var(--green);font-weight:600}
+.tabs{display:flex;gap:18px;padding:6px 14px 0;font-size:15px;color:#c9cdc7;border-bottom:1px solid #222625;white-space:nowrap;overflow:hidden}
+.tabs .on{color:var(--green);font-weight:700;padding-bottom:8px;border-bottom:3px solid var(--green)}
+.feed{flex:1;overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:12px 0}
+.post{padding:0 14px;display:flex;flex-direction:column;gap:8px}
+.imgs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:2px;height:130px}
+.post h4{margin:0;font-size:15px;line-height:1.4;font-weight:600}.post p{margin:0;font-size:11px;color:#7d837c}
+.ad{margin:0 14px;height:90px;border-radius:6px;background:#2a2d2c;display:flex;align-items:center;justify-content:center;color:#7d837c;font-size:12px}
+.nav{display:flex;justify-content:space-around;align-items:center;height:64px;background:#171918;border-top:1px solid #222625;font-size:12px;color:#9aa099;padding-bottom:8px}
+.nav .on{color:var(--green);font-weight:700}
+.entry{position:absolute;right:0;top:300px;width:46px;height:56px;border:0;border-radius:14px 0 0 14px;font-size:12px;font-weight:800;line-height:1.2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.entry.todo{background:var(--green);color:var(--green-ink)}.entry.done{background:#2a2d2c;color:#9aa099}
+.toast{position:absolute;left:50%;top:70px;transform:translate(-50%,-12px);max-width:86%;padding:10px 16px;border-radius:12px;background:#f2f4ef;color:#111;font-size:13px;font-weight:600;opacity:0;pointer-events:none;transition:.25s;z-index:5;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.mask{position:absolute;inset:0;background:rgba(0,0,0,.74);display:none;align-items:center;justify-content:center;z-index:3}
+.mask.show{display:flex}
+.dlg{position:relative;width:322px;padding:26px 18px 20px;border-radius:22px;background:linear-gradient(180deg,#22301a 0%,#1a1d1b 38%);border:1px solid #3a5324;box-shadow:0 0 48px rgba(132,224,74,.18);display:flex;flex-direction:column;align-items:center;gap:14px}
+.x{position:absolute;right:6px;top:6px;width:44px;height:44px;border:0;background:transparent;color:#9aa099;display:flex;align-items:center;justify-content:center}
+.ttl{text-align:center}.ttl b{display:block;font-size:22px;font-weight:900;letter-spacing:.5px}.ttl span{font-size:12px;color:#9aa099}
+.ttl span.bad{color:var(--warn);font-weight:600}
+.days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%}
+.day{position:relative;height:100px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid #34402c;background:#202321;font:inherit;color:inherit;padding:0}
+.day .l{font-size:12px;color:#c9cdc7}.day .a{font-size:14px;font-weight:800;color:var(--gold)}
+.day.today{border:2px solid var(--green);background:rgba(132,224,74,.12)}
+.day.future{opacity:.7}
+.day.done .a{color:var(--green)}
+.day.missed{border:1px dashed #5a4a44;background:#1c1a19;color:#8d838a}
+.day.missed .a{color:#9a8a84;font-size:11px;font-weight:700}
+.day.missed .l{color:#8d8a88}
+.coin{width:30px;height:30px;border-radius:50%;background:var(--gold);color:#7a5508;font-weight:900;font-size:15px;display:flex;align-items:center;justify-content:center}
+.chk{width:30px;height:30px;border-radius:50%;background:var(--green);color:var(--green-ink);display:flex;align-items:center;justify-content:center}
+.mx{width:30px;height:30px;border-radius:50%;background:#2e2926;color:#a08f88;display:flex;align-items:center;justify-content:center}
+.tag{position:absolute;top:-9px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:10px;font-weight:800;padding:2px 7px;border-radius:8px}
+.tag.on{background:#ff6a3d;color:#fff}.tag.off{background:#3a3633;color:#a99f99}
+.cta{width:100%;height:48px;border:0;border-radius:24px;background:var(--green);color:var(--green-ink);font-size:16px;font-weight:900}
+.cta[disabled]{background:#2f3330;color:#7d837c;cursor:not-allowed}
+.hint{font-size:11px;color:#7d837c;text-align:center;line-height:1.5}
+.warn{width:100%;padding:9px 12px;border-radius:10px;background:rgba(255,122,77,.1);border:1px solid rgba(255,122,77,.35);color:#ffb59c;font-size:12px;line-height:1.5;text-align:center}
+.big{font-size:40px;font-weight:900;line-height:1;color:var(--gold)}
+.sum{width:100%;padding:10px 12px;border-radius:10px;background:#242826;font-size:12px;color:#9aa099;text-align:center}
+.ctl{width:360px;max-width:100%;display:flex;flex-direction:column;gap:16px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.box h3{margin:0;font-size:14px;letter-spacing:.5px}
+.row{display:flex;flex-wrap:wrap;gap:8px}
+.btn{height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:#202422;font-size:13px;font-weight:600}
+.btn.pri{background:var(--green);border-color:var(--green);color:var(--green-ink)}
+.btn.ghost{border-style:dashed}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}th{color:var(--mute);font-weight:500;font-size:12px}
+.pill{display:inline-block;padding:1px 8px;border-radius:9px;font-size:12px;font-weight:700}
+.p-ok{background:rgba(132,224,74,.16);color:var(--green)}.p-miss{background:rgba(255,122,77,.16);color:#ff9a78}.p-wait{background:#262a28;color:var(--mute)}.p-now{background:rgba(246,195,68,.16);color:var(--gold)}
+.rules{margin:0;padding-left:18px;color:#c9cdc7;font-size:12.5px;display:flex;flex-direction:column;gap:4px}
+.state{font-size:12px;color:var(--mute)}
+@media (max-width:440px){.phone{height:calc(100dvh - 32px);min-height:640px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="phone" id="phone">
+    <div class="top">
+      <div class="logo">51<small>吃瓜 lite</small></div>
+      <div class="search"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8d938c" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>输入您想搜索的关键词</div>
+      <div class="rank">榜单</div>
+    </div>
+    <div class="tabs"><div class="on">首页</div><div>今日热点</div><div>热门推荐</div><div>精选内容</div><div>更多 ⌄</div></div>
+    <div class="feed">
+      <div class="post"><div class="imgs"><div style="background:linear-gradient(160deg,#2b4a45,#17302d)"></div><div style="background:linear-gradient(160deg,#4a4036,#2a241d)"></div><div style="background:linear-gradient(160deg,#3d3a52,#222036)"></div></div><h4>内容标题占位文案,最多展示两行,超出部分省略显示</h4><p>51吃瓜轻量版 · 2026年11月 · 今日热点</p></div>
+      <div class="post"><div class="imgs"><div style="background:linear-gradient(160deg,#4a3b3b,#2a1f1f)"></div><div style="background:linear-gradient(160deg,#2f4553,#1b2a33)"></div><div style="background:linear-gradient(160deg,#454a2e,#272a19)"></div></div><h4>内容标题占位文案,最多展示两行,超出部分省略显示</h4><p>51吃瓜轻量版 · 2026年11月 · 热门推荐</p></div>
+      <div class="ad">运营位 / 广告位占位</div>
+    </div>
+    <div class="nav"><div class="on">首页</div><div>社区</div><div>ACG</div><div>AI科技</div><div>应用</div><div>我的</div></div>
+
+    <button class="entry todo" id="entry" type="button" aria-label="打开签到" hidden></button>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="mask" id="mask"><div class="dlg" id="dlg" role="dialog" aria-modal="true" aria-label="每日签到"></div></div>
+  </div>
+
+  <div class="ctl">
+    <div class="box">
+      <h3>模拟操作</h3>
+      <div class="state" id="stateLine"></div>
+      <div class="row">
+        <button class="btn pri" type="button" id="btnOpen">打开 App / H5</button>
+        <button class="btn" type="button" id="btnNext">进入下一天 →</button>
+      </div>
+      <div class="row">
+        <button class="btn ghost" type="button" data-preset="miss1">场景:第1天漏签</button>
+        <button class="btn ghost" type="button" data-preset="miss2">场景:第3天,第2天漏签</button>
+        <button class="btn ghost" type="button" data-preset="full">场景:全勤,第3天</button>
+        <button class="btn ghost" type="button" data-preset="reset">重置</button>
+      </div>
+    </div>
+    <div class="box">
+      <h3>签到记录</h3>
+      <table><thead><tr><th>日期</th><th>状态</th><th>金币</th></tr></thead><tbody id="rows"></tbody></table>
+      <div class="state" id="coins"></div>
+    </div>
+    <div class="box">
+      <h3>规则(含新增:漏签状态)</h3>
+      <ul class="rules">
+        <li>每次打开 App / H5 弹出签到弹窗;右上角 × 可关闭</li>
+        <li>关闭但未签:同一天再次打开仍弹出;签到后当日不再弹出</li>
+        <li>每个账号每天限签 1 次,每次 +5 金币</li>
+        <li>连续签到 3 天:第 3 天额外 +15 金币(当天共 20)</li>
+        <li><b>当天没签到视为漏签,活动期间不可补签</b></li>
+        <li>任一天漏签后,连续签到奖励失效,其余日期仍可正常签到领 5 金币</li>
+        <li>活动结束(11月13日起)不再弹窗、隐藏入口</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var DATES=['11月10日','11月11日','11月12日'];
+  var S;
+  function fresh(){S={cur:0,hist:[null,null,null],rew:[0,0,0],popup:false,phase:'before',lastGain:0,lastBonus:0};}
+  fresh();
+  var $=function(id){return document.getElementById(id)};
+  var tt;
+  function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('show')},2200)}
+  function ended(){return S.cur>=3}
+  function signedToday(){return !ended()&&S.hist[S.cur]==='signed'}
+  function missedCount(){return S.hist.filter(function(h){return h==='missed'}).length}
+  function bonusOK(){return S.hist[0]!=='missed'&&S.hist[1]!=='missed'}
+  function coins(){return S.rew.reduce(function(a,b){return a+b},0)}
+  var ICON_X='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  var ICON_CHK='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  var ICON_MX='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  var COIN_BIG='<svg width="96" height="96" viewBox="0 0 76 76" aria-hidden="true"><circle cx="38" cy="38" r="34" fill="#f6c344"/><circle cx="38" cy="38" r="27" fill="none" stroke="#c9961b" stroke-width="3"/><text x="38" y="48" text-anchor="middle" font-size="30" font-weight="900" fill="#a67410" font-family="sans-serif">¥</text></svg>';
+
+  function dayCard(n){
+    var h=S.hist[n],cls='day',icon,amt,tag='',label='第'+(n+1)+'天';
+    if(h==='signed'){cls+=' done';icon='<div class="chk">'+ICON_CHK+'</div>';amt=(n===2&&S.rew[2]===20)?'+5 +15':'+5'}
+    else if(h==='missed'){cls+=' missed';icon='<div class="mx">'+ICON_MX+'</div>';amt='漏签 · 不可补签'}
+    else{ if(n===S.cur)cls+=' today';else cls+=' future'; icon='<div class="coin">¥</div>'; amt=(n===2&&bonusOK())?'+5 +15':'+5'}
+    if(n===2){tag=bonusOK()?'<div class="tag on">额外+15</div>':'<div class="tag off">奖励已失效</div>'}
+    var inner=tag+'<div class="l">'+label+'</div>'+icon+'<div class="a">'+amt+'</div>';
+    if(h==='missed')return '<button type="button" class="'+cls+'" data-miss="1" aria-label="'+label+'已漏签,不可补签">'+inner+'</button>';
+    return '<div class="'+cls+'">'+inner+'</div>';
+  }
+
+  function renderDlg(){
+    var d=$('dlg'),html='<button class="x" type="button" id="xBtn" aria-label="关闭">'+ICON_X+'</button>';
+    if(S.phase==='success'){
+      var total=S.lastGain+S.lastBonus;
+      var desc=S.lastBonus?'每日签到 +5 · 连续签到3天额外 +15':'每日签到奖励已发放到你的账户';
+      var prog;
+      if(S.cur===2){prog=S.lastBonus?'连续签到奖励已领取 · 活动圆满完成':'本次活动已结束 · 因漏签未获得连续奖励'}
+      else{prog=bonusOK()?('已连续签到 '+(S.cur+1)+' 天 · 第3天签到可额外领15金币'):'已漏签,连续奖励已失效 · 明天继续签到可领5金币'}
+      html+=COIN_BIG+'<b style="font-size:24px;font-weight:900">签到成功</b><div style="display:flex;align-items:baseline;gap:6px;color:var(--gold)"><span class="big">+'+total+'</span><span style="font-size:15px;font-weight:700">金币</span></div>'
+        +'<div style="font-size:13px;color:#c9cdc7;text-align:center;line-height:1.6">'+desc+'</div><div class="sum">'+prog+'</div><button class="cta" type="button" id="okBtn">开心收下</button>';
+    }else{
+      var sub=missedCount()?'<span class="bad">已漏签 '+missedCount()+' 天 · 活动期间不可补签</span>':'<span>11月10日—11月12日 · 连续3天额外送15金币</span>';
+      var gain=(S.cur===2&&bonusOK())?20:5;
+      html+='<div class="ttl"><b>双十一签到领金币</b>'+sub+'</div>'
+        +'<svg width="64" height="64" viewBox="0 0 76 76" aria-hidden="true"><circle cx="38" cy="38" r="34" fill="#f6c344"/><circle cx="38" cy="38" r="27" fill="none" stroke="#c9961b" stroke-width="3"/><text x="38" y="48" text-anchor="middle" font-size="30" font-weight="900" fill="#a67410" font-family="sans-serif">¥</text></svg>'
+        +'<div class="days">'+dayCard(0)+dayCard(1)+dayCard(2)+'</div>';
+      if(missedCount())html+='<div class="warn">'+(bonusOK()?'':'连续签到已中断,第3天额外 +15 金币已失效。')+'今天签到仍可领取 5 金币。</div>';
+      html+=signedToday()?'<button class="cta" type="button" disabled>今日已签到</button>':'<button class="cta" type="button" id="signBtn">立即签到,领'+gain+'金币</button>';
+      html+='<div class="hint">每个账号每天限签1次 · 完成签到后当日不再弹出<br>当天未签到视为漏签,不可补签</div>';
+    }
+    d.innerHTML=html;
+  }
+
+  function renderEntry(){
+    var e=$('entry');
+    if(ended()){e.hidden=true;return}
+    e.hidden=S.popup;
+    var done=signedToday();
+    e.className='entry '+(done?'done':'todo');
+    e.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>'+(done?'已签到':'签到');
+  }
+
+  function renderPanel(){
+    var rows='';
+    for(var i=0;i<3;i++){
+      var st,pill,c=S.rew[i]?('+'+S.rew[i]):'—';
+      if(S.hist[i]==='signed'){pill='<span class="pill p-ok">已签到</span>'}
+      else if(S.hist[i]==='missed'){pill='<span class="pill p-miss">漏签</span>'}
+      else if(i===S.cur&&!ended()){pill='<span class="pill p-now">今天 · 待签</span>'}
+      else{pill='<span class="pill p-wait">未开始</span>'}
+      rows+='<tr><td>'+DATES[i]+'</td><td>'+pill+'</td><td>'+c+'</td></tr>';
+    }
+    $('rows').innerHTML=rows;
+    $('coins').textContent='累计获得金币:'+coins()+(bonusOK()?'':'  · 连续签到奖励已失效');
+    $('stateLine').textContent=ended()?'当前:活动已结束(11月13日)':'当前:'+DATES[S.cur]+(signedToday()?' · 今日已签到':' · 今日未签到');
+    $('btnNext').textContent=ended()?'活动已结束':(S.cur===2?'进入活动结束日 →':'进入下一天 →');
+    $('btnNext').disabled=ended();$('btnOpen').disabled=false;
+  }
+
+  function render(){
+    $('mask').classList.toggle('show',S.popup);
+    if(S.popup)renderDlg();
+    renderEntry();renderPanel();
+  }
+
+  function openApp(){
+    if(ended()){S.popup=false;render();toast('活动已结束,不再弹出签到');return}
+    if(signedToday()){S.popup=false;render();toast('今日已签到,不再弹出');return}
+    S.popup=true;S.phase='before';render();
+  }
+  function sign(){
+    S.hist[S.cur]='signed';
+    var bonus=(S.cur===2&&bonusOK())?15:0;
+    S.rew[S.cur]=5+bonus;S.lastGain=5;S.lastBonus=bonus;S.phase='success';render();
+  }
+  function closeDlg(){S.popup=false;render();if(!signedToday()&&!ended())toast('已关闭 · 今天未签到,下次打开仍会弹出')}
+  function next(){
+    if(ended())return;
+    var msg='';
+    if(!S.hist[S.cur]){S.hist[S.cur]='missed';msg=DATES[S.cur]+'未签到,记为漏签,不可补签。'}
+    S.cur++;S.popup=false;render();
+    if(ended()){toast((msg||'')+'活动已结束');return}
+    toast(msg+'进入'+DATES[S.cur]);
+    setTimeout(openApp,700);
+  }
+  function preset(k){
+    fresh();
+    if(k==='miss1'){S.cur=1;S.hist=['missed',null,null]}
+    if(k==='miss2'){S.cur=2;S.hist=['signed','missed',null];S.rew=[5,0,0]}
+    if(k==='full'){S.cur=2;S.hist=['signed','signed',null];S.rew=[5,5,0]}
+    render();
+    setTimeout(openApp,300);
+  }
+
+  document.addEventListener('click',function(ev){
+    var t=ev.target.closest('button');if(!t)return;
+    if(t.id==='xBtn')closeDlg();
+    else if(t.id==='signBtn')sign();
+    else if(t.id==='okBtn'){S.popup=false;render()}
+    else if(t.id==='entry'){S.popup=true;S.phase='before';render()}
+    else if(t.id==='btnOpen')openApp();
+    else if(t.id==='btnNext')next();
+    else if(t.dataset.preset)preset(t.dataset.preset);
+    else if(t.dataset.miss)toast('活动期间不支持补签');
+  });
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&S.popup)closeDlg()});
+
+  render();setTimeout(openApp,300);
+})();
+</script>
+</body>
+</html>
