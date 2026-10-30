@@ -1,273 +1,892 @@
 <!doctype html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>51吃瓜 APP 启动页广告原型</title>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>数据后台（菜单规划原型）</title>
 <style>
-  :root{--bg:#EDEDF0;--panel:#FFFFFF;--text:#141416;--muted:#5E5E66;--line:#DADAE0;--brand:#E52643}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;min-height:100vh;display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start;justify-content:center;padding:32px 16px}
+:root{--bg:#f6f7f5;--panel:#fff;--fg:#1d2a25;--mut:#6a7873;--line:#e1e6e3;--acc:#1f6b4c;--acc2:#e8f2ec;--up:#1f8a5b;--down:#c4453a;--warn:#b7791f;
+--c1:#2f7d5b;--c2:#d9822b;--c3:#3b6fb6;--c4:#9a5bb5;--c5:#c2485a;--c6:#7a8b94;--grid:#e6ebe8}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#131917;--panel:#1b2420;--fg:#e4ece8;--mut:#93a39c;--line:#2a3631;--acc:#58c28f;--acc2:#1f3029;--up:#4fc58a;--down:#ef7b70;--warn:#e0b05a;--c1:#58c28f;--c2:#e89a4d;--c3:#6f9bdc;--c4:#bf8ad8;--c5:#e87b8d;--c6:#9aaab3;--grid:#27322d;color-scheme:dark}}
+:root[data-theme=dark]{--bg:#131917;--panel:#1b2420;--fg:#e4ece8;--mut:#93a39c;--line:#2a3631;--acc:#58c28f;--acc2:#1f3029;--up:#4fc58a;--down:#ef7b70;--warn:#e0b05a;--c1:#58c28f;--c2:#e89a4d;--c3:#6f9bdc;--c4:#bf8ad8;--c5:#e87b8d;--c6:#9aaab3;--grid:#27322d;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 -apple-system,"PingFang SC","Microsoft YaHei",sans-serif}
+.app{display:grid;grid-template-columns:216px minmax(0,1fr);min-height:100vh}
+aside{background:var(--panel);border-right:1px solid var(--line);padding:16px 10px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font-weight:700;font-size:15px;padding:4px 10px 2px}.brand small{display:block;color:var(--mut);font-weight:400;font-size:12px}
+.nav{margin-top:12px;display:flex;flex-direction:column;gap:2px}
+.nav button{all:unset;cursor:pointer;padding:8px 10px;border-radius:8px;color:var(--fg);display:flex;justify-content:space-between;gap:8px}
+.nav button:hover{background:var(--acc2)}.nav button.on{background:var(--acc);color:#fff}
+.nav button i{font-style:normal;font-size:12px;opacity:.7}
+main{padding:16px max(16px,env(safe-area-inset-right,0px)) 48px 24px;min-width:0}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 12px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;border-bottom:1px solid var(--line)}
+.top .grp{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.top label{color:var(--mut);font-size:12px}
+select,input[type=date],.pill{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font:inherit;font-size:13px}
+.pill{cursor:pointer}.pill.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.sample{margin-left:auto;font-size:12px;color:var(--warn);border:1px dashed var(--warn);border-radius:8px;padding:3px 8px}
+h1{font-size:22px;margin:20px 0 4px}.q{color:var(--mut);margin:0 0 16px;max-width:70ch}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-bottom:16px}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.tile .n{color:var(--mut);font-size:12px}.tile .v{font-size:26px;font-weight:700;margin:2px 0}
+.tile .d{font-size:12px;color:var(--mut);display:flex;gap:10px;flex-wrap:wrap}
+.u{color:var(--up)}.dn{color:var(--down)}
+.tile .m{margin-top:8px;border-top:1px dashed var(--line);padding-top:6px;font-size:12px;color:var(--mut)}
+.tile .m b{font-weight:600;color:var(--fg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+.card h3{margin:0 0 2px;font-size:15px}.card .s{color:var(--mut);font-size:12px;margin-bottom:8px}
+.card svg{width:100%;height:auto;display:block}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mut);margin-top:6px}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.fun{display:flex;flex-direction:column;gap:6px}
+.fun .r{display:grid;grid-template-columns:110px 1fr 120px;gap:8px;align-items:center;font-size:13px}
+.fun .b{height:22px;border-radius:5px;background:var(--c1);min-width:2px}
+.fun .p{color:var(--mut);font-size:12px;text-align:right}
+.heat{width:100%;border-collapse:collapse;font-size:12px}.heat td,.heat th{padding:5px 6px;text-align:center;border:1px solid var(--panel)}
+.heat th{color:var(--mut);font-weight:500}
+details{margin-top:16px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+.tw{overflow-x:auto;margin-top:8px}
+table.t{border-collapse:collapse;width:100%;min-width:760px;font-size:12.5px}
+.t th{background:var(--acc2);text-align:left;padding:6px 8px;white-space:nowrap}.t td{padding:6px 8px;border-top:1px solid var(--line);vertical-align:top}
+.tag{display:inline-block;background:var(--acc2);color:var(--acc);border-radius:6px;padding:0 6px;font-size:12px}
+code{font:12px ui-monospace,monospace;background:var(--acc2);padding:0 4px;border-radius:4px}
+.note{background:var(--acc2);border-radius:10px;padding:8px 12px;font-size:12.5px;color:var(--mut);margin:0 0 14px}
 
-  /* 控制面板 */
-  .panel{flex:0 1 320px;background:var(--panel);border-radius:16px;padding:22px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
-  .panel h1{margin:0 0 4px;font-size:18px}
-  .panel .sub{margin:0 0 18px;font-size:13px;color:var(--muted)}
-  .field{margin-bottom:16px}
-  .field > span{display:block;font-size:13px;font-weight:600;margin-bottom:8px}
-  .seg{display:flex;gap:6px;flex-wrap:wrap}
-  .seg button{height:36px;min-width:52px;padding:0 12px;border:1px solid var(--line);background:#fff;border-radius:8px;font:inherit;font-size:13px;cursor:pointer;color:var(--text)}
-  .seg button[aria-pressed="true"]{border-color:var(--brand);background:var(--brand);color:#fff}
-  .row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-size:13px}
-  .row.off{opacity:.35;pointer-events:none}
-  .primary{width:100%;height:42px;border:0;border-radius:10px;background:var(--text);color:#fff;font:inherit;font-size:14px;cursor:pointer;margin-top:4px}
-  .rules{margin:18px 0 0;padding:14px 16px;background:#F6F6F8;border-radius:10px;font-size:12.5px;line-height:1.75;color:#3A3A40}
-  .rules ol{margin:0;padding-left:18px}
-  .log{margin-top:12px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.tabs button{all:unset;cursor:pointer;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel)}
+.tabs button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 10px}
+.bar input[type=text]{background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font:inherit;font-size:13px;min-width:200px}
+.bar .c{color:var(--mut);font-size:12px;margin-left:auto}
+table.l{border-collapse:collapse;width:100%;min-width:900px;font-size:13px}
+.l th{background:var(--acc2);text-align:right;padding:8px 10px;white-space:nowrap;cursor:pointer;user-select:none;position:sticky;top:0}
+.l th:first-child,.l td:first-child{text-align:left}.l th.s{color:var(--acc)}
+.l td{padding:8px 10px;border-top:1px solid var(--line);text-align:right;white-space:nowrap}
+.l tbody tr{cursor:pointer}.l tbody tr:hover{background:var(--acc2)}
+.l td:first-child{font-weight:600;color:var(--acc)}
+.pg{display:flex;gap:6px;justify-content:flex-end;margin-top:10px;align-items:center;font-size:13px;color:var(--mut)}
+.pg button{all:unset;cursor:pointer;padding:3px 10px;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--fg)}
+.pg button[disabled]{opacity:.4;cursor:default}.pg button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.dr{position:fixed;top:0;right:0;bottom:0;width:min(520px,100vw);background:var(--panel);border-left:1px solid var(--line);box-shadow:-8px 0 24px #0003;z-index:20;overflow:auto;padding:16px 18px 32px;padding-bottom:max(32px,env(safe-area-inset-bottom,0px))}
+.dr.prd{width:min(920px,100vw)}.prd h3{margin:18px 0 6px;font-size:15px}.prd ul{margin:4px 0;padding-left:20px}.prd li{margin:3px 0}.muted{color:var(--mut,#888)}.prdb{padding:4px 8px 12px}.dr h2{margin:0 0 2px;font-size:18px}.dr .x{all:unset;cursor:pointer;float:right;padding:2px 10px;border:1px solid var(--line);border-radius:6px}
+.mg{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:12px 0}
+.mg div{background:var(--bg);border-radius:8px;padding:8px 10px}.mg b{display:block;font-size:17px}.mg span{font-size:12px;color:var(--mut)}
 
-  /* 手机 */
-  .stage{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:10px}
-  .phone-wrap{width:calc(440px * var(--s));height:calc(956px * var(--s))}
-  .phone{--s:1;width:440px;height:956px;transform:scale(var(--s));transform-origin:top left;position:relative;overflow:hidden;border-radius:36px;background:#000;box-shadow:0 0 0 10px #1B1B1F,0 20px 50px rgba(0,0,0,.25);font-family:inherit}
-  .size{font-size:12px;color:var(--muted)}
+.src{display:inline-block;border-radius:6px;padding:0 6px;font-size:12px}
+.src.a{background:var(--acc2);color:var(--acc)}.src.b{background:#e8eef9;color:#3b6fb6}.src.c{background:#fbeede;color:#b7791f}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .src.b{background:#22304a;color:#8fb3ea}:root:not([data-theme=light]) .src.c{background:#40321c;color:#e0b05a}}
+.cv{display:inline-block;height:8px;border-radius:4px;background:var(--c1);vertical-align:middle;margin-right:6px}
+.gh{color:var(--mut);font-size:12px;padding:10px 10px 2px;letter-spacing:.05em}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:14px}
+.kp .tile{cursor:pointer}.kp .tile.on{outline:2px solid var(--acc)}.kp svg{width:100%;height:34px;margin-top:4px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 8px}.chips button{all:unset;cursor:pointer;padding:3px 10px;border:1px solid var(--line);border-radius:999px;font-size:12.5px;background:var(--panel)}.chips button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.alerts{background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:10px;padding:8px 12px;margin-bottom:14px;font-size:13px}
+.dn2{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.ctl{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.ctl label{color:var(--mut);font-size:12px;margin-right:4px}
+.st{display:inline-block;border-radius:6px;padding:0 6px;font-size:12px}.st.ok{background:var(--acc2);color:var(--acc)}.st.w{background:#fbeede;color:#b7791f}.st.d{background:#e8eef9;color:#3b6fb6}
 
-  .track{display:flex;height:100%;transition:transform .45s cubic-bezier(.4,0,.2,1)}
-  .ad{flex:0 0 440px;height:100%;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;border:0;padding:0;font:inherit;cursor:pointer}
-  .ad .t{font-size:36px;font-weight:900;letter-spacing:1px}
-  .ad .d{font-size:15px;font-weight:500;opacity:.9}
-  .media-static{width:180px;height:180px;border-radius:24px;border:3px solid currentColor;display:flex;align-items:center;justify-content:center}
-  .media-dyn{position:relative;width:180px;height:180px;display:flex;align-items:center;justify-content:center}
-  .media-dyn .p{position:absolute;inset:0;border-radius:50%;border:3px solid currentColor;animation:pulse 1.8s ease-out infinite}
-  .media-dyn .p2{animation-delay:.9s}
-  .media-dyn .r{position:absolute;inset:30px;border-radius:50%;border:3px dashed currentColor;opacity:.55;animation:spin 5s linear infinite}
-  @keyframes pulse{0%{transform:scale(.55);opacity:.85}100%{transform:scale(1.5);opacity:0}}
-  @keyframes spin{to{transform:rotate(360deg)}}
-
-  .cd{position:absolute;top:60px;right:20px;z-index:3}
-  .ring{width:48px;height:48px;border-radius:50%;background:rgba(0,0,0,.45);color:#fff;position:relative;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:17px}
-  .ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
-  .ring small{font-size:11px;font-weight:500}
-  .enter{height:44px;padding:0 18px 0 22px;border:0;border-radius:22px;background:#fff;color:#141416;font:inherit;font-size:16px;font-weight:700;display:flex;align-items:center;gap:4px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.25);animation:pop .25s ease-out}
-  @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
-
-  .bottom{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 20px 60px;display:flex;flex-direction:column;align-items:center;gap:22px;pointer-events:none}
-  .detail{pointer-events:auto;height:52px;min-width:240px;padding:0 28px;border-radius:26px;background:rgba(0,0,0,.42);color:#fff;border:1.5px solid rgba(255,255,255,.7);font:inherit;font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}
-  .meta{width:100%;display:flex;align-items:center;justify-content:space-between}
-  .tag{font-size:11px;line-height:18px;padding:0 6px;border-radius:4px;background:rgba(0,0,0,.45);color:#fff}
-  .dots{display:flex;gap:6px;align-items:center}
-  .dots i{display:block;width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.55);transition:width .3s,background .3s}
-  .dots i.on{width:18px;background:#fff}
-
-  .toast{position:absolute;left:50%;top:46%;transform:translateX(-50%);z-index:5;padding:12px 18px;border-radius:10px;background:rgba(20,20,22,.88);color:#fff;font-size:14px;white-space:nowrap;display:none}
-  .home{position:absolute;inset:0;z-index:6;background:#000;color:#F2F2F2;display:none;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center}
-  .home .logo{font-size:44px;font-weight:900;letter-spacing:-1px}
-  .home .logo b{color:#FF4D7E}
-  .home button{margin-top:12px;height:46px;padding:0 26px;border-radius:23px;border:1px solid #3A3A40;background:transparent;color:#F2F2F2;font:inherit;font-size:15px;cursor:pointer}
-</style>
-</head>
-<body>
-
-<section class="panel" aria-label="原型配置">
-  <h1>启动页广告原型</h1>
-  <p class="sub">51吃瓜 APP · 440×956 · 修改配置后自动重播</p>
-
-  <div class="field">
-    <span>广告数量</span>
-    <div class="seg" id="countSeg">
-      <button type="button" data-v="1">1 个</button>
-      <button type="button" data-v="2">2 个</button>
-      <button type="button" data-v="3" aria-pressed="true">3 个</button>
-    </div>
-  </div>
-
-  <div class="field">
-    <span>素材类型</span>
-    <div class="row" data-i="0"><span>广告 1</span><div class="seg"><button type="button" data-t="static" aria-pressed="true">静态</button><button type="button" data-t="dynamic">动态</button></div></div>
-    <div class="row" data-i="1"><span>广告 2</span><div class="seg"><button type="button" data-t="static">静态</button><button type="button" data-t="dynamic" aria-pressed="true">动态</button></div></div>
-    <div class="row" data-i="2"><span>广告 3</span><div class="seg"><button type="button" data-t="static" aria-pressed="true">静态</button><button type="button" data-t="dynamic">动态</button></div></div>
-  </div>
-
-  <button type="button" class="primary" id="replayBtn">重新播放</button>
-  <div class="log" id="log">—</div>
-
-  <div class="rules">
-    <ol>
-      <li>最多配置 3 个启动页广告，支持静态图片 / 动态视频·GIF。</li>
-      <li>1 个广告：停留 5 秒。</li>
-      <li>2–3 个广告：同一启动页内自动横向轮播，每个 2 秒。</li>
-      <li>右上角为启动页总倒计时（1 个 5s / 2 个 4s / 3 个 6s），倒计时期间不可点击。</li>
-      <li>倒计时结束 → 变为「进入」按钮，点击进入首页。</li>
-      <li>点击广告画面 → 跳转广告详情页。</li>
-    </ol>
-  </div>
-</section>
-
-<div class="stage">
-  <div class="phone-wrap" id="phoneWrap">
-    <div class="phone" id="phone">
-      <div class="track" id="track"></div>
-
-      <div class="cd" id="cd">
-        <div class="ring" id="ring" aria-live="polite">
-          <svg width="48" height="48" viewBox="0 0 48 48" aria-hidden="true">
-            <circle cx="24" cy="24" r="19" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="3"/>
-            <circle id="arc" cx="24" cy="24" r="19" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-dasharray="119.4" stroke-dashoffset="0"/>
-          </svg>
-          <span><span id="num">6</span><small>s</small></span>
-        </div>
-      </div>
-
-      <div class="toast" id="toast" role="status">将跳转至广告详情页（原型示意）</div>
-
-      <div class="home" id="home">
-        <div class="logo">51<b>吃瓜</b></div>
-        <div style="font-size:16px;color:#A8A8AE">已进入 APP 首页（原型示意）</div>
-        <button type="button" id="homeReplay">重新播放启动页</button>
-      </div>
-    </div>
-  </div>
-  <div class="size">440 × 956</div>
+.ph{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:16px 0 8px}.ph h1{margin:2px 0 0}.bc{color:var(--mut);font-size:12px}
+.acts{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.upd{font-size:12px;color:var(--mut)}
+.btn{all:unset;cursor:pointer;padding:4px 12px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-size:13px}.btn:hover{border-color:var(--acc);color:var(--acc)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:8px 16px;border-radius:8px;z-index:60;font-size:13px;max-width:90vw}
+.vw .vt{float:right;display:flex;gap:0;margin:-34px 0 0}.vt button{all:unset;cursor:pointer;padding:1px 10px;font-size:12px;border:1px solid var(--line);background:var(--panel)}.vt button:first-child{border-radius:6px 0 0 6px}.vt button:last-child{border-radius:0 6px 6px 0;border-left:0}.vt button.on{background:var(--acc);color:#fff;border-color:var(--acc)}
+.vtb{max-height:260px;overflow:auto}.vtb table{border-collapse:collapse;width:100%;font-size:12px}.vtb th{background:var(--acc2);position:sticky;top:0;padding:4px 8px;text-align:right}.vtb td{padding:4px 8px;border-top:1px solid var(--line);text-align:right}.vtb th:first-child,.vtb td:first-child{text-align:left}
+.hint{color:var(--mut);font-size:12px}.lostrow{cursor:pointer}.lostrow:hover .b{opacity:.8}
+.fbar{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:13px}
+.stabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin:4px 0 14px;flex-wrap:wrap}.stabs button{all:unset;cursor:pointer;padding:8px 2px;color:var(--mut);border-bottom:2px solid transparent}.stabs button.on{color:var(--acc);border-bottom-color:var(--acc);font-weight:600}
+.fv{display:flex;flex-direction:column}.fvr{display:grid;grid-template-columns:150px minmax(0,1fr) 120px;gap:10px;align-items:center;font-size:13px}.fvt{background:var(--bg);border-radius:6px;height:30px;display:flex;justify-content:center}.fvb{background:var(--c1);border-radius:6px;height:100%}.fvc{text-align:center;color:var(--mut);font-size:11.5px;margin:3px 0}.fvv{text-align:right}.fvv em{font-style:normal;color:var(--mut);font-size:12px}
+.dimbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px}.dimbar .chips{margin:0}
+@media(max-width:820px){.fvr{grid-template-columns:90px minmax(0,1fr) 88px}}
+@media(max-width:820px){.app{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.nav{flex-direction:row;overflow-x:auto}.nav button{white-space:nowrap}main{padding-left:max(16px,env(safe-area-inset-left,0px))}.fun .r{grid-template-columns:84px 1fr 96px}.grid{grid-template-columns:1fr}}
+/* ===== polish ===== */
+:root{--sh:0 1px 2px rgba(20,40,32,.05),0 4px 16px rgba(20,40,32,.05);--r:14px}
+body{font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased;letter-spacing:.01em}
+.app{grid-template-columns:232px minmax(0,1fr)}
+aside{padding:20px 12px;background:var(--panel)}
+.brand{font-size:17px;padding:6px 12px 14px;border-bottom:1px solid var(--line);margin-bottom:6px;letter-spacing:.02em}
+.nav{margin-top:8px;gap:3px}
+.nav button{padding:9px 12px;border-radius:10px;font-size:14px;transition:background .15s,color .15s}
+.nav button.on{box-shadow:0 2px 8px rgba(31,107,76,.25);font-weight:600}
+.nav button i{background:rgba(127,140,134,.15);border-radius:999px;padding:0 8px;line-height:20px;opacity:.9}
+.nav button.on i{background:rgba(255,255,255,.22)}
+.gh{padding:16px 12px 4px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em}
+main{padding:20px 32px 64px 32px;max-width:1500px}
+.top{top:0;padding:10px 0 14px;gap:12px;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top label{font-weight:500}
+select,input[type=date],.pill{border-radius:10px;padding:6px 11px;transition:border-color .15s,box-shadow .15s}
+select:hover,input[type=date]:hover{border-color:var(--acc)}
+select:focus,input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 20%,transparent)}
+.ph{margin:24px 0 14px}
+h1{font-size:26px;font-weight:700;letter-spacing:.01em;margin:4px 0 6px}
+.q{font-size:14px;line-height:1.7}
+.bc{letter-spacing:.04em}
+.btn{padding:6px 14px;border-radius:10px;font-weight:500;transition:all .15s}
+.btn:hover{background:var(--acc2);transform:translateY(-1px)}
+.tiles,.kp{gap:14px;margin-bottom:18px}
+.tile,.card,.fbar,.alerts,details{border-radius:var(--r);box-shadow:var(--sh);border-color:var(--line)}
+.tile{padding:16px 18px;transition:transform .15s,box-shadow .15s}
+.kp .tile:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(20,40,32,.1)}
+.tile .n{font-size:12.5px;font-weight:500;letter-spacing:.03em}
+.tile .v{font-size:30px;font-weight:700;letter-spacing:-.01em;margin:4px 0 2px;font-variant-numeric:tabular-nums}
+.kp .tile.on{outline:2px solid var(--acc);outline-offset:-1px;background:linear-gradient(180deg,var(--acc2),var(--panel) 70%)}
+.grid{gap:14px}
+.card{padding:18px 20px}
+.card h3{font-size:15.5px;font-weight:700;margin:0 0 3px;display:flex;align-items:center;gap:8px}
+.card h3::before{content:"";width:4px;height:15px;border-radius:2px;background:var(--acc);flex:none}
+.card .s{font-size:12.5px;margin-bottom:12px}
+.tabs button,.chips button,.stabs button{transition:all .15s}
+.tabs button{padding:7px 16px;font-weight:500}
+.tabs button:hover:not(.on){border-color:var(--acc);color:var(--acc)}
+.stabs{gap:28px}.stabs button{padding:10px 2px;font-weight:500}.stabs button.on{font-weight:700}
+table.l,table.t{font-variant-numeric:tabular-nums}
+.l th,.t th{font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--mut);background:color-mix(in srgb,var(--acc2) 70%,var(--panel));border-bottom:1px solid var(--line)}
+.l th:first-child{border-top-left-radius:10px}.l th:last-child{border-top-right-radius:10px}
+.l td,.t td{padding:10px 12px}
+.l tbody tr:nth-child(even),.t tr:nth-child(even) td{background:color-mix(in srgb,var(--bg) 55%,transparent)}
+.l tbody tr{transition:background .12s}
+.l td:first-child{color:var(--fg)}
+.bar input[type=text]{padding:7px 12px;border-radius:10px}
+.pg button{border-radius:8px;padding:4px 11px}
+.fun .b{border-radius:6px;height:24px}
+.fvt{border-radius:8px;height:34px}
+.heat td{border-radius:4px}
+.alerts{border-left-width:4px;padding:12px 16px}
+.dr{border-radius:16px 0 0 16px;box-shadow:-12px 0 40px rgba(0,0,0,.18);padding:24px 26px 40px}
+.dr h2{font-size:20px}
+.dr .x{border-radius:8px;padding:3px 12px}
+.mg div{border-radius:10px;padding:10px 12px}.mg b{font-size:19px;font-variant-numeric:tabular-nums}
+.tag,.st,.src{border-radius:6px;padding:1px 8px;font-weight:500}
+.toast{border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.25);padding:10px 20px}
+/* PRD */
+.dr.prd{width:min(760px,100vw);padding:28px 36px 56px;font-size:14px;line-height:1.8}
+.dr.prd h2{font-size:24px;margin-bottom:6px}
+.dr.prd h3{font-size:16px;margin:30px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px;color:var(--fg)}
+.dr.prd h3::before{content:"";width:4px;height:16px;border-radius:2px;background:var(--acc)}
+.dr.prd p{margin:8px 0}
+.dr.prd ul{margin:6px 0;padding-left:0;list-style:none}
+.dr.prd li{position:relative;padding:5px 0 5px 20px}
+.dr.prd li::before{content:"";position:absolute;left:5px;top:15px;width:6px;height:6px;border-radius:50%;background:var(--acc);opacity:.7}
+.dr.prd .tw{border:1px solid var(--line);border-radius:12px;overflow:auto}
+.dr.prd table.t{min-width:560px;margin:0}
+.dr.prd table.t td,.dr.prd table.t th{padding:9px 12px}
+.dr.prd table.t tr:first-child th{border-top:0}
+.dr.prd .muted{color:var(--mut)}
+.dr.prd h4{margin:18px 0 6px;font-size:14px;color:var(--acc)}
+.vw{max-width:1200px}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--mut) 35%,transparent);border-radius:8px;border:2px solid transparent;background-clip:content-box}
+@media(max-width:820px){main{padding:14px 16px 48px}h1{font-size:22px}.dr.prd{padding:20px 18px 40px}.dr{border-radius:0}}
+/* ===== typography ===== */
+:root{--ff:"PingFang SC","HarmonyOS Sans SC","Noto Sans SC","Source Han Sans SC","Microsoft YaHei UI","Microsoft YaHei",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;--fn:"SF Pro Display","Segoe UI","Helvetica Neue",Arial,var(--ff)}
+body{font-family:var(--ff);font-size:14px;line-height:1.7;color:var(--fg);font-feature-settings:"tnum" 1;text-rendering:optimizeLegibility}
+button,select,input{font-family:inherit}
+h1,h2,h3,h4{text-wrap:balance;font-weight:700}
+h1{font-size:26px;line-height:1.3;letter-spacing:0}
+.q{font-size:14.5px;line-height:1.8;color:var(--mut);max-width:62ch;text-wrap:pretty}
+.bc{font-size:12px;letter-spacing:.06em;color:var(--mut)}
+.tile .v,.mg b,.fun .p b,.l td,.t td,.heat td,.fvr b{font-family:var(--fn);font-variant-numeric:tabular-nums}
+.tile .v{font-weight:700;letter-spacing:-.02em}
+.tile .n{font-size:13px;color:var(--mut);font-weight:500}
+.tile .d,.tile .m{font-size:12.5px;line-height:1.6}
+.card h3{font-size:16px;line-height:1.4}
+.card .s{font-size:13px;line-height:1.65;color:var(--mut);text-wrap:pretty}
+.leg{font-size:12.5px}
+.hint,.upd{font-size:12.5px;line-height:1.6}
+.nav button{font-size:14px;letter-spacing:.02em}
+.gh{font-size:11.5px;font-weight:600;letter-spacing:.14em}
+.top label{font-size:12.5px;letter-spacing:.04em}
+.l th,.t th{font-size:12.5px;line-height:1.4}
+.l td,.t td{font-size:13px;line-height:1.55}
+.t td{color:color-mix(in srgb,var(--fg) 92%,var(--bg))}
+.alerts,.fbar{font-size:13.5px;line-height:1.7}
+.dr{line-height:1.7}
+/* PRD document typography */
+.dr.prd{font-size:14.5px;line-height:1.85;color:color-mix(in srgb,var(--fg) 94%,var(--bg));font-family:var(--ff)}
+.dr.prd h2{font-size:26px;line-height:1.3;margin:4px 0 8px;letter-spacing:0}
+.dr.prd>.muted{font-size:12.5px;letter-spacing:.03em;margin:0 0 6px}
+.dr.prd h3{font-size:17px;line-height:1.4;margin:34px 0 12px;letter-spacing:.01em}
+.dr.prd p{text-wrap:pretty;margin:10px 0}
+.dr.prd p b{color:var(--fg)}
+.dr.prd li{padding:6px 0 6px 22px;text-wrap:pretty}
+.dr.prd li::before{top:17px}
+.dr.prd table.t th{font-size:12.5px;letter-spacing:.03em}
+.dr.prd table.t td{font-size:13px;line-height:1.7}
+.dr.prd table.t td:first-child,.dr.prd table.t th:first-child{width:2.5em;text-align:center;color:var(--mut)}
+.dr.prd .x{font-size:13px}
+/* PRD 总览 page tables */
+.card .t td:first-child{font-weight:600;white-space:nowrap;color:var(--fg)}
+.card .t td{line-height:1.75;font-size:13.5px}
+/* chips & tags */
+.chips button,.tabs button{font-size:13.5px;letter-spacing:.02em}
+.tag,.st,.src{font-size:12px;letter-spacing:.02em}
+.toast{font-size:13.5px}
+/* SVG chart text */
+svg text{font-family:var(--fn);font-variant-numeric:tabular-nums}
+@media(max-width:820px){h1{font-size:22px}.dr.prd{font-size:14px}.dr.prd h2{font-size:22px}}
+.heat th{white-space:nowrap;padding:6px 8px}.heat th:first-child{white-space:normal;min-width:72px;line-height:1.35}
+/* ===== v3: 去说明文字 + 统一指标卡文字 ===== */
+.q,.card>.s,.card .s{display:none!important}
+.ph{margin:24px 0 18px}
+.card h3{margin-bottom:12px}
+.tile{display:flex;flex-direction:column}
+.tile .n{font-size:13px;line-height:1.4;margin:0}
+.tile .v{font-size:30px;line-height:1.25;margin:6px 0 8px;white-space:nowrap}
+.tile .d{display:flex;flex-direction:column;gap:3px;font-size:12.5px;line-height:1.5;color:var(--mut)}
+.tile .d>*{display:block;white-space:nowrap;font-size:12.5px;font-weight:400}
+.tile .d b,.tile .d .u,.tile .d .dn{font-weight:600;font-family:var(--fn);font-variant-numeric:tabular-nums}
+.tile .m{font-size:12.5px;line-height:1.5}
+.kp .tile svg{margin-top:8px}
+.df{display:block;font-size:12px;font-weight:400;line-height:1.5;color:var(--mut);margin-top:2px;white-space:normal;max-width:30ch}
+.fvr{grid-template-columns:230px minmax(0,1fr) 130px!important;align-items:center}
+.fvn{display:block}
+.l td:first-child .df{max-width:26ch}
+@media(max-width:820px){.fvr{grid-template-columns:120px minmax(0,1fr) 88px!important}}
+.tile .v{white-space:normal;overflow-wrap:anywhere}
+.df.calc{color:var(--acc);opacity:.9;max-width:none}.fvc .df{display:block;text-align:center}.l th .df{text-align:right;font-weight:400;letter-spacing:0;max-width:16ch;margin-left:auto}.tile .n .df{margin-top:3px}
+.dr h2{font-size:17px;line-height:1.5;padding-right:70px;font-weight:700}
+.dr .mg .df{max-width:none;margin-top:4px}
+.cc{margin:0 0 12px;padding:8px 12px;background:var(--acc2);border-radius:10px;font-size:12.5px;line-height:1.65;color:var(--mut)}
+.cc div+div{margin-top:2px}
+.dr .cc{margin:8px 0 12px}
+/* ===== tips ===== */
+.ti{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;margin-left:6px;border-radius:50%;border:1px solid var(--mut);color:var(--mut);font:italic 700 10px/1 Georgia,serif;vertical-align:1px;cursor:help;opacity:.7;font-style:italic;transition:all .15s;flex:none}
+[data-tip]:hover>.ti,.ti:hover{opacity:1;color:var(--acc);border-color:var(--acc)}
+th .ti{margin-left:4px}
+#tip{position:fixed;display:none;z-index:90;max-width:min(360px,calc(100vw - 16px));padding:10px 14px;border-radius:10px;background:var(--fg);color:var(--bg);font-size:12.5px;line-height:1.7;white-space:pre-line;box-shadow:0 8px 28px rgba(0,0,0,.28);pointer-events:none;text-align:left;font-weight:400;letter-spacing:.01em}
+[data-tip]{cursor:help}
+.l th[data-tip],.l td[data-tip]{cursor:inherit}
+.card>h3[data-tip]{cursor:help}
+.fbar .ctl label[data-tip],.fbar b[data-tip]{text-decoration:underline dotted;text-underline-offset:3px}
+</style></head><body>
+<div class="app">
+<aside><div class="brand">数据后台<small></small></div><nav class="nav" id="nav"></nav></aside>
+<main>
+<div class="top">
+ <div class="grp"><label>日期</label><span id="presets"></span><input type="date" id="d1"><span>–</span><input type="date" id="d2"></div>
+ 
+ <div class="grp"><label>用户</label><select id="fu"><option>全部</option><option>新用户</option><option>老用户</option><option>游客</option><option>登录用户</option></select></div>
+ <div class="grp"><label>渠道</label><select id="fc"><option>全部</option><option>渠道A</option><option>渠道B</option><option>渠道C</option></select></div>
+ 
+ 
 </div>
-
+<div id="view"></div>
+</main></div>
 <script>
-(function () {
-  var PALETTE = [
-    { bg: '#FF4D7E', fg: '#FFFFFF' },
-    { bg: '#2D6CDF', fg: '#FFFFFF' },
-    { bg: '#F5A623', fg: '#141416' }
-  ];
-  var C = 119.4;
-  var cfg = { count: 3, types: ['static', 'dynamic', 'static'] };
-  var st = {};
-  var timer = null, toastTimer = null;
+const MODS=[{"group": "行为分析", "name": "页面分析", "q": "人来了之后看了几个页面、待多久、点了哪里。", "cnt": 6, "ch": ""}, {"group": "行为分析", "name": "漏斗分析", "q": "用户从哪个入口进来，一步步走到最终成功，掉在哪一步。", "cnt": 21, "ch": ""}, {"group": "开发文档", "name": "PRD 总览", "q": "完整需求文档：通用规则与各菜单 PRD。", "cnt": 44, "ch": ""}];
+const METRICS=[{"menu": "页面分析", "sub": "粘性指标", "name": "人均日打开次数", "form": "指标卡", "ev": "app_open", "f": "当日 app_open 次数 ÷ DAU"}, {"menu": "页面分析", "sub": "留客指标", "name": "页面跳出率", "form": "指标卡", "ev": "page_view、page_leave", "f": "只看一个页面就离开的会话数 ÷ 总会话数"}, {"menu": "页面分析", "sub": "流量规模", "name": "全站 PV", "form": "指标卡", "ev": "page_view", "f": "页面浏览次数"}, {"menu": "页面分析", "sub": "流量规模", "name": "全站 UV", "form": "趋势图", "ev": "page_view", "f": "页面浏览去重用户数"}, {"menu": "页面分析", "sub": "板块渗透", "name": "核心页面访问占比", "form": "分布条", "ev": "page_view", "f": "各核心页面 PV ÷ 全站 PV"}, {"menu": "页面分析", "sub": "流量结构", "name": "底部导航点击占比", "form": "分布条", "ev": "nav_tab_click", "f": "各导航点击次数 ÷ 导航总点击次数"}, {"menu": "漏斗分析", "sub": "汇总卡", "name": "流程入口点击人数", "form": "汇总卡", "ev": "coin_entry_click、vip_entry_click、content_purchase_click、login_click、search_entry_click", "f": "各流程入口事件的去重用户数"}, {"menu": "漏斗分析", "sub": "汇总卡", "name": "流程最终成功人数", "form": "汇总卡", "ev": "order_paid、*_purchase、login_success、search_result_click", "f": "各流程最终成功事件的去重用户数"}, {"menu": "漏斗分析", "sub": "汇总卡", "name": "总转化率（入口→最终成功）", "form": "汇总卡", "ev": "（同上）", "f": "最终成功人数 ÷ 入口点击人数"}, {"menu": "漏斗分析", "sub": "汇总卡", "name": "掉得最多的一步", "form": "汇总卡", "ev": "（各步骤事件）", "f": "各步骤相邻两步流失率中最大的一步"}, {"menu": "漏斗分析", "sub": "漏斗 / 柱图", "name": "整体漏斗、各步流失人数占比", "form": "漏斗 / 柱图", "ev": "（各步骤事件）", "f": "每步人数 ÷ 上一步；流失占比 = 该步流失人数 ÷ 总流失人数"}, {"menu": "漏斗分析", "sub": "趋势图", "name": "每天入口点击与最终成功", "form": "趋势图", "ev": "（入口事件与成功事件）", "f": "按天统计入口点击人数与成功人数"}, {"menu": "漏斗分析", "sub": "拆分表", "name": "按入口来源拆分的转化率", "form": "拆分表", "ev": "（入口事件 + 最终成功事件）", "f": "分 entry_source 的各步转化率与总转化率"}, {"menu": "漏斗分析", "sub": "金币充值", "name": "金币充值：入口→商品页→选商品→订单→成功", "form": "金币充值", "ev": "coin_entry_click、coin_goods_view、coin_goods_select、order_created、order_paid", "f": "每步人数 ÷ 上一步；总转化 = order_paid ÷ coin_entry_click"}, {"menu": "漏斗分析", "sub": "金币充值", "name": "订单创建后未支付去向", "form": "金币充值", "ev": "order_created、order_paid", "f": "创建订单未支付的人，按取消/失败/中途退出分类占比（需订单带失败原因）"}, {"menu": "漏斗分析", "sub": "VIP 开通", "name": "VIP 开通：入口→开通页→选套餐→订单→成功", "form": "VIP 开通", "ev": "vip_entry_click、vip_page_view、vip_plan_select、order_created、order_paid", "f": "每步人数 ÷ 上一步；总转化 = order_paid ÷ vip_entry_click"}, {"menu": "漏斗分析", "sub": "内容付费", "name": "内容付费：详情→点击购买→确认支付→购买成功", "form": "内容付费", "ev": "video_event、comic_event、novel_event、drama_event、content_purchase_click、content_purchase_confirm、video_purchase、comic_purchase、novel_purchase、drama_purchase、post_unlock", "f": "每步人数 ÷ 上一步；按内容类型拆分"}, {"menu": "漏斗分析", "sub": "内容付费", "name": "金币不足的人是否去充值", "form": "内容付费", "ev": "content_purchase_click、coin_entry_click、order_paid、video_purchase", "f": "金币不足人数 → 点击去充值 → 充值成功 → 回到内容购买成功"}, {"menu": "漏斗分析", "sub": "登录注册", "name": "登录注册流程：入口→登录页→提交→成功", "form": "登录注册", "ev": "login_click、login_page_expose、login_submit、login_success、register_success", "f": "每步人数 ÷ 上一步；按触发场景（点赞/评论/收藏/付费等）拆分"}, {"menu": "漏斗分析", "sub": "活跃到看内容", "name": "活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成", "form": "活跃到看内容", "ev": "app_open、news_expose、video_expose、news_click、video_play_click、news_detail_view、video_play_start、news_read_finish、video_play_end", "f": "每步去重人数 ÷ 上一步；按用户类型（新用户/老用户/回流/游客/会员）拆分"}, {"menu": "漏斗分析", "sub": "活跃到看内容", "name": "活跃用户内容触达率", "form": "活跃到看内容", "ev": "app_open、news_detail_view、video_play_start", "f": "当天进入内容详情的去重用户数 ÷ 当天日活"}, {"menu": "漏斗分析", "sub": "活跃到看内容", "name": "活跃用户内容触达率（按用户来源拆分）", "form": "活跃到看内容", "ev": "app_open、news_detail_view、video_play_start", "f": "按渠道/启动来源/用户类型分组：看了内容的人 ÷ 该组活跃用户"}, {"menu": "漏斗分析", "sub": "活跃到看内容", "name": "没看内容的人去哪了", "form": "活跃到看内容", "ev": "page_view、page_leave、news_expose、news_click", "f": "日活里没进内容详情的人，按当天行为分为：只逛首页没点 / 打开即退出(leave_type=bounce) / 去了其他页面 / 其他"}, {"menu": "漏斗分析", "sub": "活跃到看内容", "name": "用户停在了哪个页面", "form": "活跃到看内容", "ev": "page_view、page_leave", "f": "每页：访问人数、人均停留 = 总 stay_ms ÷ 访问人数、跳出率、作为最后页面占比"}, {"menu": "漏斗分析", "sub": "活跃到看内容", "name": "看内容 vs 没看内容的留存对比", "form": "活跃到看内容", "ev": "app_open、news_detail_view、video_play_start", "f": "当天看了内容 / 没看的两组用户，分别算次日、7日留存"}, {"menu": "漏斗分析", "sub": "流失用户", "name": "流失用户构成（用户类型/渠道）", "form": "流失用户", "ev": "（该流程每一步的事件）", "f": "某一步没走到下一步的用户，按用户类型、渠道分组占比"}, {"menu": "漏斗分析", "sub": "转化窗口期", "name": "转化窗口期内的转化率（当天内/7天内/30天内）", "form": "转化窗口期", "ev": "（该流程每一步的事件）", "f": "从第一步开始，在窗口期内走完后续步骤的用户才算转化"}];
+const FLOWS=[{"id": "active", "name": "活跃到看内容", "entry": "用户类型", "extra": "active", "q": "每天有多少活跃用户真正看了内容，没看的人去了哪里、停在哪个页面。", "entries": ["新用户", "老用户（近7天活跃）", "回流用户（沉默7天以上）", "游客（未登录）", "会员"], "shares": [0.22, 0.5, 0.1, 0.38, 0.16], "steps": [{"n": "活跃用户（日活）", "ev": "app_open", "src": "原表已有", "f": "launch_type、from_source", "r": 1}, {"n": "浏览内容列表（有效曝光）", "ev": "news_expose / video_expose", "src": "原表已有", "f": "news_id、position、expose_duration_ms、tab_id", "r": 0.9}, {"n": "点击内容", "ev": "news_click / video_play_click", "src": "原表已有", "f": "news_id、position、tab_id", "r": 0.68}, {"n": "进入内容详情", "ev": "news_detail_view / video_play_start", "src": "原表已有", "f": "news_id、from_page、from_position", "r": 0.9}, {"n": "读完 / 播放完成", "ev": "news_read_finish / video_play_end", "src": "原表已有", "f": "news_id、read_duration_ms、play_progress", "r": 0.62}], "drop": ["只逛首页没点", "打开即退出", "去了其他页面", "其他"]}, {"id": "coin", "name": "金币充值", "entry": "入口来源", "q": "用户从哪个入口点进去买金币，一步步走到充值成功，掉在哪一步。", "entries": ["我的页金币入口", "内容付费弹窗（金币不足）", "任务/签到页", "视频播放页顶部", "首页入口"], "shares": [1, 0.9, 0.45, 0.3, 0.2], "steps": [{"n": "金币入口点击", "ev": "coin_entry_click", "src": "建议新增", "f": "entry_source、from_page、flow_id", "r": 1}, {"n": "进入金币商品页", "ev": "coin_goods_view", "src": "建议新增", "f": "entry_source、flow_id", "r": 0.82}, {"n": "选择金币商品", "ev": "coin_goods_select", "src": "建议新增", "f": "goods_id、coin_amount、price、flow_id", "r": 0.46}, {"n": "创建订单", "ev": "order_created", "src": "吃瓜网已有", "f": "order_id、goods_id、amount、entry_source、flow_id", "r": 0.82}, {"n": "充值成功", "ev": "order_paid", "src": "吃瓜网已有", "f": "order_id、amount、pay_channel、entry_source、flow_id", "r": 0.88}], "drop": ["取消/返回", "支付失败", "支付中退出", "其他"]}, {"id": "vip", "name": "VIP 开通", "entry": "入口来源", "q": "用户从哪个入口点进去开通会员，最后有没有开通成功。", "entries": ["我的页VIP卡片", "内容付费弹窗", "播放页开通提示", "首页运营位", "设置页"], "shares": [1, 0.8, 0.55, 0.35, 0.12], "steps": [{"n": "VIP入口点击", "ev": "vip_entry_click", "src": "建议新增", "f": "entry_source、from_page、flow_id", "r": 1}, {"n": "进入VIP开通页", "ev": "vip_page_view", "src": "建议新增", "f": "entry_source、flow_id", "r": 0.78}, {"n": "选择套餐", "ev": "vip_plan_select", "src": "建议新增", "f": "plan_id、price、flow_id", "r": 0.52}, {"n": "创建订单", "ev": "order_created", "src": "吃瓜网已有", "f": "order_id、goods_id、amount、entry_source、flow_id", "r": 0.8}, {"n": "开通成功", "ev": "order_paid", "src": "吃瓜网已有", "f": "order_id、amount、pay_channel、is_renew、entry_source、flow_id", "r": 0.9}], "drop": ["取消/返回", "支付失败", "支付中退出", "其他"]}, {"id": "content", "name": "内容付费", "entry": "内容类型", "q": "各类内容里，从看到付费点到买成功，哪一步掉人；金币不足的人有没有去充值。", "entries": ["视频", "漫画", "小说", "短剧", "帖子解锁"], "shares": [1, 0.7, 0.55, 0.8, 0.3], "steps": [{"n": "进入内容详情", "ev": "video_event / comic_event / novel_event / drama_event", "src": "吃瓜网已有", "f": "content_id、content_type、entry_source", "r": 1}, {"n": "点击购买", "ev": "content_purchase_click", "src": "建议新增", "f": "content_id、content_type、price、balance_enough、flow_id", "r": 0.14}, {"n": "确认支付", "ev": "content_purchase_confirm", "src": "建议新增", "f": "content_id、price、pay_type(coin/vip)、flow_id", "r": 0.66}, {"n": "购买成功", "ev": "video_purchase / comic_purchase / novel_purchase / drama_purchase / post_unlock", "src": "吃瓜网已有", "f": "content_id、price、pay_type、flow_id", "r": 0.9}], "drop": ["金币不足", "取消", "支付失败", "其他"], "extra": "coin_short"}, {"id": "login", "name": "登录注册", "entry": "入口来源", "q": "用户从哪个场景被引到登录，最后登录成功了多少。", "entries": ["我的页登录入口", "点赞触发", "评论触发", "收藏触发", "付费触发", "启动引导"], "shares": [1, 0.6, 0.45, 0.4, 0.35, 0.5], "steps": [{"n": "登录入口点击", "ev": "login_click", "src": "原表已有", "f": "trigger_from、entry_source、flow_id", "r": 1}, {"n": "登录页曝光", "ev": "login_page_expose", "src": "原表已有", "f": "trigger_from、flow_id", "r": 0.9}, {"n": "提交登录/注册", "ev": "login_submit", "src": "建议新增", "f": "login_method、flow_id", "r": 0.62}, {"n": "登录成功", "ev": "user_login / user_register", "src": "吃瓜网已有", "f": "login_method、reg_type、flow_id", "r": 0.88}], "drop": ["放弃", "验证失败", "网络异常", "其他"]}];
+const PAGES=[{"page": "首页", "ev": [{"id": "search_entry_click", "name": "点击搜索入口", "fn": "顶部栏 / 搜索框", "act": "点击搜索框", "props": "entry_page,default_hint", "new": false, "ms": "流程入口点击人数、搜索流程：入口→提交→结果曝光→点击结果、搜索：入口→提交→结果曝光→结果点击", "note": "补字段 flow_id"}, {"id": "home_tab_click", "name": "频道Tab切换", "fn": "频道栏 / 频道切换（首页 / 今日吃瓜 / 热门大瓜 / 网黄精选 / 撸片精品 / 每日… ）", "act": "点击或滑动切换频道", "props": "tab_id,tab_name,tab_index,switch_type(click/swipe),from_tab", "new": false, "ms": "频道点击分布", "note": ""}, {"id": "home_tab_click", "name": "频道Tab切换", "fn": "频道栏 / 「更多」展开", "act": "点击更多、选择隐藏的频道", "props": "tab_id,tab_name,tab_index,switch_type(click/swipe),from_tab", "new": false, "ms": "频道点击分布", "note": "展开动作本身没有事件；是否需要，待你决定"}, {"id": "news_expose", "name": "资讯卡片曝光", "fn": "资讯信息流 / 内容卡片", "act": "卡片曝光（≥50% 可见且 ≥500ms）", "props": "news_id,news_classify,position,recommend_type(人工/算法),is_top,expose_duration_ms,tab_id,algo_id,request_id", "new": false, "ms": "内容总曝光、内容 TOP5（按曝光量）、活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、没看内容的人去哪了、资讯/视频/漫画/小说/短剧/帖子 总曝光量、单条资讯：分发与点击（曝光量、有效曝光(≥5s)、点击率）", "note": "「热搜」角标没有字段，建议在曝光和点击事件加 badge_type"}, {"id": "news_click", "name": "资讯卡片点击", "fn": "资讯信息流 / 内容卡片", "act": "点击卡片进入详情", "props": "news_id,news_classify,position,recommend_type,is_top,tab_id", "new": false, "ms": "活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、没看内容的人去哪了、单条资讯：分发与点击（曝光量、有效曝光(≥5s)、点击率）", "note": ""}, {"id": "home_pull_refresh", "name": "下拉刷新", "fn": "资讯信息流 / 列表刷新", "act": "下拉刷新", "props": "page_name,tab_id,result,new_count", "new": false, "ms": "刷新/加载成功率", "note": ""}, {"id": "home_load_more", "name": "上拉加载更多", "fn": "资讯信息流 / 列表加载", "act": "上拉加载更多", "props": "page_name,tab_id,page_no,result", "new": false, "ms": "刷新/加载成功率", "note": ""}, {"id": "search_entry_click", "name": "点击搜索入口", "fn": "搜索入口 / 搜索框", "act": "点击搜索框", "props": "entry_page,default_hint", "new": false, "ms": "流程入口点击人数、搜索流程：入口→提交→结果曝光→点击结果、搜索：入口→提交→结果曝光→结果点击", "note": "补字段 flow_id"}, {"id": "home_more_open", "name": "频道抽屉展开", "fn": "频道栏 / 「更多」抽屉（约18个频道）", "act": "点击「更多」展开频道抽屉", "props": "from_tab", "new": true, "ms": "频道点击分布", "note": "MuMu扫描发现，缺埋点"}, {"id": "home_tab_click", "name": "（复用）频道切换", "fn": "频道栏 / 抽屉内频道", "act": "点选抽屉内某频道", "props": "switch_type=drawer", "new": true, "ms": "频道点击分布", "note": "已有事件，补字段/枚举"}]}, {"page": "社区页", "ev": [{"id": "search_entry_click", "name": "点击搜索入口", "fn": "顶部栏 / 搜索框", "act": "点击搜索框", "props": "entry_page,default_hint", "new": false, "ms": "流程入口点击人数、搜索流程：入口→提交→结果曝光→点击结果、搜索：入口→提交→结果曝光→结果点击", "note": "补字段 flow_id"}, {"id": "search_entry_click", "name": "点击搜索入口", "fn": "搜索入口 / 搜索框", "act": "点击搜索框", "props": "entry_page,default_hint", "new": false, "ms": "流程入口点击人数、搜索流程：入口→提交→结果曝光→点击结果、搜索：入口→提交→结果曝光→结果点击", "note": "补字段 flow_id"}, {"id": "post_expose", "name": "帖子曝光", "fn": "社区信息流 / 帖子卡片", "act": "曝光 / 点击", "props": "post_id,community_id,post_content_type,position,recommend_type", "new": false, "ms": "资讯/视频/漫画/小说/短剧/帖子 总曝光量、单条帖子：分发与点击（曝光量、点击率、详情浏览）", "note": "补字段 expose_duration_ms"}, {"id": "post_click", "name": "帖子点击", "fn": "社区信息流 / 帖子卡片", "act": "曝光 / 点击", "props": "post_id,community_id,post_content_type,position", "new": false, "ms": "单条帖子：分发与点击（曝光量、点击率、详情浏览）", "note": ""}, {"id": "community_tab_click", "name": "社区Tab切换", "fn": "社区信息流 / 顶部Tab（关注/推荐/成人精选/吃瓜休闲区/实时热点）", "act": "切换顶部Tab", "props": "tab_id,tab_name,from_tab", "new": true, "ms": "社区Tab分布", "note": "MuMu扫描发现，缺埋点"}, {"id": "community_filter_click", "name": "社区筛选切换", "fn": "社区信息流 / 筛选（最新/热门/文字/图片/视频）", "act": "切换筛选", "props": "tab_id,filter_id,filter_name", "new": true, "ms": "社区筛选使用率", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "ACG页", "ev": [{"id": "search_entry_click", "name": "点击搜索入口", "fn": "顶部栏 / 搜索框", "act": "点击搜索框", "props": "entry_page,default_hint", "new": false, "ms": "流程入口点击人数、搜索流程：入口→提交→结果曝光→点击结果、搜索：入口→提交→结果曝光→结果点击", "note": "补字段 flow_id"}, {"id": "search_entry_click", "name": "点击搜索入口", "fn": "搜索入口 / 搜索框", "act": "点击搜索框", "props": "entry_page,default_hint", "new": false, "ms": "流程入口点击人数、搜索流程：入口→提交→结果曝光→点击结果、搜索：入口→提交→结果曝光→结果点击", "note": "补字段 flow_id"}, {"id": "acg_type_switch", "name": "ACG类型切换", "fn": "ACG / 漫画/小说切换", "act": "切换漫画/小说", "props": "acg_type(comic/novel),from_type", "new": false, "ms": "漫画/小说访问占比", "note": "新增"}, {"id": "acg_category_click", "name": "ACG分类Tab切换", "fn": "ACG / 分类Tab", "act": "切换分类Tab（漫画：推荐/韩漫/汉化/CG画集/写真&Cosplay…；小说：推荐/家庭乱伦/都市激情/异能/同人改编…）", "props": "acg_type,category_id,category_name,tab_index", "new": false, "ms": "ACG分类Tab使用分布", "note": "新增"}, {"id": "acg_quick_entry_click", "name": "ACG快捷入口点击", "fn": "ACG / 快捷入口", "act": "点击快捷入口（漫画：分类/最新/热门/完结；小说：长篇/短篇/连载/人气/分类）", "props": "acg_type,entry_id", "new": false, "ms": "ACG快捷入口点击分布", "note": "新增"}, {"id": "acg_more_click", "name": "ACG分区「更多」点击", "fn": "ACG / 内容分区", "act": "点击「正在观看/正在看」更多", "props": "acg_type,section_id", "new": false, "ms": "ACG分区更多点击率", "note": "新增"}, {"id": "zone_item_expose", "name": "（复用）板块卡片曝光", "fn": "ACG / 内容卡片", "act": "卡片曝光", "props": "zone_id=acg,item_id,item_type(comic/novel),position,section_id", "new": false, "ms": "ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补 section_id/item_type"}, {"id": "zone_item_click", "name": "（复用）板块卡片点击", "fn": "ACG / 内容卡片", "act": "点击卡片", "props": "zone_id=acg,item_id,item_type,position,section_id", "new": false, "ms": "AI工具使用渗透率、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完、ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补 section_id/item_type"}]}, {"page": "榜单页", "ev": [{"id": "rank_page_expose", "name": "榜单页曝光", "fn": "顶部栏 / 榜单入口", "act": "点击榜单入口 → 进入榜单页", "props": "from_page,rank_type", "new": false, "ms": "榜单点击率", "note": "入口按钮本身的点击没有单独事件，用榜单页曝光的来源页推算"}, {"id": "rank_item_click", "name": "榜单条目点击", "fn": "顶部栏 / 榜单页", "act": "点击榜单里的条目", "props": "rank_type,content_id,content_type,rank_no", "new": false, "ms": "榜单点击率", "note": ""}, {"id": "news_expose", "name": "资讯卡片曝光", "fn": "资讯信息流 / 内容卡片", "act": "卡片曝光（≥50% 可见且 ≥500ms）", "props": "news_id,news_classify,position,recommend_type(人工/算法),is_top,expose_duration_ms,tab_id,algo_id,request_id", "new": false, "ms": "内容总曝光、内容 TOP5（按曝光量）、活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、没看内容的人去哪了、资讯/视频/漫画/小说/短剧/帖子 总曝光量、单条资讯：分发与点击（曝光量、有效曝光(≥5s)、点击率）", "note": "「热搜」角标没有字段，建议在曝光和点击事件加 badge_type"}, {"id": "news_click", "name": "资讯卡片点击", "fn": "资讯信息流 / 内容卡片", "act": "点击卡片进入详情", "props": "news_id,news_classify,position,recommend_type,is_top,tab_id", "new": false, "ms": "活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、没看内容的人去哪了、单条资讯：分发与点击（曝光量、有效曝光(≥5s)、点击率）", "note": ""}, {"id": "rank_tab_click", "name": "榜单切换", "fn": "榜单页 / 日/周/月榜、往期、标签", "act": "切换榜单维度", "props": "main_tab(榜单/往期/标签),period(day/week/month)", "new": true, "ms": "榜单点击率", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "全局底部导航", "ev": [{"id": "nav_tab_click", "name": "底部导航点击", "fn": "底部导航 / 首页 / 社区 / ACG / AI科技 / 应用 / 我的", "act": "点击导航项", "props": "nav_id(home/community/acg/ai/app/me),from_nav,is_repeat_click", "new": false, "ms": "底部导航点击占比", "note": ""}]}, {"page": "全部页面", "ev": [{"id": "page_view", "name": "页面浏览", "fn": "首页通用 / 页面", "act": "进入 / 离开首页", "props": "page_name,ref_page,enter_source,content_id(详情页)", "new": false, "ms": "今日 vs 昨日分时活跃、页面 TOP5（按访问量）、分时活跃用户（按小时）、星期 × 时段活跃指数、页面跳出率、全站 PV…等10项", "note": ""}, {"id": "page_leave", "name": "页面离开", "fn": "首页通用 / 页面", "act": "进入 / 离开首页", "props": "page_name,stay_ms,scroll_depth,leave_type(normal/bounce/back/quit),is_last_page", "new": false, "ms": "流失前最后停留页面、页面跳出率、没看内容的人去哪了、用户停在了哪个页面", "note": ""}, {"id": "page_load_result", "name": "页面加载结果", "fn": "首页通用 / 页面", "act": "进入 / 离开首页", "props": "page_name,result(success/timeout/fail),load_ms", "new": false, "ms": "页面加载失败率", "note": ""}, {"id": "page_view", "name": "页面浏览", "fn": "页面通用 / 所有页面", "act": "页面浏览 / 离开 / 加载结果", "props": "page_name,ref_page,enter_source,content_id(详情页)", "new": false, "ms": "今日 vs 昨日分时活跃、页面 TOP5（按访问量）、分时活跃用户（按小时）、星期 × 时段活跃指数、页面跳出率、全站 PV…等10项", "note": ""}, {"id": "page_leave", "name": "页面离开", "fn": "页面通用 / 所有页面", "act": "页面浏览 / 离开 / 加载结果", "props": "page_name,stay_ms,scroll_depth,leave_type(normal/bounce/back/quit),is_last_page", "new": false, "ms": "流失前最后停留页面、页面跳出率、没看内容的人去哪了、用户停在了哪个页面", "note": ""}, {"id": "page_load_result", "name": "页面加载结果", "fn": "页面通用 / 所有页面", "act": "页面浏览 / 离开 / 加载结果", "props": "page_name,result(success/timeout/fail),load_ms", "new": false, "ms": "页面加载失败率", "note": ""}]}, {"page": "内容详情页", "ev": [{"id": "news_detail_view", "name": "资讯详情浏览", "fn": "资讯详情 / 详情页", "act": "进入 / 离开 / 读完", "props": "news_id,news_classify,author_id,from_page,from_position", "new": false, "ms": "新用户核心转化：安装→首次打开→首次浏览内容→首次互动→首次付费、首次浏览内容率、首次互动率、渠道对比（新增、次日留存、人均时长、看内容率、付费转化率）、活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、活跃用户内容触达率…等10项", "note": ""}, {"id": "news_detail_leave", "name": "资讯详情离开", "fn": "资讯详情 / 详情页", "act": "进入 / 离开 / 读完", "props": "news_id,read_duration_ms,scroll_depth,is_scroll_all", "new": false, "ms": "单条资讯：分发与点击（曝光量、有效曝光(≥5s)、点击率）、单条资讯：消费深度（详情访问、平均阅读时长、完读率）", "note": ""}, {"id": "news_read_finish", "name": "资讯阅读完成", "fn": "资讯详情 / 详情页", "act": "进入 / 离开 / 读完", "props": "news_id,is_scroll_all(1),read_duration_ms", "new": false, "ms": "活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、单条资讯：分发与点击（曝光量、有效曝光(≥5s)、点击率）、单条资讯：消费深度（详情访问、平均阅读时长、完读率）", "note": ""}, {"id": "news_like", "name": "资讯点赞", "fn": "资讯详情 / 互动栏", "act": "点赞 / 收藏 / 评论 / 分享 / 不感兴趣", "props": "news_id,action(like/cancel)", "new": false, "ms": "新用户核心转化：安装→首次打开→首次浏览内容→首次互动→首次付费、首次互动率、单条资讯：互动与付费（点赞、评论、收藏、分享）", "note": ""}, {"id": "news_collect", "name": "资讯收藏", "fn": "资讯详情 / 互动栏", "act": "点赞 / 收藏 / 评论 / 分享 / 不感兴趣", "props": "news_id,action(add/cancel)", "new": false, "ms": "首次互动率、单条资讯：互动与付费（点赞、评论、收藏、分享）", "note": ""}, {"id": "news_comment_publish", "name": "资讯评论发布", "fn": "资讯详情 / 互动栏", "act": "点赞 / 收藏 / 评论 / 分享 / 不感兴趣", "props": "news_id,comment_id,text_length,is_reply", "new": false, "ms": "首次互动率、单条资讯：互动与付费（点赞、评论、收藏、分享）", "note": ""}, {"id": "news_share_click", "name": "资讯分享点击", "fn": "资讯详情 / 互动栏", "act": "点赞 / 收藏 / 评论 / 分享 / 不感兴趣", "props": "news_id,share_channel", "new": false, "ms": "付费次数 / 解锁数 / 分享次数、单条资讯：互动与付费（点赞、评论、收藏、分享）、分享成功率", "note": ""}, {"id": "news_share_success", "name": "资讯分享成功", "fn": "资讯详情 / 互动栏", "act": "点赞 / 收藏 / 评论 / 分享 / 不感兴趣", "props": "news_id,share_channel", "new": false, "ms": "分享成功率", "note": ""}, {"id": "news_dislike", "name": "资讯不感兴趣", "fn": "资讯详情 / 互动栏", "act": "点赞 / 收藏 / 评论 / 分享 / 不感兴趣", "props": "news_id,reason", "new": false, "ms": "内容不感兴趣/举报率", "note": ""}, {"id": "content_report_submit", "name": "举报提交", "fn": "资讯详情 / 举报", "act": "提交举报", "props": "content_id,content_type,report_type", "new": false, "ms": "内容不感兴趣/举报率", "note": ""}, {"id": "content_purchase_click", "name": "点击购买内容", "fn": "内容付费 / 点击购买 → 确认支付", "act": "点击购买、确认支付", "props": "content_id,content_type,price,balance_enough,flow_id", "new": false, "ms": "流程入口点击人数、内容付费：详情→点击购买→确认支付→购买成功、金币不足的人是否去充值", "note": "建议新增"}, {"id": "content_purchase_confirm", "name": "确认支付", "fn": "内容付费 / 点击购买 → 确认支付", "act": "点击购买、确认支付", "props": "content_id,price,pay_type,flow_id", "new": false, "ms": "内容付费：详情→点击购买→确认支付→购买成功", "note": "建议新增"}]}, {"page": "视频播放页", "ev": [{"id": "video_expose", "name": "视频卡片曝光", "fn": "视频播放 / 视频卡片", "act": "卡片曝光", "props": "video_id,video_type(short/film/episode),show_pos,position,recommend_type,tab_id", "new": false, "ms": "内容总曝光、内容 TOP5（按曝光量）、活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、资讯/视频/漫画/小说/短剧/帖子 总曝光量、单条视频：分发与点击（曝光量、曝光播放转化率、播放量）", "note": "缺 expose_duration_ms，有效曝光判断不了（已在新增清单里）；补字段 expose_duration_ms、video_classify"}, {"id": "video_play_click", "name": "点击播放", "fn": "视频播放 / 播放器", "act": "点击播放 / 首帧 / 异常 / 结束或退出 / 切换画质", "props": "video_id,video_type,film_id,film_type,episode,enter_source(feed/search/zone/push)", "new": false, "ms": "活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成", "note": ""}, {"id": "video_play_start", "name": "播放开始(首帧)", "fn": "视频播放 / 播放器", "act": "点击播放 / 首帧 / 异常 / 结束或退出 / 切换画质", "props": "video_id,video_type,play_type,play_auto,play_mute,play_quality,startup_cost_ms,enter_source", "new": false, "ms": "新用户核心转化：安装→首次打开→首次浏览内容→首次互动→首次付费、首次浏览内容率、渠道对比（新增、次日留存、人均时长、看内容率、付费转化率）、活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、活跃用户内容触达率、活跃用户内容触达率（按用户来源拆分）…等10项", "note": "补字段 flow_id"}, {"id": "video_play_error", "name": "播放异常", "fn": "视频播放 / 播放器", "act": "点击播放 / 首帧 / 异常 / 结束或退出 / 切换画质", "props": "video_id,error_type(fail/lag/black_screen),error_code,lag_ms,lag_count", "new": false, "ms": "视频播放错误率", "note": ""}, {"id": "video_play_end", "name": "播放结束/退出", "fn": "视频播放 / 播放器", "act": "点击播放 / 首帧 / 异常 / 结束或退出 / 切换画质", "props": "video_id,end_type(finish/slip/quit/switch),play_progress,play_duration_ms,quit_scene,quit_time", "new": false, "ms": "活跃到看内容：日活→内容曝光→点击→详情→读完/播放完成、单条视频：分发与点击（曝光量、曝光播放转化率、播放量）、单条视频：消费深度（完播率、平均播放时长）", "note": ""}, {"id": "video_quality_switch", "name": "画质切换", "fn": "视频播放 / 播放器", "act": "点击播放 / 首帧 / 异常 / 结束或退出 / 切换画质", "props": "video_id,from_quality,play_quality", "new": false, "ms": "缓存成功率与清晰度切换", "note": ""}, {"id": "video_like", "name": "视频点赞", "fn": "视频播放 / 互动栏", "act": "点赞 / 评论 / 分享 / 收藏", "props": "video_id,action", "new": false, "ms": "新用户核心转化：安装→首次打开→首次浏览内容→首次互动→首次付费、首次互动率、单条视频：互动与付费（点赞、评论、收藏、分享、付费次数）", "note": ""}, {"id": "video_comment_publish", "name": "视频评论", "fn": "视频播放 / 互动栏", "act": "点赞 / 评论 / 分享 / 收藏", "props": "video_id,comment_id,is_reply", "new": false, "ms": "单条视频：互动与付费（点赞、评论、收藏、分享、付费次数）", "note": ""}, {"id": "video_share_click", "name": "视频分享", "fn": "视频播放 / 互动栏", "act": "点赞 / 评论 / 分享 / 收藏", "props": "video_id,share_channel", "new": false, "ms": "单条视频：互动与付费（点赞、评论、收藏、分享、付费次数）", "note": ""}, {"id": "video_collect", "name": "视频收藏", "fn": "视频播放 / 互动栏", "act": "点赞 / 评论 / 分享 / 收藏", "props": "video_id,action", "new": false, "ms": "单条视频：互动与付费（点赞、评论、收藏、分享、付费次数）", "note": ""}, {"id": "video_cache_start", "name": "视频缓存发起", "fn": "视频播放 / 缓存", "act": "发起缓存 / 缓存结果", "props": "video_id,cache_quality", "new": false, "ms": "缓存成功率与清晰度切换", "note": ""}, {"id": "video_cache_result", "name": "视频缓存结果", "fn": "视频播放 / 缓存", "act": "发起缓存 / 缓存结果", "props": "video_id,result(success/fail),fail_reason", "new": false, "ms": "缓存成功率与清晰度切换", "note": ""}]}, {"page": "后台", "ev": [{"id": "news_publish", "name": "资讯发布(后台)", "fn": "内容发布（后台） / 发布与审核", "act": "资讯上线 / 视频发布 / 审核结果", "props": "news_id,news_classify,publisher,publish_time", "new": false, "ms": "内容发布与审核通过率", "note": ""}, {"id": "video_publish", "name": "用户视频发布", "fn": "内容发布（后台） / 发布与审核", "act": "资讯上线 / 视频发布 / 审核结果", "props": "video_id,video_source,duration_s", "new": false, "ms": "内容发布与审核通过率", "note": ""}, {"id": "content_audit", "name": "内容审核结果(后台)", "fn": "内容发布（后台） / 发布与审核", "act": "资讯上线 / 视频发布 / 审核结果", "props": "content_id,content_type,result(pass/reject/delete),reason", "new": false, "ms": "内容发布与审核通过率", "note": ""}]}, {"page": "搜索页", "ev": [{"id": "search_hot_word_click", "name": "点击热搜/历史词", "fn": "搜索页 / 热搜 / 历史词", "act": "点击词条", "props": "word,word_type(hot/history/suggest),position", "new": false, "ms": "热词点击率", "note": ""}, {"id": "search_submit", "name": "提交搜索", "fn": "搜索页 / 提交搜索", "act": "点击搜索或回车", "props": "keyword,input_type(手输/热词/历史/联想),is_valid(非空且非纯符号=1)", "new": false, "ms": "搜索次数、搜索流程：入口→提交→结果曝光→点击结果、日均搜索次数、人均搜索次数、搜索：入口→提交→结果曝光→结果点击、高频搜索词 TOP…等7项", "note": "补字段 entry_source、flow_id"}, {"id": "search_result_expose", "name": "搜索结果曝光", "fn": "搜索页 / 搜索结果", "act": "结果曝光 / 点击结果", "props": "keyword,result_count,is_empty(无结果=1),cost_ms", "new": false, "ms": "搜索流程：入口→提交→结果曝光→点击结果、搜索无结果率、搜索结果点击率、搜索：入口→提交→结果曝光→结果点击", "note": "补字段 flow_id"}, {"id": "search_result_click", "name": "搜索结果点击", "fn": "搜索页 / 搜索结果", "act": "结果曝光 / 点击结果", "props": "keyword,content_id,content_type,position,result_tab", "new": false, "ms": "流程最终成功人数、搜索流程：入口→提交→结果曝光→点击结果、搜索结果点击率、搜索：入口→提交→结果曝光→结果点击", "note": "补字段 flow_id（click_position 现为 position）"}, {"id": "search_history_view", "name": "查看搜索历史", "fn": "搜索页 / 搜索历史", "act": "查看 / 清空", "props": "history_count", "new": false, "ms": "搜索历史清除率", "note": ""}, {"id": "search_history_clear", "name": "清空搜索历史", "fn": "搜索页 / 搜索历史", "act": "查看 / 清空", "props": "-", "new": false, "ms": "搜索历史清除率", "note": ""}]}, {"page": "帖子详情页", "ev": [{"id": "post_detail_view", "name": "帖子详情浏览", "fn": "帖子详情 / 详情页", "act": "进入详情", "props": "post_id,author_id,from_page", "new": false, "ms": "单条帖子：分发与点击（曝光量、点击率、详情浏览）、帖子评论与回复率", "note": ""}, {"id": "post_like", "name": "帖子点赞/点踩", "fn": "帖子互动 / 点赞点踩 / 评论 / 回复", "act": "互动", "props": "post_id,action(like/dislike/cancel)", "new": false, "ms": "单条帖子：互动与付费（点赞、评论、收藏、解锁数）", "note": ""}, {"id": "post_comment_publish", "name": "帖子评论", "fn": "帖子互动 / 点赞点踩 / 评论 / 回复", "act": "互动", "props": "post_id,comment_id", "new": false, "ms": "帖子评论与回复率", "note": ""}, {"id": "post_reply_publish", "name": "帖子回复", "fn": "帖子互动 / 点赞点踩 / 评论 / 回复", "act": "互动", "props": "post_id,comment_id,reply_to", "new": false, "ms": "帖子评论与回复率", "note": ""}]}, {"page": "发帖页", "ev": [{"id": "post_publish_click", "name": "点击发布", "fn": "发帖 / 发布", "act": "点击发布 / 发布成功", "props": "post_content_type,topic_id,has_image,text_length", "new": false, "ms": "发帖转化率", "note": ""}, {"id": "post_publish_success", "name": "发帖成功", "fn": "发帖 / 发布", "act": "点击发布 / 发布成功", "props": "post_id,post_content_type,topic_id,author_id", "new": false, "ms": "发帖转化率", "note": ""}]}, {"page": "话题页", "ev": [{"id": "topic_view", "name": "话题页浏览", "fn": "话题 / 话题页", "act": "进入话题页", "props": "topic_id,enter_source", "new": false, "ms": "话题页访问", "note": ""}]}, {"page": "我的页", "ev": [{"id": "me_entry_click", "name": "我的页入口点击", "fn": "功能入口 / 收藏 / 历史 / 金币 / 设置 / 反馈", "act": "点击入口", "props": "entry_id(收藏/历史/金币/设置/反馈)", "new": false, "ms": "我的页功能入口渗透", "note": ""}, {"id": "coin_entry_click", "name": "金币入口点击", "fn": "金币充值 / 入口 → 商品 → 下单 → 成功", "act": "点击入口、看商品、选商品", "props": "entry_source,from_page,flow_id", "new": false, "ms": "流程入口点击人数、金币充值：入口→商品页→选商品→订单→成功、金币不足的人是否去充值", "note": "建议新增"}, {"id": "me_entry_click", "name": "（复用）我的入口点击", "fn": "我的页 / 功能入口（我的AI/收藏/社区/评论回复/博主认证/关注/邀请好友/专线客服/商务合作）", "act": "点击入口", "props": "entry_id 需扩充为上述9项 + 金币充值 + 设置", "new": true, "ms": "我的页功能入口渗透", "note": "已有事件，补字段/枚举"}, {"id": "me_stat_click", "name": "我的统计点击", "fn": "我的页 / 粉丝 / 关注 / 点赞数", "act": "点击统计数", "props": "stat_type", "new": true, "ms": "我的收藏、发帖、回复使用", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "个人设置页", "ev": [{"id": "setting_change", "name": "设置变更", "fn": "设置 / 开关与选项", "act": "变更设置", "props": "setting_key,old_value,new_value", "new": false, "ms": "设置变更与缓存清理", "note": ""}, {"id": "cache_clear_click", "name": "清理缓存", "fn": "设置 / 清理缓存", "act": "点击清理", "props": "cache_size_mb", "new": false, "ms": "设置变更与缓存清理", "note": ""}, {"id": "profile_edit", "name": "资料修改", "fn": "个人设置 / 头像/昵称/签名/邮箱", "act": "修改资料", "props": "field(avatar/nickname/signature/email),result", "new": true, "ms": "设置变更与缓存清理", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "（未发现入口，待确认）", "ev": [{"id": "feedback_submit", "name": "提交反馈", "fn": "反馈 / 意见反馈", "act": "提交反馈", "props": "feedback_type", "new": false, "ms": "意见反馈与退出登录", "note": ""}]}, {"page": "个人设置页（未见入口，待确认）", "ev": [{"id": "logout_click", "name": "退出登录", "fn": "账号 / 退出登录", "act": "退出", "props": "-", "new": false, "ms": "意见反馈与退出登录", "note": ""}]}, {"page": "登录页", "ev": [{"id": "login_page_expose", "name": "登录页曝光", "fn": "登录 / 登录页", "act": "登录页曝光 / 点击登录 / 提交 / 成功 / 失败", "props": "trigger_from(主动/被动拦截),ref_page", "new": false, "ms": "登录：曝光→点击→成功、登录注册流程：入口→登录页→提交→成功", "note": "login_submit 为建议新增；补字段 entry_source、flow_id"}, {"id": "login_click", "name": "点击登录", "fn": "登录 / 登录页", "act": "登录页曝光 / 点击登录 / 提交 / 成功 / 失败", "props": "login_method(phone/wechat/apple/other)", "new": false, "ms": "登录成功率、登录：曝光→点击→成功、流程入口点击人数、登录注册流程：入口→登录页→提交→成功", "note": "login_submit 为建议新增；补字段 entry_source、flow_id"}, {"id": "login_submit", "name": "提交登录/注册", "fn": "登录 / 登录页", "act": "登录页曝光 / 点击登录 / 提交 / 成功 / 失败", "props": "login_method,flow_id", "new": false, "ms": "登录注册流程：入口→登录页→提交→成功", "note": "login_submit 为建议新增"}, {"id": "login_success", "name": "登录成功", "fn": "登录 / 登录页", "act": "登录页曝光 / 点击登录 / 提交 / 成功 / 失败", "props": "login_method,is_new_user", "new": false, "ms": "登录成功率、游客→登录转化率、登录：曝光→点击→成功、流程最终成功人数、登录注册流程：入口→登录页→提交→成功", "note": "login_submit 为建议新增；补字段 entry_source、flow_id"}, {"id": "login_fail", "name": "登录失败", "fn": "登录 / 登录页", "act": "登录页曝光 / 点击登录 / 提交 / 成功 / 失败", "props": "login_method,fail_reason,error_code", "new": false, "ms": "登录失败原因分布", "note": "login_submit 为建议新增"}, {"id": "register_click", "name": "点击注册", "fn": "注册 / 注册", "act": "点击注册 / 注册成功", "props": "reg_type", "new": false, "ms": "注册成功率", "note": ""}, {"id": "register_success", "name": "注册成功", "fn": "注册 / 注册", "act": "点击注册 / 注册成功", "props": "user_id,reg_type,channel,invite_code", "new": false, "ms": "新增注册用户占比、新增游客用户、注册成功率、登录注册流程：入口→登录页→提交→成功、邀请分享率", "note": "补字段 entry_source、flow_id"}]}, {"page": "金币任务（未见入口，待确认）", "ev": [{"id": "coin_task_click", "name": "金币任务点击", "fn": "金币任务 / 任务列表", "act": "点击任务", "props": "task_id,task_status", "new": false, "ms": "金币任务点击", "note": ""}]}, {"page": "后台/服务端", "ev": [{"id": "coin_grant", "name": "金币入账", "fn": "金币账户 / 入账与消耗", "act": "金币发放 / 消耗", "props": "coin_amount,source(签到/任务/活动),biz_id,flow_id", "new": false, "ms": "金币发放总量、金币消耗率、金币发放与消耗趋势", "note": ""}, {"id": "coin_spend", "name": "金币消耗", "fn": "金币账户 / 入账与消耗", "act": "金币发放 / 消耗", "props": "coin_amount,spend_type,biz_id,flow_id", "new": false, "ms": "金币消耗率、金币发放与消耗趋势", "note": ""}]}, {"page": "金币充值页", "ev": [{"id": "coin_goods_view", "name": "进入金币商品页", "fn": "金币充值 / 入口 → 商品 → 下单 → 成功", "act": "点击入口、看商品、选商品", "props": "entry_source,flow_id", "new": false, "ms": "金币充值：入口→商品页→选商品→订单→成功、充值按钮点击率", "note": "建议新增"}, {"id": "coin_goods_select", "name": "选择金币商品", "fn": "金币充值 / 入口 → 商品 → 下单 → 成功", "act": "点击入口、看商品、选商品", "props": "goods_id,coin_amount,price,flow_id", "new": false, "ms": "金币充值：入口→商品页→选商品→订单→成功", "note": "建议新增"}, {"id": "order_created", "name": "订单创建", "fn": "订单 / 创建 / 成功 / 失败", "act": "订单结果", "props": "order_id,goods_id,goods_type,amount,pay_channel,entry_source,flow_id", "new": false, "ms": "金币充值：入口→商品页→选商品→订单→成功、订单创建后未支付去向、VIP 开通：入口→开通页→选套餐→订单→成功、订单创建数、支付成功率、订单：创建→支付成功…等7项", "note": "order_created、order_paid 吃瓜网已有，原表缺；order_fail 建议新增；字段待研发确认"}, {"id": "order_paid", "name": "订单支付成功", "fn": "订单 / 创建 / 成功 / 失败", "act": "订单结果", "props": "order_id,amount,pay_channel,is_renew,entry_source,flow_id", "new": false, "ms": "订单支付数、新用户核心转化：安装→首次打开→首次浏览内容→首次互动→首次付费、渠道对比（新增、次日留存、人均时长、看内容率、付费转化率）、流程最终成功人数、金币充值：入口→商品页→选商品→订单→成功、订单创建后未支付去向…等11项", "note": "order_created、order_paid 吃瓜网已有，原表缺；order_fail 建议新增；字段待研发确认"}, {"id": "order_fail", "name": "订单支付失败", "fn": "订单 / 创建 / 成功 / 失败", "act": "订单结果", "props": "order_id,fail_reason,pay_channel,flow_id", "new": false, "ms": "订单失败率", "note": "order_created、order_paid 吃瓜网已有，原表缺；order_fail 建议新增；字段待研发确认"}, {"id": "coin_pay_method_select", "name": "选择支付方式", "fn": "金币充值 / 支付方式选择", "act": "选择支付方式", "props": "pay_channel,flow_id", "new": true, "ms": "支付方式占比", "note": "MuMu扫描发现，缺埋点"}, {"id": "coin_recharge_click", "name": "点击立即充值", "fn": "金币充值 / 立即充值按钮", "act": "点击立即充值", "props": "goods_id,pay_channel,price,flow_id", "new": true, "ms": "充值按钮点击率", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "（未见入口，待确认）", "ev": [{"id": "vip_entry_click", "name": "VIP 入口点击", "fn": "VIP 开通 / 入口 → 开通页 → 选套餐", "act": "点击入口、看开通页、选套餐", "props": "entry_source,from_page,flow_id", "new": false, "ms": "流程入口点击人数、VIP 开通：入口→开通页→选套餐→订单→成功", "note": "建议新增"}, {"id": "vip_page_view", "name": "进入 VIP 开通页", "fn": "VIP 开通 / 入口 → 开通页 → 选套餐", "act": "点击入口、看开通页、选套餐", "props": "entry_source,flow_id", "new": false, "ms": "VIP 开通：入口→开通页→选套餐→订单→成功", "note": "建议新增"}, {"id": "vip_plan_select", "name": "选择 VIP 套餐", "fn": "VIP 开通 / 入口 → 开通页 → 选套餐", "act": "点击入口、看开通页、选套餐", "props": "plan_id,price,flow_id", "new": false, "ms": "VIP 开通：入口→开通页→选套餐→订单→成功", "note": "建议新增"}]}, {"page": "启动", "ev": [{"id": "app_first_open", "name": "首次启动", "fn": "应用启动 / 启动与前后台", "act": "首次启动、每次启动、切前后台", "props": "install_source,is_login(恒0)", "new": false, "ms": "新增用户、次日留存、新用户核心转化：安装→首次打开→首次浏览内容→首次互动→首次付费、新增注册用户占比、新增游客用户、安装→首次打开…等12项", "note": ""}, {"id": "app_open", "name": "应用启动", "fn": "应用启动 / 启动与前后台", "act": "首次启动、每次启动、切前后台", "props": "launch_type(cold/hot),from_source(icon/push/deeplink/h5_link),launch_cost_ms,open_hour", "new": false, "ms": "DAU 日活、次日留存、崩溃率、今日 vs 昨日分时活跃、WAU 周活、MAU 月活…等25项", "note": ""}, {"id": "app_install_attribution", "name": "安装归因回传", "fn": "应用启动 / 渠道安装", "act": "渠道回传安装数据", "props": "channel_id,source,download_count,install_count", "new": false, "ms": "新用户核心转化：安装→首次打开→首次浏览内容→首次互动→首次付费、安装→首次打开、每天各渠道新增用户 / 渠道占比、渠道对比（新增、次日留存、人均时长、看内容率、付费转化率）", "note": ""}, {"id": "update_popup_action", "name": "升级弹窗操作", "fn": "版本升级 / 升级弹窗", "act": "弹出 / 更新 / 稍后", "props": "target_version,is_force,action(expose/update/later)", "new": false, "ms": "升级弹窗转化与权限授权率", "note": ""}, {"id": "deeplink_open", "name": "外链唤起", "fn": "外链 / 外链唤起", "act": "通过外链进入", "props": "utm_source,utm_campaign,target_page", "new": false, "ms": "外链唤起次数", "note": ""}]}, {"page": "全局", "ev": [{"id": "app_foreground", "name": "进入前台", "fn": "应用启动 / 启动与前后台", "act": "首次启动、每次启动、切前后台", "props": "-", "new": false, "ms": "人均在线时长", "note": ""}, {"id": "app_background", "name": "进入后台/退出", "fn": "应用启动 / 启动与前后台", "act": "首次启动、每次启动、切前后台", "props": "session_start_time,session_end_time,session_duration_ms", "new": false, "ms": "人均在线时长、流失前最后停留页面、单次使用时长分布", "note": ""}, {"id": "permission_result", "name": "权限申请结果", "fn": "系统权限 / 权限弹窗", "act": "允许 / 拒绝", "props": "perm_type(通知/存储/相册/相机...),result(allow/deny)", "new": false, "ms": "升级弹窗转化与权限授权率", "note": ""}, {"id": "app_crash", "name": "应用崩溃", "fn": "异常与性能 / 崩溃、接口、图片", "act": "崩溃 / 接口异常 / 图片加载失败", "props": "crash_page,error_log,stack_hash", "new": false, "ms": "崩溃率", "note": ""}, {"id": "api_error", "name": "接口/网络异常", "fn": "异常与性能 / 崩溃、接口、图片", "act": "崩溃 / 接口异常 / 图片加载失败", "props": "api_name,http_code,error_code,error_type(network/server/timeout),cost_ms,network_type", "new": false, "ms": "接口错误率", "note": ""}, {"id": "img_load_fail", "name": "图片加载失败", "fn": "异常与性能 / 崩溃、接口、图片", "act": "崩溃 / 接口异常 / 图片加载失败", "props": "img_host,error_code", "new": false, "ms": "图片加载失败率", "note": ""}]}, {"page": "AI科技页", "ev": [{"id": "zone_item_click", "name": "AI工具卡片点击", "fn": "AI科技 / AI工具卡片（图片换脸/视频换脸/图生视频…）", "act": "点击工具卡片", "props": "zone_id=ai,item_id,tool_type", "new": true, "ms": "AI工具使用渗透率、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完、ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补字段/枚举"}, {"id": "ai_task_submit", "name": "AI任务提交", "fn": "AI科技 / AI任务提交", "act": "提交生成", "props": "tool_type,cost_coin,flow_id", "new": true, "ms": "AI任务成功率、AI工具使用渗透率", "note": "MuMu扫描发现，缺埋点"}, {"id": "ai_task_result", "name": "AI任务结果", "fn": "AI科技 / AI任务结果", "act": "任务完成或失败", "props": "tool_type,result(success/fail),duration_s,fail_reason", "new": true, "ms": "AI任务成功率", "note": "MuMu扫描发现，缺埋点"}, {"id": "zone_item_expose", "name": "AI工具卡片曝光", "fn": "AI科技 / AI工具卡片", "act": "卡片曝光", "props": "zone_id=ai,item_id,tool_type,position", "new": false, "ms": "ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，按 zone_id=ai 区分"}]}, {"page": "我的AI页", "ev": [{"id": "my_ai_tab_click", "name": "我的AI类型切换", "fn": "我的AI / 类型Tab（图片换脸/视频换脸/AI脱衣/图生视频/AI绘画）", "act": "切换类型", "props": "tool_type", "new": true, "ms": "我的AI记录查看", "note": "MuMu扫描发现，缺埋点"}, {"id": "my_ai_status_click", "name": "我的AI状态切换", "fn": "我的AI / 状态Tab（已完成/处理中/失败）", "act": "切换状态", "props": "tool_type,status", "new": true, "ms": "我的AI记录查看", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "充值记录页", "ev": [{"id": "recharge_record_view", "name": "充值记录查看", "fn": "金币充值 / 充值记录", "act": "点击充值记录", "props": "record_count,is_empty", "new": true, "ms": "充值记录查看率", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "我的收藏页", "ev": [{"id": "fav_tab_click", "name": "收藏Tab切换", "fn": "我的收藏 / 类型Tab（文章/帖子/漫画/小说）", "act": "切换Tab", "props": "content_type", "new": true, "ms": "我的收藏、发帖、回复使用", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "我的社区页", "ev": [{"id": "my_post_tab_click", "name": "我的发帖状态切换", "fn": "我的社区 / 状态Tab（已发布/待审核/未通过/通过待回调）", "act": "切换Tab", "props": "status", "new": true, "ms": "我的收藏、发帖、回复使用", "note": "MuMu扫描发现，缺埋点"}, {"id": "post_publish_click", "name": "（复用）点击发布", "fn": "我的社区 / 发布按钮", "act": "点击发布", "props": "entry=my_post", "new": true, "ms": "发帖转化率", "note": "已有事件，补字段/枚举"}]}, {"page": "评论回复页", "ev": [{"id": "reply_tab_click", "name": "评论回复Tab切换", "fn": "评论回复 / Tab（文章/帖子）", "act": "切换Tab", "props": "content_type", "new": true, "ms": "我的收藏、发帖、回复使用", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "博主认证页", "ev": [{"id": "creator_apply_click", "name": "博主认证入口点击", "fn": "博主认证 / 认证入口", "act": "点击认证/联系方式", "props": "apply_channel", "new": true, "ms": "博主认证申请点击", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "邀请好友页", "ev": [{"id": "invite_share_click", "name": "邀请分享操作", "fn": "邀请好友 / 保存图片 / 复制链接", "act": "点击保存图片或复制链接", "props": "action(save_image/copy_link),invite_code", "new": true, "ms": "邀请分享率", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "我的关注页", "ev": [{"id": "follow_action", "name": "关注操作", "fn": "关注 / 关注/取消关注作者", "act": "点击关注", "props": "target_id,action(follow/cancel),from_page", "new": true, "ms": "关注转化", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "详情页", "ev": [{"id": "follow_action", "name": "关注操作", "fn": "关注 / 关注/取消关注作者", "act": "点击关注", "props": "target_id,action(follow/cancel),from_page", "new": true, "ms": "关注转化", "note": "MuMu扫描发现，缺埋点"}]}, {"page": "ACG页（漫画/小说）", "ev": [{"id": "search_entry_click", "name": "（复用）点击搜索入口", "fn": "ACG / 搜索框", "act": "点击搜索框", "props": "entry_page=ACG,acg_type", "new": false, "ms": "流程入口点击人数、搜索流程：入口→提交→结果曝光→点击结果、搜索：入口→提交→结果曝光→结果点击", "note": "已有事件，补 entry_page=ACG"}]}, {"page": "分类页", "ev": [{"id": "zone_item_expose", "name": "（复用）板块卡片曝光", "fn": "ACG / 内容卡片", "act": "卡片曝光", "props": "zone_id=acg,item_id,item_type(comic/novel),position,section_id", "new": false, "ms": "ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补 section_id/item_type"}, {"id": "zone_item_click", "name": "（复用）板块卡片点击", "fn": "ACG / 内容卡片", "act": "点击卡片", "props": "zone_id=acg,item_id,item_type,position,section_id", "new": false, "ms": "AI工具使用渗透率、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完、ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补 section_id/item_type"}, {"id": "home_load_more", "name": "（复用）列表加载", "fn": "ACG / 列表页", "act": "上拉加载更多", "props": "page_name=acg_list/acg_category,page_no,result", "new": false, "ms": "刷新/加载成功率", "note": "已有事件，新增 page_name 枚举"}]}, {"page": "列表页", "ev": [{"id": "zone_item_expose", "name": "（复用）板块卡片曝光", "fn": "ACG / 内容卡片", "act": "卡片曝光", "props": "zone_id=acg,item_id,item_type(comic/novel),position,section_id", "new": false, "ms": "ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补 section_id/item_type"}, {"id": "zone_item_click", "name": "（复用）板块卡片点击", "fn": "ACG / 内容卡片", "act": "点击卡片", "props": "zone_id=acg,item_id,item_type,position,section_id", "new": false, "ms": "AI工具使用渗透率、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完、ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补 section_id/item_type"}]}, {"page": "详情页推荐位", "ev": [{"id": "zone_item_expose", "name": "（复用）板块卡片曝光", "fn": "ACG / 内容卡片", "act": "卡片曝光", "props": "zone_id=acg,item_id,item_type(comic/novel),position,section_id", "new": false, "ms": "ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补 section_id/item_type"}, {"id": "zone_item_click", "name": "（复用）板块卡片点击", "fn": "ACG / 内容卡片", "act": "点击卡片", "props": "zone_id=acg,item_id,item_type,position,section_id", "new": false, "ms": "AI工具使用渗透率、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完、ACG卡片曝光点击率、AI工具卡片点击率", "note": "已有事件，补 section_id/item_type"}]}, {"page": "ACG分类页", "ev": [{"id": "page_view", "name": "（复用）页面浏览", "fn": "ACG / 分类页", "act": "进入分类页", "props": "page_name=acg_category", "new": false, "ms": "今日 vs 昨日分时活跃、页面 TOP5（按访问量）、分时活跃用户（按小时）、星期 × 时段活跃指数、页面跳出率、全站 PV…等10项", "note": "已有事件，新增 page_name 枚举"}, {"id": "acg_filter_click", "name": "ACG筛选点击", "fn": "ACG / 分类页", "act": "切换筛选（分类：全部/韩漫/汉化/CG画集…；状态：全部/完结/连载；排序：全部/最新更新/最多观看）", "props": "acg_type,filter_type(category/status/sort),filter_value", "new": false, "ms": "ACG筛选使用分布", "note": "新增"}]}, {"page": "ACG列表页（最新/热门/完结/正在观看）", "ev": [{"id": "acg_list_view", "name": "ACG列表页浏览", "fn": "ACG / 列表页", "act": "进入列表页", "props": "acg_type,list_id(latest/hot/finished/watching),from_entry", "new": false, "ms": "ACG列表页访问", "note": "新增"}]}, {"page": "ACG列表页", "ev": [{"id": "home_load_more", "name": "（复用）列表加载", "fn": "ACG / 列表页", "act": "上拉加载更多", "props": "page_name=acg_list/acg_category,page_no,result", "new": false, "ms": "刷新/加载成功率", "note": "已有事件，新增 page_name 枚举"}]}, {"page": "漫画详情页", "ev": [{"id": "acg_detail_view", "name": "ACG详情浏览", "fn": "ACG / 详情页", "act": "进入详情页", "props": "acg_type,content_id,from_page,from_section,is_finished", "new": false, "ms": "漫画/小说访问占比、ACG详情访问、ACG标签点击率、ACG收藏率、ACG推荐位点击率、ACG详情到阅读转化…等7项", "note": "新增（可复用 comic_event/novel_event）"}, {"id": "acg_tag_click", "name": "ACG标签点击", "fn": "ACG / 详情页", "act": "点击标签", "props": "acg_type,content_id,tag_name", "new": false, "ms": "ACG标签点击率", "note": "新增"}, {"id": "acg_collect", "name": "ACG收藏", "fn": "ACG / 详情页", "act": "收藏 / 取消收藏", "props": "acg_type,content_id,action(add/cancel),is_login", "new": false, "ms": "ACG收藏率", "note": "新增（可复用 comic_collect/novel_collect）"}, {"id": "acg_chapter_list_open", "name": "ACG章节目录打开", "fn": "ACG / 详情页", "act": "点击「查看全部章节」", "props": "acg_type,content_id,from(detail/reader)", "new": false, "ms": "ACG章节目录使用率", "note": "新增"}, {"id": "acg_read_start", "name": "ACG开始阅读", "fn": "ACG / 详情页", "act": "点击「开始阅读」", "props": "acg_type,content_id,chapter_id,start_type(start/continue/chapter_list)", "new": false, "ms": "ACG详情到阅读转化、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完", "note": "新增（可复用 comic_event/novel_event）"}, {"id": "acg_recommend_click", "name": "ACG详情推荐位点击", "fn": "ACG / 详情页", "act": "点击「为您推荐」卡片", "props": "acg_type,from_content_id,to_content_id,position", "new": false, "ms": "ACG推荐位点击率", "note": "新增"}]}, {"page": "小说详情页", "ev": [{"id": "acg_detail_view", "name": "ACG详情浏览", "fn": "ACG / 详情页", "act": "进入详情页", "props": "acg_type,content_id,from_page,from_section,is_finished", "new": false, "ms": "漫画/小说访问占比、ACG详情访问、ACG标签点击率、ACG收藏率、ACG推荐位点击率、ACG详情到阅读转化…等7项", "note": "新增（可复用 comic_event/novel_event）"}, {"id": "acg_tag_click", "name": "ACG标签点击", "fn": "ACG / 详情页", "act": "点击标签", "props": "acg_type,content_id,tag_name", "new": false, "ms": "ACG标签点击率", "note": "新增"}, {"id": "acg_collect", "name": "ACG收藏", "fn": "ACG / 详情页", "act": "收藏 / 取消收藏", "props": "acg_type,content_id,action(add/cancel),is_login", "new": false, "ms": "ACG收藏率", "note": "新增（可复用 comic_collect/novel_collect）"}, {"id": "acg_read_start", "name": "ACG开始阅读", "fn": "ACG / 详情页", "act": "点击「开始阅读」", "props": "acg_type,content_id,chapter_id,start_type(start/continue/chapter_list)", "new": false, "ms": "ACG详情到阅读转化、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完", "note": "新增（可复用 comic_event/novel_event）"}, {"id": "acg_recommend_click", "name": "ACG详情推荐位点击", "fn": "ACG / 详情页", "act": "点击「为您推荐」卡片", "props": "acg_type,from_content_id,to_content_id,position", "new": false, "ms": "ACG推荐位点击率", "note": "新增"}]}, {"page": "章节目录弹层", "ev": [{"id": "acg_chapter_sort", "name": "ACG章节排序切换", "fn": "ACG / 详情页", "act": "切换倒序 / 正序", "props": "acg_type,content_id,order(asc/desc)", "new": false, "ms": "ACG章节目录使用率", "note": "新增"}, {"id": "acg_chapter_click", "name": "ACG章节点击", "fn": "ACG / 详情页", "act": "点击某一章", "props": "acg_type,content_id,chapter_id,chapter_no", "new": false, "ms": "ACG章节目录使用率、人均阅读章节数", "note": "新增"}]}, {"page": "漫画阅读页", "ev": [{"id": "acg_reader_nav", "name": "ACG阅读器导航", "fn": "ACG / 阅读器", "act": "点击 上一章 / 目录 / 下一章", "props": "acg_type,content_id,chapter_id,action(prev/next/catalog)", "new": false, "ms": "人均阅读章节数", "note": "新增"}, {"id": "acg_read_end", "name": "ACG阅读结束", "fn": "ACG / 阅读器", "act": "阅读结束或退出", "props": "acg_type,content_id,chapter_id,read_duration_ms,end_type(finish/quit),scroll_depth", "new": false, "ms": "ACG平均阅读时长与读完率、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完", "note": "新增（可复用 page_leave）"}, {"id": "page_load_result", "name": "（复用）页面加载结果", "fn": "ACG / 阅读器", "act": "阅读页加载", "props": "page_name=acg_reader,acg_type,result,load_ms", "new": false, "ms": "页面加载失败率", "note": "已有事件，新增 page_name 枚举"}]}, {"page": "小说阅读页", "ev": [{"id": "acg_reader_nav", "name": "ACG阅读器导航", "fn": "ACG / 阅读器", "act": "点击 上一章 / 目录 / 下一章", "props": "acg_type,content_id,chapter_id,action(prev/next/catalog)", "new": false, "ms": "人均阅读章节数", "note": "新增"}, {"id": "acg_read_end", "name": "ACG阅读结束", "fn": "ACG / 阅读器", "act": "阅读结束或退出", "props": "acg_type,content_id,chapter_id,read_duration_ms,end_type(finish/quit),scroll_depth", "new": false, "ms": "ACG平均阅读时长与读完率、ACG阅读流程：ACG页→卡片点击→详情→开始阅读→读完", "note": "新增（可复用 page_leave）"}, {"id": "page_load_result", "name": "（复用）页面加载结果", "fn": "ACG / 阅读器", "act": "阅读页加载", "props": "page_name=acg_reader,acg_type,result,load_ms", "new": false, "ms": "页面加载失败率", "note": "已有事件，新增 page_name 枚举"}]}];
+const EVENTS=[{"id": "search_entry_click", "src": "原表", "name": "点击搜索入口", "props": "entry_page,default_hint", "trig": "点击搜索框/搜索图标"}, {"id": "rank_page_expose", "src": "原表", "name": "榜单页曝光", "props": "from_page,rank_type", "trig": "进入榜单页"}, {"id": "rank_item_click", "src": "原表", "name": "榜单条目点击", "props": "rank_type,content_id,content_type,rank_no", "trig": "点击榜单条目"}, {"id": "home_tab_click", "src": "原表", "name": "频道Tab切换", "props": "tab_id,tab_name,tab_index,switch_type(click/swipe),from_tab", "trig": "点击/滑动切换首页频道"}, {"id": "news_expose", "src": "原表", "name": "资讯卡片曝光", "props": "news_id,news_classify,position,recommend_type(人工/算法),is_top,expose_duration_ms,tab_id,algo_id,request_id", "trig": "卡片按曝光口径可见"}, {"id": "news_click", "src": "原表", "name": "资讯卡片点击", "props": "news_id,news_classify,position,recommend_type,is_top,tab_id", "trig": "点击资讯卡片"}, {"id": "home_pull_refresh", "src": "原表", "name": "下拉刷新", "props": "page_name,tab_id,result,new_count", "trig": "触发下拉刷新"}, {"id": "home_load_more", "src": "原表", "name": "上拉加载更多", "props": "page_name,tab_id,page_no,result", "trig": "触底加载"}, {"id": "nav_tab_click", "src": "原表", "name": "底部导航点击", "props": "nav_id(home/community/acg/ai/app/me),from_nav,is_repeat_click", "trig": "点击底部导航项"}, {"id": "page_view", "src": "原表", "name": "页面浏览", "props": "page_name,ref_page,enter_source,content_id(详情页)", "trig": "页面展示"}, {"id": "page_leave", "src": "原表", "name": "页面离开", "props": "page_name,stay_ms,scroll_depth,leave_type(normal/bounce/back/quit),is_last_page", "trig": "页面退出/切后台"}, {"id": "page_load_result", "src": "原表", "name": "页面加载结果", "props": "page_name,result(success/timeout/fail),load_ms", "trig": "页面首屏加载结束或超时"}, {"id": "news_detail_view", "src": "原表", "name": "资讯详情浏览", "props": "news_id,news_classify,author_id,from_page,from_position", "trig": "详情页展示"}, {"id": "news_detail_leave", "src": "原表", "name": "资讯详情离开", "props": "news_id,read_duration_ms,scroll_depth,is_scroll_all", "trig": "离开详情页"}, {"id": "news_read_finish", "src": "原表", "name": "资讯阅读完成", "props": "news_id,is_scroll_all(1),read_duration_ms", "trig": "滚动到底≥90%"}, {"id": "news_like", "src": "原表", "name": "资讯点赞", "props": "news_id,action(like/cancel)", "trig": "点赞状态变化"}, {"id": "news_collect", "src": "原表", "name": "资讯收藏", "props": "news_id,action(add/cancel)", "trig": "收藏状态变化"}, {"id": "news_comment_publish", "src": "原表", "name": "资讯评论发布", "props": "news_id,comment_id,text_length,is_reply", "trig": "评论接口成功"}, {"id": "news_share_click", "src": "原表", "name": "资讯分享点击", "props": "news_id,share_channel", "trig": "点击分享"}, {"id": "news_share_success", "src": "原表", "name": "资讯分享成功", "props": "news_id,share_channel", "trig": "系统回调成功"}, {"id": "news_dislike", "src": "原表", "name": "资讯不感兴趣", "props": "news_id,reason", "trig": "点击不感兴趣"}, {"id": "content_report_submit", "src": "原表", "name": "举报提交", "props": "content_id,content_type,report_type", "trig": "举报成功(资讯/视频/帖子通用)"}, {"id": "video_expose", "src": "原表", "name": "视频卡片曝光", "props": "video_id,video_type(short/film/episode),show_pos,position,recommend_type,tab_id", "trig": "视频卡片按曝光口径可见"}, {"id": "video_play_click", "src": "原表", "name": "点击播放", "props": "video_id,video_type,film_id,film_type,episode,enter_source(feed/search/zone/push)", "trig": "用户发起播放(点封面/播放按钮/选集)"}, {"id": "video_play_start", "src": "原表", "name": "播放开始(首帧)", "props": "video_id,video_type,play_type,play_auto,play_mute,play_quality,startup_cost_ms,enter_source", "trig": "首帧渲染成功"}, {"id": "video_play_error", "src": "原表", "name": "播放异常", "props": "video_id,error_type(fail/lag/black_screen),error_code,lag_ms,lag_count", "trig": "播放失败/卡顿/黑屏"}, {"id": "video_play_end", "src": "原表", "name": "播放结束/退出", "props": "video_id,end_type(finish/slip/quit/switch),play_progress,play_duration_ms,quit_scene,quit_time", "trig": "完播、划走、主动退出、切视频"}, {"id": "video_quality_switch", "src": "原表", "name": "画质切换", "props": "video_id,from_quality,play_quality", "trig": "手动切换画质"}, {"id": "video_like", "src": "原表", "name": "视频点赞", "props": "video_id,action", "trig": "点赞状态变化"}, {"id": "video_comment_publish", "src": "原表", "name": "视频评论", "props": "video_id,comment_id,is_reply", "trig": "评论接口成功"}, {"id": "video_share_click", "src": "原表", "name": "视频分享", "props": "video_id,share_channel", "trig": "点击分享"}, {"id": "video_collect", "src": "原表", "name": "视频收藏", "props": "video_id,action", "trig": "收藏状态变化"}, {"id": "video_cache_start", "src": "原表", "name": "视频缓存发起", "props": "video_id,cache_quality", "trig": "点击缓存"}, {"id": "video_cache_result", "src": "原表", "name": "视频缓存结果", "props": "video_id,result(success/fail),fail_reason", "trig": "缓存完成或失败"}, {"id": "news_publish", "src": "原表", "name": "资讯发布(后台)", "props": "news_id,news_classify,publisher,publish_time", "trig": "后台审核上线"}, {"id": "video_publish", "src": "原表", "name": "用户视频发布", "props": "video_id,video_source,duration_s", "trig": "用户视频发布成功"}, {"id": "content_audit", "src": "原表", "name": "内容审核结果(后台)", "props": "content_id,content_type,result(pass/reject/delete),reason", "trig": "审核通过/驳回/删除"}, {"id": "search_hot_word_click", "src": "原表", "name": "点击热搜/历史词", "props": "word,word_type(hot/history/suggest),position", "trig": "点击词条"}, {"id": "search_submit", "src": "原表", "name": "提交搜索", "props": "keyword,input_type(手输/热词/历史/联想),is_valid(非空且非纯符号=1)", "trig": "点击搜索或回车"}, {"id": "search_result_expose", "src": "原表", "name": "搜索结果曝光", "props": "keyword,result_count,is_empty(无结果=1),cost_ms", "trig": "结果返回并展示"}, {"id": "search_result_click", "src": "原表", "name": "搜索结果点击", "props": "keyword,content_id,content_type,position,result_tab", "trig": "点击结果"}, {"id": "search_history_view", "src": "原表", "name": "查看搜索历史", "props": "history_count", "trig": "展示搜索历史"}, {"id": "search_history_clear", "src": "原表", "name": "清空搜索历史", "props": "-", "trig": "点击清空"}, {"id": "post_expose", "src": "原表", "name": "帖子曝光", "props": "post_id,community_id,post_content_type,position,recommend_type", "trig": "帖子卡片按曝光口径可见"}, {"id": "post_click", "src": "原表", "name": "帖子点击", "props": "post_id,community_id,post_content_type,position", "trig": "点击帖子"}, {"id": "post_detail_view", "src": "原表", "name": "帖子详情浏览", "props": "post_id,author_id,from_page", "trig": "帖子详情展示"}, {"id": "post_like", "src": "原表", "name": "帖子点赞/点踩", "props": "post_id,action(like/dislike/cancel)", "trig": "点赞/点踩状态变化"}, {"id": "post_comment_publish", "src": "原表", "name": "帖子评论", "props": "post_id,comment_id", "trig": "评论接口成功"}, {"id": "post_reply_publish", "src": "原表", "name": "帖子回复", "props": "post_id,comment_id,reply_to", "trig": "回复接口成功"}, {"id": "post_publish_click", "src": "原表", "name": "点击发布", "props": "post_content_type,topic_id,has_image,text_length", "trig": "点击发布按钮"}, {"id": "post_publish_success", "src": "原表", "name": "发帖成功", "props": "post_id,post_content_type,topic_id,author_id", "trig": "发帖接口成功"}, {"id": "topic_view", "src": "原表", "name": "话题页浏览", "props": "topic_id,enter_source", "trig": "进入话题页"}, {"id": "me_entry_click", "src": "原表", "name": "我的页入口点击", "props": "entry_id(收藏/历史/金币/设置/反馈)", "trig": "点击功能入口"}, {"id": "setting_change", "src": "原表", "name": "设置变更", "props": "setting_key,old_value,new_value", "trig": "开关/选项变更"}, {"id": "cache_clear_click", "src": "原表", "name": "清理缓存", "props": "cache_size_mb", "trig": "点击清理缓存"}, {"id": "feedback_submit", "src": "原表", "name": "提交反馈", "props": "feedback_type", "trig": "反馈成功"}, {"id": "logout_click", "src": "原表", "name": "退出登录", "props": "-", "trig": "退出成功"}, {"id": "login_page_expose", "src": "原表", "name": "登录页曝光", "props": "trigger_from(主动/被动拦截),ref_page", "trig": "登录页展示"}, {"id": "login_click", "src": "原表", "name": "点击登录", "props": "login_method(phone/wechat/apple/other)", "trig": "点击登录/获取验证码"}, {"id": "login_submit", "src": "原表", "name": "提交登录/注册", "props": "login_method,flow_id", "trig": "在登录页点击提交"}, {"id": "login_success", "src": "原表", "name": "登录成功", "props": "login_method,is_new_user", "trig": "登录接口成功"}, {"id": "login_fail", "src": "原表", "name": "登录失败", "props": "login_method,fail_reason,error_code", "trig": "登录接口失败"}, {"id": "register_click", "src": "原表", "name": "点击注册", "props": "reg_type", "trig": "点击注册/提交注册"}, {"id": "register_success", "src": "原表", "name": "注册成功", "props": "user_id,reg_type,channel,invite_code", "trig": "注册接口成功"}, {"id": "coin_task_click", "src": "原表", "name": "金币任务点击", "props": "task_id,task_status", "trig": "点击任务"}, {"id": "coin_grant", "src": "原表", "name": "金币入账", "props": "coin_amount,source(签到/任务/活动),biz_id,flow_id", "trig": "发放成功"}, {"id": "coin_spend", "src": "原表", "name": "金币消耗", "props": "coin_amount,spend_type,biz_id,flow_id", "trig": "消耗成功"}, {"id": "coin_entry_click", "src": "原表", "name": "金币入口点击", "props": "entry_source,from_page,flow_id", "trig": "用户点击任一进入金币充值的入口"}, {"id": "coin_goods_view", "src": "原表", "name": "进入金币商品页", "props": "entry_source,flow_id", "trig": "金币商品页曝光"}, {"id": "coin_goods_select", "src": "原表", "name": "选择金币商品", "props": "goods_id,coin_amount,price,flow_id", "trig": "点选某个金币商品"}, {"id": "vip_entry_click", "src": "原表", "name": "VIP 入口点击", "props": "entry_source,from_page,flow_id", "trig": "点击进入会员开通的入口"}, {"id": "vip_page_view", "src": "原表", "name": "进入 VIP 开通页", "props": "entry_source,flow_id", "trig": "VIP 开通页曝光"}, {"id": "vip_plan_select", "src": "原表", "name": "选择 VIP 套餐", "props": "plan_id,price,flow_id", "trig": "点选某个套餐"}, {"id": "content_purchase_click", "src": "原表", "name": "点击购买内容", "props": "content_id,content_type,price,balance_enough,flow_id", "trig": "在内容详情点击购买/解锁"}, {"id": "content_purchase_confirm", "src": "原表", "name": "确认支付", "props": "content_id,price,pay_type,flow_id", "trig": "在购买确认框点击确认"}, {"id": "order_created", "src": "原表", "name": "订单创建", "props": "order_id,goods_id,goods_type,amount,pay_channel,entry_source,flow_id", "trig": "订单创建成功（吃瓜网已有，原表缺，字段待研发确认）"}, {"id": "order_paid", "src": "原表", "name": "订单支付成功", "props": "order_id,amount,pay_channel,is_renew,entry_source,flow_id", "trig": "支付成功回调（吃瓜网已有，原表缺，字段待研发确认）"}, {"id": "order_fail", "src": "原表", "name": "订单支付失败", "props": "order_id,fail_reason,pay_channel,flow_id", "trig": "支付失败/取消/超时"}, {"id": "app_first_open", "src": "原表", "name": "首次启动", "props": "install_source,is_login(恒0)", "trig": "设备首次打开(安装后首次)"}, {"id": "app_open", "src": "原表", "name": "应用启动", "props": "launch_type(cold/hot),from_source(icon/push/deeplink/h5_link),launch_cost_ms,open_hour", "trig": "App 每次启动(冷/热)或 H5 首屏加载完成"}, {"id": "app_foreground", "src": "原表", "name": "进入前台", "props": "-", "trig": "切回前台"}, {"id": "app_background", "src": "原表", "name": "进入后台/退出", "props": "session_start_time,session_end_time,session_duration_ms", "trig": "切后台或被杀(会话结束)"}, {"id": "app_install_attribution", "src": "原表", "name": "安装归因回传", "props": "channel_id,source,download_count,install_count", "trig": "渠道/应用商店回传安装数据,按天导入"}, {"id": "update_popup_action", "src": "原表", "name": "升级弹窗操作", "props": "target_version,is_force,action(expose/update/later)", "trig": "弹出/点击更新/稍后"}, {"id": "permission_result", "src": "原表", "name": "权限申请结果", "props": "perm_type(通知/存储/相册/相机...),result(allow/deny)", "trig": "系统权限弹窗给出结果"}, {"id": "deeplink_open", "src": "原表", "name": "外链唤起", "props": "utm_source,utm_campaign,target_page", "trig": "通过外链/Scheme 进入"}, {"id": "app_crash", "src": "原表", "name": "应用崩溃", "props": "crash_page,error_log,stack_hash", "trig": "崩溃(下次启动补报)"}, {"id": "api_error", "src": "原表", "name": "接口/网络异常", "props": "api_name,http_code,error_code,error_type(network/server/timeout),cost_ms,network_type", "trig": "接口失败、超时或网络异常导致内容加载失败"}, {"id": "img_load_fail", "src": "原表", "name": "图片加载失败", "props": "img_host,error_code", "trig": "图片404/超时"}, {"id": "community_tab_click", "src": "扫描新增", "name": "社区Tab切换", "props": "tab_id,tab_name,from_tab", "trig": "点击社区顶部Tab"}, {"id": "community_filter_click", "src": "扫描新增", "name": "社区筛选切换", "props": "tab_id,filter_id,filter_name", "trig": "点击子筛选"}, {"id": "home_more_open", "src": "扫描新增", "name": "频道抽屉展开", "props": "from_tab", "trig": "点击更多"}, {"id": "zone_item_click", "src": "扫描新增", "name": "AI工具卡片点击", "props": "zone_id=ai,item_id,tool_type", "trig": "点击工具卡"}, {"id": "ai_task_submit", "src": "扫描新增", "name": "AI任务提交", "props": "tool_type,cost_coin,flow_id", "trig": "点击生成/提交"}, {"id": "ai_task_result", "src": "扫描新增", "name": "AI任务结果", "props": "tool_type,result(success/fail),duration_s,fail_reason", "trig": "任务返回"}, {"id": "my_ai_tab_click", "src": "扫描新增", "name": "我的AI类型切换", "props": "tool_type", "trig": "点击类型Tab"}, {"id": "my_ai_status_click", "src": "扫描新增", "name": "我的AI状态切换", "props": "tool_type,status", "trig": "点击状态Tab"}, {"id": "rank_tab_click", "src": "扫描新增", "name": "榜单切换", "props": "main_tab(榜单/往期/标签),period(day/week/month)", "trig": "点击榜单Tab"}, {"id": "coin_pay_method_select", "src": "扫描新增", "name": "选择支付方式", "props": "pay_channel,flow_id", "trig": "点击支付方式"}, {"id": "coin_recharge_click", "src": "扫描新增", "name": "点击立即充值", "props": "goods_id,pay_channel,price,flow_id", "trig": "点击按钮"}, {"id": "recharge_record_view", "src": "扫描新增", "name": "充值记录查看", "props": "record_count,is_empty", "trig": "进入充值记录页"}, {"id": "me_stat_click", "src": "扫描新增", "name": "我的统计点击", "props": "stat_type", "trig": "点击粉丝/关注/点赞"}, {"id": "fav_tab_click", "src": "扫描新增", "name": "收藏Tab切换", "props": "content_type", "trig": "点击Tab"}, {"id": "my_post_tab_click", "src": "扫描新增", "name": "我的发帖状态切换", "props": "status", "trig": "点击Tab"}, {"id": "reply_tab_click", "src": "扫描新增", "name": "评论回复Tab切换", "props": "content_type", "trig": "点击Tab"}, {"id": "creator_apply_click", "src": "扫描新增", "name": "博主认证入口点击", "props": "apply_channel", "trig": "点击认证入口"}, {"id": "invite_share_click", "src": "扫描新增", "name": "邀请分享操作", "props": "action(save_image/copy_link),invite_code", "trig": "点击按钮"}, {"id": "profile_edit", "src": "扫描新增", "name": "资料修改", "props": "field(avatar/nickname/signature/email),result", "trig": "保存修改"}, {"id": "follow_action", "src": "扫描新增", "name": "关注操作", "props": "target_id,action(follow/cancel),from_page", "trig": "点击关注"}, {"id": "acg_type_switch", "src": "原表", "name": "ACG类型切换", "props": "acg_type(comic/novel),from_type", "trig": "点击顶部漫画/小说切换"}, {"id": "acg_category_click", "src": "原表", "name": "ACG分类Tab切换", "props": "acg_type,category_id,category_name,tab_index", "trig": "点击分类Tab"}, {"id": "acg_quick_entry_click", "src": "原表", "name": "ACG快捷入口点击", "props": "acg_type,entry_id", "trig": "点击快捷入口"}, {"id": "acg_more_click", "src": "原表", "name": "ACG分区「更多」点击", "props": "acg_type,section_id", "trig": "点击更多"}, {"id": "zone_item_expose", "src": "原表", "name": "（复用）板块卡片曝光", "props": "zone_id=acg,item_id,item_type(comic/novel),position,section_id", "trig": "卡片进入可视区"}, {"id": "acg_filter_click", "src": "原表", "name": "ACG筛选点击", "props": "acg_type,filter_type(category/status/sort),filter_value", "trig": "点击筛选项"}, {"id": "acg_list_view", "src": "原表", "name": "ACG列表页浏览", "props": "acg_type,list_id(latest/hot/finished/watching),from_entry", "trig": "进入列表页"}, {"id": "acg_detail_view", "src": "原表", "name": "ACG详情浏览", "props": "acg_type,content_id,from_page,from_section,is_finished", "trig": "进入详情页"}, {"id": "acg_tag_click", "src": "原表", "name": "ACG标签点击", "props": "acg_type,content_id,tag_name", "trig": "点击详情页标签"}, {"id": "acg_collect", "src": "原表", "name": "ACG收藏", "props": "acg_type,content_id,action(add/cancel),is_login", "trig": "点击底部收藏"}, {"id": "acg_chapter_list_open", "src": "原表", "name": "ACG章节目录打开", "props": "acg_type,content_id,from(detail/reader)", "trig": "点击查看全部章节/阅读器内目录"}, {"id": "acg_chapter_sort", "src": "原表", "name": "ACG章节排序切换", "props": "acg_type,content_id,order(asc/desc)", "trig": "点击倒序/正序"}, {"id": "acg_chapter_click", "src": "原表", "name": "ACG章节点击", "props": "acg_type,content_id,chapter_id,chapter_no", "trig": "点击章节"}, {"id": "acg_read_start", "src": "原表", "name": "ACG开始阅读", "props": "acg_type,content_id,chapter_id,start_type(start/continue/chapter_list)", "trig": "点击开始阅读/进入阅读器"}, {"id": "acg_recommend_click", "src": "原表", "name": "ACG详情推荐位点击", "props": "acg_type,from_content_id,to_content_id,position", "trig": "点击推荐卡片"}, {"id": "acg_reader_nav", "src": "原表", "name": "ACG阅读器导航", "props": "acg_type,content_id,chapter_id,action(prev/next/catalog)", "trig": "点击底部导航"}, {"id": "acg_read_end", "src": "原表", "name": "ACG阅读结束", "props": "acg_type,content_id,chapter_id,read_duration_ms,end_type(finish/quit),scroll_depth", "trig": "退出阅读器/读完章节"}];
+const END=new Date('2026-10-27T00:00:00');
+let S={m:0,n:14,end:new Date(END),fp:'全部',fu:'全部',fc:'全部',cmp:'上一周期'};
+const $=s=>document.querySelector(s);const cmpName=()=>S.n<=7?'上周':S.n>=28?'上月':'上一周期';
+const pad=n=>String(n).padStart(2,'0');
+const fd=d=>pad(d.getMonth()+1)+'/'+pad(d.getDate());
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function hash(s){let h=7;for(const c of s)h=Math.imul(h^c.charCodeAt(0),16777619);return h>>>0}
+const scale=()=>({新用户:.3,老用户:.7,游客:.45,登录用户:.55,全部:1}[S.fu])*({渠道A:.45,渠道B:.3,渠道C:.2,全部:1}[S.fc]);
+const days=()=>{const a=[];for(let i=S.n-1;i>=0;i--){const d=new Date(S.end);d.setDate(d.getDate()-i);a.push(d)}return a};
+// 序列：base 基数，vol 波动，seed 随机种子
+function ser(base,vol,seed,n=S.n,kind='num',trend=0){const r=rng(hash(seed+S.fp+S.fu+S.fc)),a=[];for(let i=0;i<n;i++){const w=1+0.05*Math.sin(i*Math.PI/3.5);let v=base*(kind==='num'?scale():1)*w*(1+(r()-.5)*2*vol)*(1+trend*i/n);a.push(v)}return a}
+function fmt(v,k){if(k==='pct')return v.toFixed(1)+'%';if(k==='ms')return Math.round(v)+'ms';if(k==='min')return v.toFixed(1)+'分钟';if(k==='x')return v.toFixed(2);if(k==='yuan')return '¥'+Math.round(v).toLocaleString();return Math.round(v).toLocaleString()}
+function dl(a,b,k){if(b===0)return '—';if(k==='pct'||k==='ms'&&false){const d=a-b;return (d>=0?'+':'')+d.toFixed(1)+' 个百分点'}const d=(a-b)/b*100;return (d>=0?'+':'')+d.toFixed(1)+'%'}
+function cls(a,b,inv){const up=a>=b;return (up!==!!inv)?'u':'dn'}
+function tile(t,key){const a=ser(t.base,t.vol,key,Math.max(S.n,14),t.k,0);const v=a[a.length-1],p=a[a.length-2],w=a[a.length-8];
+ return `<div class="tile"><div class="n">${t.name}</div><div class="v">${fmt(v,t.k)}</div><div class="d"><span>较昨日 <b class="${cls(v,p,t.inv)}">${dl(v,p,t.k)}</b></span><span>较上周同日 <b class="${cls(v,w,t.inv)}">${dl(v,w,t.k)}</b></span></div></div>`}
+// ===== 图表 =====
+const COL=['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)','var(--c6)'];
+function legend(names){return `<div class="leg">${names.map((n,i)=>`<span><i style="background:${COL[i%6]}"></i>${n}</span>`).join('')}</div>`}
+function nice(m){const e=Math.pow(10,Math.floor(Math.log10(m||1))),f=m/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e}
+function line(c,key){const N=c.labels?c.labels.length:S.n,labels=c.labels||days().map(fd),W=640,H=230,L=48,R=12,T=12,B=26;
+ let ss=c.series.map((s,i)=>({n:s.n,d:ser(s.base,s.vol,key+i,N,s.k||'num',s.trend||0),k:s.k||'num',dash:s.dash}));
+ const cmpOn=!c.nocmp&&ss.length<=3&&!ss.some(s=>s.dash);
+ if(cmpOn){const f=.93;ss=ss.concat(c.series.map((s,i)=>({n:s.n+'（'+cmpName()+'）',d:ser(s.base*f,s.vol,key+'p'+i,N,s.k||'num',s.trend||0),k:s.k||'num',dash:1,cmp:1,ci:i})))}
+ const all=ss.flatMap(s=>s.d);let mx=nice(Math.max(...all)*1.05),mn=c.zero===false?Math.min(...all)*.95:0;if(c.zero===false)mx=Math.max(...all)*1.03;
+ const x=i=>L+(W-L-R)*(N===1?.5:i/(N-1)),y=v=>T+(H-T-B)*(1-(v-mn)/(mx-mn||1));
+ let g='';for(let k=0;k<=4;k++){const v=mn+(mx-mn)*k/4,yy=y(v);g+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="var(--grid)"/><text x="${L-6}" y="${yy+4}" text-anchor="end" font-size="11" fill="var(--mut)">${ss[0].k==='pct'?v.toFixed(0)+'%':v>=10000?(v/10000).toFixed(1)+'万':Math.round(v)}</text>`}
+ const step=Math.ceil(N/7);labels.forEach((l,i)=>{if(i%step===0||i===N-1)g+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--mut)">${l}</text>`});
+ let mk='';(c.marks||[]).forEach(m=>{const i=N-1-m.back;if(i>=0){mk+=`<rect x="${x(i)-6}" y="${T}" width="12" height="${H-T-B}" fill="var(--down)" opacity=".1"/><text x="${x(i)}" y="${T+10}" text-anchor="middle" font-size="11" fill="var(--down)">${m.t}</text>`}});
+ const p=ss.map((s,si)=>{const d=s.d.map((v,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1)).join('');return `<path d="${d}" fill="none" stroke="${COL[s.cmp?s.ci:si]}" stroke-width="2" ${s.dash?'stroke-dasharray="5 4"':''}/>`+s.d.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="6" fill="transparent"><title>${s.n} ${labels[i]}：${fmt(v,s.k)}</title></circle>`).join('')}).join('');
+ const base=ss.filter(s=>!s.cmp),tb=`<div class="vtb" hidden><table><tr><th>日期</th>${ss.map(s=>`<th>${s.n}</th>`).join('')}</tr>${labels.map((l,i)=>`<tr><td>${l}</td>${ss.map(s=>`<td>${fmt(s.d[i],s.k)}</td>`).join('')}</tr>`).join('')}</table></div>`;
+ return `<div class="vw"><div class="vt"><button class="on" onclick="vtog(this,0)">趋势图</button><button onclick="vtog(this,1)">明细表</button></div><div class="vg"><svg viewBox="0 0 ${W} ${H}">${g}${mk}${p}</svg>`+((base.length>1||cmpOn)?legend(base.map(s=>s.n))+(cmpOn?`<div class="leg"><span>虚线 = ${cmpName()}</span></div>`:''):'')+`</div>${tb}</div>`}
+function vtog(b,m){const w=b.closest('.vw');w.querySelectorAll('.vt button').forEach((x,i)=>x.classList.toggle('on',i===m));w.querySelector('.vg').hidden=!!m;w.querySelector('.vtb').hidden=!m}
+function bars(c,key){const W=640,H=230,L=48,R=12,T=12,B=40,cats=c.cats,n=cats.length;
+ const sers=c.series.map((s,i)=>cats.map((_,j)=>{const r=rng(hash(key+i+'_'+j+S.fp+S.fu+S.fc));return s.base*(s.k==='pct'?1:scale())*(c.shape?c.shape[j]:1)*(1+(r()-.5)*(s.vol||.15))}));
+ const stack=c.stack;const tot=cats.map((_,j)=>stack?sers.reduce((a,s)=>a+s[j],0):Math.max(...sers.map(s=>s[j])));
+ const mx=nice(Math.max(...tot)*1.08);const y=v=>T+(H-T-B)*(1-v/mx),bw=(W-L-R)/n;let g='';
+ for(let k=0;k<=4;k++){const v=mx*k/4;g+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${c.series[0].k==='pct'?v.toFixed(0)+'%':v>=10000?(v/10000).toFixed(1)+'万':Math.round(v)}</text>`}
+ let b='';cats.forEach((cn,j)=>{const cx=L+bw*j;b+=`<text x="${cx+bw/2}" y="${H-22}" text-anchor="middle" font-size="11" fill="var(--mut)">${cn}</text>`;
+  if(stack){let acc=0;sers.forEach((s,i)=>{const h=y(acc)-y(acc+s[j]);b+=`<rect x="${cx+bw*.15}" y="${y(acc+s[j])}" width="${bw*.7}" height="${h}" fill="${COL[i]}"><title>${cn} ${c.series[i].n}：${fmt(s[j],c.series[i].k)}</title></rect>`;acc+=s[j]})}
+  else{const m=sers.length,w=bw*.7/m;sers.forEach((s,i)=>{b+=`<rect x="${cx+bw*.15+w*i}" y="${y(s[j])}" width="${w-2}" height="${y(0)-y(s[j])}" fill="${COL[i]}" rx="2"><title>${cn} ${c.series[i].n}：${fmt(s[j],c.series[i].k)}</title></rect>`})}});
+ return `<svg viewBox="0 0 ${W} ${H}">${g}${b}</svg>`+(c.series.length>1?legend(c.series.map(s=>s.n)):'')}
+function hbar(c,key){const r=rng(hash(key+S.fp+S.fu+S.fc+S.n));let v=c.items.map((n,i)=>({n,v:c.base*(c.k==='pct'?1:scale())*(c.shape?c.shape[i]:1/(1+i*.55))*(1+(r()-.5)*.1)}));
+ if(c.share){const t=v.reduce((a,b)=>a+b.v,0);v=v.map(o=>({n:o.n,v:o.v/t*100}))}
+ const mx=Math.max(...v.map(o=>o.v));const k=c.share?'pct':c.k;
+ return `<div class="fun">${v.map(o=>`<div class="r"><span>${o.n}</span><div class="b" style="width:${o.v/mx*100}%;background:var(--c3)"></div><span class="p">${fmt(o.v,k)}</span></div>`).join('')}</div>`}
+function funnel(c,key){const r=rng(hash(key+S.fp+S.fu+S.fc));let v=c.base*scale()*S.n/14;const out=[{n:c.steps[0][0],v}];
+ for(let i=1;i<c.steps.length;i++){v=v*c.steps[i][1]*(1+(r()-.5)*.06);out.push({n:c.steps[i][0],v})}
+ const mx=out[0].v;
+ return `<div class="fun">${out.map((o,i)=>`<div class="r"><span>${o.n}</span><div class="b" style="width:${o.v/mx*100}%"></div><span class="p">${Math.round(o.v).toLocaleString()} · ${i?(o.v/out[i-1].v*100).toFixed(1)+'%':'起点'}</span></div>`).join('')}</div>`}
+function heat(c,key){const days_=c.cols,r=rng(hash(key+S.fp+S.fu+S.fc+S.n));const ds=days().slice(-8,-1);
+ let h=`<table class="heat"><tr><th>新用户来的那天</th>${days_.map(d=>`<th>${d}</th>`).join('')}</tr>`;
+ ds.forEach((d,ri)=>{h+=`<tr><th>${fd(d)}</th>`;days_.forEach((dn,ci)=>{const need=[1,3,7,15,30][ci];const age=7-ri;if(need>age){h+=`<td style="color:var(--mut)">—</td>`}else{const base=[42,32,24,17,12][ci];const v=base*(1+(r()-.5)*.14);const a=Math.min(.85,v/60);h+=`<td style="background:color-mix(in srgb,var(--c1) ${(a*100).toFixed(0)}%,var(--panel))" title="${fd(d)} 第${dn}">${v.toFixed(1)}%</td>`}});h+='</tr>'});
+ return h+'</table><div class="s" style="margin-top:6px">没到的日期先空着（—）</div>'}
+const DRAW={line,bars,hbar,funnel,heat};
+function spark(v,color){const w=120,h=34,mx=Math.max(...v),mn=Math.min(...v),x=i=>i/(v.length-1)*w,y=t=>h-3-(t-mn)/(mx-mn||1)*(h-6);return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${v.map((t,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(t).toFixed(1)).join('')}" fill="none" stroke="${color||'var(--c1)'}" stroke-width="1.8" vector-effect="non-scaling-stroke"/></svg>`}
+function donut(c,key){const r=rng(hash(key+S.fp+S.fu+S.fc));let v=c.items.map((n,i)=>(c.shape?c.shape[i]:1/(1+i*.7))*(.9+r()*.2));const t=v.reduce((a,b)=>a+b,0);v=v.map(x=>x/t);const C=2*Math.PI*60;let acc=0;
+ const arcs=v.map((p,i)=>{const len=p*C,o=`<circle r="60" cx="80" cy="80" fill="none" stroke="${COL[i%6]}" stroke-width="26" stroke-dasharray="${len.toFixed(2)} ${(C-len).toFixed(2)}" stroke-dashoffset="${(-acc).toFixed(2)}" transform="rotate(-90 80 80)"><title>${c.items[i]} ${(p*100).toFixed(1)}%</title></circle>`;acc+=len;return o}).join('');
+ return `<div class="dn2"><svg viewBox="0 0 160 160" style="width:150px;height:150px;flex:none">${arcs}<text x="80" y="76" text-anchor="middle" font-size="12" fill="var(--mut)">${c.center||''}</text><text x="80" y="94" text-anchor="middle" font-size="15" font-weight="700" fill="var(--fg)">${(v[0]*100).toFixed(0)}%</text></svg><div class="leg" style="flex-direction:column;gap:4px;margin:0">${c.items.map((n,i)=>`<span><i style="background:${COL[i%6]}"></i>${n}　${(v[i]*100).toFixed(1)}%</span>`).join('')}</div></div>`}
+function wkheat(c,key){const r=rng(hash(key+S.fp+S.fu+S.fc+S.n)),W=640,H=230,L0=40,cw=(W-L0-8)/24,ch=(H-34)/7,wd=['周一','周二','周三','周四','周五','周六','周日'];let g='';
+ for(let d=0;d<7;d++){g+=`<text x="${L0-6}" y="${8+d*ch+ch/2+4}" text-anchor="end" font-size="11" fill="var(--mut)">${wd[d]}</text>`;for(let h=0;h<24;h++){const base=h<6?.12+h*.02:h<9?.35:h<12?.55:h<14?.7:h<18?.55:h<23?.95:.5;const v=Math.min(1,base*(d>4?1.12:1)*(.92+r()*.16));g+=`<rect x="${L0+h*cw}" y="${8+d*ch}" width="${cw-2}" height="${ch-2}" rx="3" fill="color-mix(in srgb,var(--c1) ${(v*100).toFixed(0)}%,var(--panel))"><title>${wd[d]} ${pad(h)}时：活跃指数 ${(v*100).toFixed(0)}</title></rect>`}}
+ for(let h=0;h<24;h+=3)g+=`<text x="${L0+h*cw+cw/2}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--mut)">${pad(h)}</text>`;return `<svg viewBox="0 0 ${W} ${H}">${g}</svg>`}
+function curve(c,key){const W=640,H=230,L0=44,R0=12,T0=12,B0=28,cats=['次日','3日','7日','15日','30日'],base=[41.5,31.8,23.8,16.9,12.1],ser_=[['全部用户',1],['登录用户',1.25],['游客',.78]],r=rng(hash(key+S.fp+S.fu+S.fc));
+ const x=i=>L0+(W-L0-R0)*i/4,y=v=>T0+(H-T0-B0)*(1-v/60);let g='';for(let k=0;k<=4;k++){const v=k*15;g+=`<line x1="${L0}" x2="${W-R0}" y1="${y(v)}" y2="${y(v)}" stroke="var(--grid)"/><text x="${L0-6}" y="${y(v)+4}" text-anchor="end" font-size="11" fill="var(--mut)">${v}%</text>`}
+ cats.forEach((n,i)=>g+=`<text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--mut)">${n}</text>`);
+ const p=ser_.map(([n,m],si)=>{const d=base.map(v=>v*m*(.97+r()*.06));return `<path d="${d.map((v,i)=>(i?'L':'M')+x(i)+' '+y(v)).join('')}" fill="none" stroke="${COL[si]}" stroke-width="2"/>`+d.map((v,i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="4" fill="${COL[si]}"><title>${n} ${cats[i]}留存 ${v.toFixed(1)}%</title></circle>`).join('')}).join('');
+ return `<svg viewBox="0 0 ${W} ${H}">${g}${p}</svg>`+legend(ser_.map(a=>a[0]))}
+DRAW.donut=donut;DRAW.wkheat=wkheat;DRAW.curve=curve;
 
-  var $ = function (id) { return document.getElementById(id); };
-  var track = $('track'), cd = $('cd'), arc = $('arc'), num = $('num'),
-      home = $('home'), toast = $('toast'), log = $('log');
+// ===== 菜单内容配置 =====
+const T=(name,base,k,vol,up,dn,inv)=>({name,base,k,vol,up,dn,inv});
+const CFG=[
+{tiles:[T('新增用户',2900,'num',.07,'渠道带来的新人变多。','来的人变少，先看哪个渠道掉了。'),T('安装→首次打开',72.8,'pct',.01,'装完更愿意打开。','装了没打开，人还没开始用；故障日这一步会一起掉。'),T('新增注册用户占比',31,'pct',.04,'新来的人更愿意注册。','多数新用户停在游客状态。'),T('新增游客用户',2000,'num',.07,'没注册就在用的人变多。','游客变少，可能是注册引导起效，也可能是来的人少了。')],
+ charts:[{t:'每天各渠道新来的人',s:'看新增是从哪个渠道长出来的。',c:{type:'bars',cats:null,stack:true,series:[{n:'渠道A',base:1300,vol:.1},{n:'渠道B',base:850,vol:.1},{n:'渠道C',base:600,vol:.1},{n:'其他',base:160,vol:.15}]},daily:true},
+ {t:'装完之后',s:'安装 → 首次打开 → 首次浏览内容 → 首次互动。',c:{type:'funnel',base:4100,steps:[['安装',1],['首次打开',.728],['首次浏览内容',.82],['首次互动',.38]]}},
+ {t:'新增用户的系统分布',s:'适配机型、系统时参考。',c:{type:'hbar',items:['Android','iOS'],share:true,base:100,shape:[1,.55]}}]},
+{tiles:[T('DAU 日活',24000,'num',.04,'每天来的人更多。','每天来的人变少，先看新用户还是老用户少了。'),T('WAU 周活',92000,'num',.03,'一周里用过的人更多。','一周里用过的人变少。'),T('MAU 月活',210000,'num',.02,'一个月里用过的人更多。','月活下降，是长期的用户流失。'),T('DAU ÷ MAU',11.4,'pct',.04,'用户更常来，粘性变高。','来的人在变少频次，只是偶尔来看一眼。')],
+ charts:[{t:'每天有多少人在用',s:'看多天时，同一个人只算一次。',c:{type:'line',series:[{n:'DAU',base:24000,vol:.05},{n:'登录用户',base:10500,vol:.05},{n:'游客',base:13500,vol:.05}]}},
+ {t:'一天里几点最活跃',s:'适合安排内容发布的时间。',c:{type:'bars',cats:Array.from({length:12},(_,i)=>pad(i*2)+'时'),series:[{n:'活跃用户',base:3200,vol:.1}],shape:[.25,.12,.2,.55,.8,.95,.9,.85,1,1.15,1.3,.8]}},
+ {t:'新老用户占比',s:'今天的活跃用户里，新老各多少。',c:{type:'hbar',items:['老用户','新用户'],share:true,base:100,shape:[1,.22]}}]},
+{tiles:[T('人均日打开次数',3.4,'x',.05,'用户更常回来看。','回来看的次数变少。'),T('人均单日在线时长',18.5,'min',.05,'用得更久。','用得更短，先看内容有没有吸引力。'),T('页面跳出率',32,'pct',.05,'看一眼就走的人变多。','更多人愿意继续看。',true),T('全站 PV',420000,'num',.05,'页面被看的次数变多。','页面被看的次数变少。')],
+ charts:[{t:'全站 PV / UV',s:'PV 是次数，UV 是人数。',c:{type:'line',series:[{n:'PV',base:420000,vol:.05},{n:'UV',base:24000,vol:.05}]}},
+ {t:'核心页面访问占比',s:'流量集中在哪几个页面。',c:{type:'hbar',items:['首页','热点','影视专区','短视频专区','我的','搜索页'],share:true,base:100}},
+ {t:'底部导航点击占比',s:'用户更爱点哪个入口。',c:{type:'hbar',items:['首页','热点','影视','短视频','我的'],share:true,base:100,shape:[1,.6,.45,.7,.35]}}]},
+{tiles:[T('资讯点击率',9.2,'pct',.05,'标题或封面更能吸引人点进来。','展示很多但没人点，看标题和封面。'),T('资讯完读率',41,'pct',.05,'内容读完的人更多。','读到一半就走，内容或篇幅有问题。'),T('视频完播率',27,'pct',.05,'视频看完的人更多。','中途离开的人变多，看前几秒是否留得住人。'),T('互动率（点赞+评论+收藏）',6.8,'pct',.06,'内容更能引起反应。','看的人多、反应的人少。')],
+ charts:[{t:'资讯：从曝光到读完',s:'曝光 → 点击 → 进详情 → 读完。',c:{type:'funnel',base:520000,steps:[['有效曝光',1],['点击',.092],['详情页访问',.97],['读完',.41]]}},
+ {t:'视频：曝光播放转化率与完播率',s:'左边是进来的人，右边是看完的人。',c:{type:'line',series:[{n:'曝光→播放',base:14,vol:.06,k:'pct'},{n:'完播率',base:27,vol:.05,k:'pct'}],zero:false}},
+ {t:'各类内容互动',s:'点赞、评论、收藏、分享，占看内容的人的比例。',c:{type:'bars',cats:['点赞','评论','收藏','分享'],series:[{n:'资讯',base:4,k:'pct'},{n:'视频',base:3.2,k:'pct'},{n:'漫画/小说/短剧',base:2.4,k:'pct'}],shape:[1,.4,.55,.3]}},
+ {t:'资讯分类阅读占比',s:'读者更爱看哪一类。',c:{type:'hbar',items:['分类A','分类B','分类C','分类D','分类E'],share:true,base:100}}]},
+{tiles:[T('发帖转化率',23,'pct',.06,'点了发帖的人更多发出去了。','点了发帖但没发出，看发帖页哪里卡住。'),T('活跃评论用户',3200,'num',.06,'愿意说话的人变多。','愿意说话的人变少。'),T('私信发送用户',1900,'num',.06,'私信更常用。','私信使用变少。'),T('私信连接成功率',98.6,'pct',.004,'消息通道更稳。','连不上，用户发不出消息，先查连接。')],
+ charts:[{t:'发帖：从点击到发出',s:'发帖点击 → 发帖成功。',c:{type:'funnel',base:2600,steps:[['发帖点击',1],['发帖成功',.23]]}},
+ {t:'活跃评论用户',s:'每天评论过的人。',c:{type:'line',series:[{n:'活跃评论用户',base:3200,vol:.06}]}}]},
+{tiles:[T('次日留存',41.5,'pct',.03,'新用户第二天更愿意回来。','新用户第二天没回来，先看首屏内容和引导。'),T('7 日留存',23.8,'pct',.03,'用了一周还在的人更多。','留不住人，看内容和召回。'),T('7 日流失用户',6400,'num',.06,'沉默的人变多。','沉默的人变少。',true),T('30 日流失用户',21800,'num',.04,'长期不来的人变多。','长期不来的人变少。',true)],
+ charts:[{t:'新用户留存',s:'按新用户来的那天算。',c:{type:'heat',cols:['次日','3日','7日','15日','30日']}},
+ {t:'7 日流失用户',s:'最近 7 天没来过的人。',c:{type:'line',series:[{n:'7日流失',base:6400,vol:.06}]}},
+ {t:'流失前最后停留页面',s:'走之前最后看的是哪里。',c:{type:'hbar',items:['首页','资讯详情','视频播放页','搜索页','登录页'],share:true,base:100,shape:[1,.8,.6,.3,.22]}}]},
+{tiles:[T('广告填充率',86,'pct',.02,'请求得到广告的比例变高。','请求发出但没广告，看广告源。'),T('广告点击率',1.7,'pct',.06,'看广告的人更愿意点。','点的人变少。'),T('eCPM',22.4,'yuan',.05,'每千次展示赚得更多。','展示的单价变低。'),T('开屏广告跳过率',44,'pct',.03,'更多人跳过开屏，体验变差。','跳过的人变少。',true)],
+ charts:[{t:'广告：从请求到点击',s:'请求 → 填充 → 曝光 → 点击。',c:{type:'funnel',base:680000,steps:[['广告请求',1],['填充',.86],['曝光',.92],['点击',.017]]}},
+ {t:'eCPM 趋势',s:'每千次展示的收益。',c:{type:'line',series:[{n:'eCPM',base:22.4,vol:.05,k:'num'}],zero:false}},
+ {t:'打扰度',s:'弹窗与开屏被关闭、被跳过的比例。',c:{type:'bars',cats:['运营位点击','弹窗点击','弹窗关闭','广告关闭','开屏跳过'],series:[{n:'占比',base:10,k:'pct'}],shape:[.55,.9,3.5,2.2,4.4]}}]},
+{tiles:[T('订单创建数',1800,'num',.07,'想买的人变多。','想买的人变少。'),T('支付成功率',91,'pct',.02,'下单后更多人付成功。','下了单没付成功，先查支付渠道。'),T('金币发放总量',820000,'num',.06,'发出去的金币变多，成本也跟着涨。','发得少了，看任务和签到有没有变化。'),T('金币消耗率',58,'pct',.03,'发出去的金币用得更多。','金币在用户手里堆着没花掉。')],
+ charts:[{t:'订单：从创建到支付',s:'订单创建 → 支付成功。',c:{type:'funnel',base:1800,steps:[['订单创建',1],['支付成功',.91]]}},
+ {t:'各类内容付费次数',s:'视频、漫画、小说、短剧。',c:{type:'bars',cats:['视频','漫画','小说','短剧'],series:[{n:'付费次数',base:900,vol:.1}],shape:[1,.7,.5,.85]}},
+ {t:'金币发放与消耗',s:'发出去多少，花出去多少。',c:{type:'line',series:[{n:'发放',base:820000,vol:.06},{n:'消耗',base:476000,vol:.06}]}}]},
+{tiles:[T('日均搜索次数',9800,'num',.06,'更多人在找东西。','找东西的人变少。'),T('搜索无结果率',7.4,'pct',.06,'搜不到的比例变高，内容有缺口。','搜得到的更多了。',true),T('搜索结果点击率',63,'pct',.04,'搜到的结果更对路。','搜到了但不点，结果和需求不匹配。'),T('人均搜索次数',1.9,'x',.05,'用户搜得更勤。','搜得更少。')],
+ charts:[{t:'搜索：从入口到点击结果',s:'入口点击 → 搜索提交 → 结果曝光 → 结果点击。',c:{type:'funnel',base:14000,steps:[['搜索入口点击',1],['有效搜索提交',.78],['结果曝光',.93],['结果点击',.63]]}},
+ {t:'高频搜索词 TOP',s:'用户最常搜的词。',c:{type:'hbar',items:['热词 1','热词 2','热词 3','热词 4','热词 5','热词 6'],base:1200}},
+ {t:'搜索无结果率',s:'搜不到的比例。',c:{type:'line',series:[{n:'无结果率',base:7.4,vol:.06,k:'pct'}],zero:false}}]},
+{tiles:[T('推送到达率',93,'pct',.02,'推送更多送到了手机上。','送不到，看推送服务与系统权限。'),T('推送点击率',6.2,'pct',.07,'推送更吸引人。','推送文案或时间需要调。'),T('点击后回访率',71,'pct',.04,'点了推送的人真的进了产品。','点了但没进，看落地页。'),T('老用户 7 日回流率',8.4,'pct',.05,'沉默的人被叫回来更多。','叫不回沉默用户。')],
+ charts:[{t:'推送：从到达到回访',s:'推送接收 → 推送点击 → 回访。',c:{type:'funnel',base:90000,steps:[['推送接收',1],['点击',.062],['回访',.71]]}},
+ {t:'老用户回流率',s:'沉默之后又回来的比例。',c:{type:'line',series:[{n:'7日回流',base:8.4,vol:.05,k:'pct'},{n:'30日回流',base:4.1,vol:.05,k:'pct'}],zero:false}}]},
+{tiles:[T('签到转化率',34,'pct',.05,'看到弹窗的人更愿意签到。','看到弹窗但不签到，奖励或文案没吸引力。'),T('签到弹窗关闭率',38,'pct',.04,'弹窗被直接关掉的变多，打扰感变强。','弹窗更能被接受。',true),T('3 天全勤率',46,'pct',.04,'连续签到的人更多。','很多人签了一两天就断了。'),T('漏签后继续签率',29,'pct',.05,'漏签之后还会回来。','漏签之后就不来了。')],
+ charts:[{t:'签到：从弹窗到签到成功',s:'弹窗曝光 → 点击签到 → 签到成功。',c:{type:'funnel',base:21000,steps:[['签到弹窗曝光',1],['点击签到',.4],['签到成功',.85]]}},
+ {t:'活动期 vs 活动前 7 天',s:'活动有没有拉动业务（指数，活动前=100）。',c:{type:'bars',cats:['DAU','次日留存','人均时长'],series:[{n:'活动前7天',base:100,k:'pct'},{n:'活动期',base:108,k:'pct'}],shape:[1,1,1]}},
+ {t:'签到转化率',s:'每天看到弹窗的人里，签到的比例。',c:{type:'line',series:[{n:'签到转化率',base:34,vol:.05,k:'pct'}],zero:false}}]},
+{tiles:[T('登录成功率',88,'pct',.02,'点了登录的人更多登录成功。','点了登录但没成功，先看失败原因。'),T('注册成功率',79,'pct',.03,'点了注册的人更多注册成功。','点了注册但没完成。'),T('游客→登录转化率',16,'pct',.05,'游客更愿意登录。','游客多、登录少。'),T('登录用户活跃占比',42,'pct',.03,'登录用户占比更高，留存更好追踪。','活跃的多是游客。')],
+ charts:[{t:'登录：从曝光到成功',s:'登录页曝光 → 登录点击 → 登录成功。',c:{type:'funnel',base:9000,steps:[['登录页曝光',1],['登录点击',.62],['登录成功',.88]]}},
+ {t:'游客→登录转化率',s:'游客里有多少变成了登录用户。',c:{type:'line',series:[{n:'转化率',base:16,vol:.05,k:'pct'}],zero:false}},
+ {t:'登录失败原因',s:'失败的人卡在哪。',c:{type:'hbar',items:['密码错误','账号不存在','网络异常','验证失败','其他'],share:true,base:100,shape:[1,.45,.35,.2,.15]}}]},
+{tiles:[T('APP 崩溃率',0.42,'pct',.15,'崩溃的人变多，看哪个版本。','更稳定了。',true),T('页面加载成功率',98.2,'pct',.004,'页面更稳地打开。','页面加载失败变多，先看接口和网络。'),T('冷启动耗时',1850,'ms',.05,'启动变慢。','启动变快。',true),T('接口成功率',99.1,'pct',.002,'接口更稳。','接口失败变多，内容加载会出问题。')],
+ charts:[{t:'崩溃率',s:'红色标记的日子是故障日，当天的下跌先看这里。',c:{type:'line',series:[{n:'崩溃率',base:.42,vol:.12,k:'pct'}],marks:[{back:12,t:'故障'}]}},
+ {t:'各版本异常报错率',s:'新版本有没有带来问题。',c:{type:'bars',cats:['v3.2.0','v3.2.1','v3.3.0','v3.3.1'],series:[{n:'报错率',base:1,k:'pct'}],shape:[1.1,.8,1.9,.7]}},
+ {t:'接口成功率',s:'左轴是成功率。',c:{type:'line',series:[{n:'接口成功率',base:99.1,vol:.003,k:'pct'}],zero:false}}]},
+{tiles:[T('工作日日均 DAU',24500,'num',.03,'工作日更活跃。','工作日偏弱。'),T('周末日均 DAU',27800,'num',.03,'周末更活跃。','周末偏弱。'),T('节假日活跃涨幅',18,'pct',.08,'假期拉动明显。','假期没拉动，运营活动要调整。'),T('夜间吃瓜用户占比',36,'pct',.04,'夜里来的人更多，适合晚间运营。','夜里来的人少。')],
+ charts:[{t:'工作日 vs 周末',s:'日均 DAU。',c:{type:'bars',cats:['工作日','周末'],series:[{n:'DAU',base:24500}],shape:[1,1.13]}},
+ {t:'热点事件期间的流量',s:'热点出现时，流量峰值有多高。',c:{type:'line',series:[{n:'内容消费量',base:420000,vol:.05,trend:.1}]}}]}
+];
+[10,9,6,4].forEach(i=>CFG.splice(i,1));CFG.splice(6,0,{});
 
-  var ICON_STATIC = '<svg width="84" height="84" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><circle cx="9" cy="9.5" r="1.8"/><path d="M3.5 17.5l5.5-5 4 3.5 3-2.5 4.5 4"/></svg>';
-  var ICON_PLAY = '<svg width="56" height="56" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>';
+const OLDN=['用户获取','用户概览','使用行为','内容分析','留存分析','付费分析','漏斗分析','搜索分析','注册登录转化','稳定性监控','热点与周期'];
+const REN={'用户获取':'新增与渠道','用户概览':'活跃用户','使用行为':'页面分析','注册登录转化':'注册登录'};
+const CFGN={};OLDN.forEach((n,i)=>CFGN[REN[n]||n]=CFG[i]);
+CFGN['新增与渠道'].charts.pop();
+CFGN['活跃用户'].charts[2]={t:'星期 × 时段活跃热力',s:'颜色越深越活跃，适合安排发布和运营的时间。',c:{type:'wkheat'}};
+CFGN['留存分析'].charts.splice(1,0,{t:'留存曲线',s:'新用户第 N 天还在的比例，登录用户和游客分开看。',c:{type:'curve'}});
+CFGN['用户画像']={tiles:[T('新用户占比',22,'pct',.05,'新来的人变多，老用户占比相对变低。','老用户占比更高，增长靠存量。'),T('登录用户占比',42,'pct',.03,'登录用户变多，更容易追踪和召回。','游客为主，用户难以识别和召回。'),T('4G/5G 占比',58,'pct',.03,'移动网络用户更多，注意流量消耗。','Wi-Fi 用户更多。')],
+ charts:[{t:'新老用户',s:'活跃用户里新、老各占多少。',c:{type:'donut',items:['老用户','新用户'],shape:[1,.28],center:'老用户'}},
+ {t:'登录状态',s:'游客和登录用户。',c:{type:'donut',items:['游客','登录用户'],shape:[1,.72],center:'游客'}},
+ {t:'操作系统',s:'iOS、Android。',c:{type:'donut',items:['Android','iOS'],shape:[1,.55],center:'Android'}},
+ {t:'网络类型',s:'适配弱网时参考。',c:{type:'donut',items:['Wi-Fi','4G','5G','其他'],shape:[1,.6,.4,.05],center:'Wi-Fi'}},
+ {t:'系统版本分布',s:'适配系统时参考。',c:{type:'hbar',items:['系统版本 A','系统版本 B','系统版本 C','系统版本 D','其他'],share:true,base:100}},
+ {t:'机型分布 TOP',s:'适配机型时参考。',c:{type:'hbar',items:['机型 1','机型 2','机型 3','机型 4','机型 5'],share:true,base:100}},
+ {t:'渠道构成',s:'各下载渠道的用户占比。',c:{type:'donut',items:['渠道A','渠道B','渠道C','其他'],shape:[1,.7,.45,.15],center:'渠道A'}}]};
 
-  function per() { return cfg.count === 1 ? 5 : 2; }
-  function total() { return cfg.count * per(); }
+// ===== 渲染 =====
+function nav(){let h='',last='';MODS.forEach((m,i)=>{if(m.group!==last){h+=`<div class="gh">${m.group}</div>`;last=m.group}h+=`<button class="${i===S.m?'on':''}" onclick="go(${i})"><span>${m.name}</span>${m.name==='PRD 总览'?'':`<i>${m.cnt}</i>`}</button>`});$('#nav').innerHTML=h}
+function go(i){S.m=i;CS.sel=null;FS.sel=null;TM.sel=null;nav();render();history.replaceState(null,'','#m'+(i+1));scrollTo(0,0)}
+function render(){render0();decorate();if(typeof defsHook==='function')defsHook();}
+function render0(){const m=MODS[S.m],c=CFGN[m.name],key='m'+m.name;if(m.name==='内容分析'){renderContent();return}if(m.name==='漏斗分析'){renderFlow();return}if(CUSTOM[m.name]){CUSTOM[m.name]();return}const _d=document.getElementById('dr');if(_d)_d.remove();
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p>`;
+ h+=`<div class="tiles">${c.tiles.map((t,i)=>tile(t,key+'t'+i)).join('')}</div><div class="grid">`;
+ c.charts.forEach((ch,i)=>{const cc=Object.assign({},ch.c);if(ch.daily)cc.cats=days().map(fd);
+  h+=`<div class="card"><h3>${ch.t}</h3><div class="s">${ch.s}</div>${DRAW[cc.type==='bars'?'bars':cc.type](cc,key+'c'+i)}</div>`});
+ h+='</div>';
+ const ms=METRICS.filter(x=>x.menu===m.name);
+ 
+ $('#view').innerHTML=h}
 
-  function build() {
-    track.innerHTML = '';
-    track.style.width = (440 * cfg.count) + 'px';
-    for (var i = 0; i < cfg.count; i++) {
-      var dyn = cfg.types[i] === 'dynamic';
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'ad';
-      b.style.background = PALETTE[i].bg;
-      b.style.color = PALETTE[i].fg;
-      b.setAttribute('aria-label', '广告素材 ' + (i + 1) + '，进入详情页');
-      b.innerHTML = (dyn
-        ? '<span class="media-dyn"><span class="p"></span><span class="p p2"></span><span class="r"></span>' + ICON_PLAY + '</span>'
-        : '<span class="media-static">' + ICON_STATIC + '</span>') +
-        '<span class="t">广告素材 ' + (i + 1) + '</span>' +
-        '<span class="d">' + (dyn ? '动态视频 / GIF' : '静态图片') + ' · 440×956 px</span>';
-      b.addEventListener('click', openAd);
-      track.appendChild(b);
-    }
-  }
+// ===== 内容分析：资源列表 =====
+const CT={
+'资讯':{u:'篇',cols:[['分类','s'],['曝光量','n'],['有效曝光(≥5s)','n'],['点击率','p'],['详情访问','n'],['平均阅读时长','min'],['完读率','p'],['点赞','n'],['评论','n'],['收藏','n'],['分享','n']],ev:'news_expose、news_click、news_detail_view、news_like 等'},
+'视频':{u:'条',cols:[['分类','s'],['曝光量','n'],['播放量','n'],['曝光播放转化率','p'],['完播率','p'],['平均播放时长','min'],['点赞','n'],['评论','n'],['收藏','n'],['分享','n'],['付费次数','n']],ev:'video_expose、video_play_start、video_play_end、video_purchase 等'},
+'漫画':{u:'部',cols:[['状态','s'],['曝光量','n'],['点击率','p'],['详情浏览','n'],['平均阅读时长','min'],['点赞','n'],['收藏','n'],['评论','n'],['付费次数','n']],ev:'comic_event、comic_like、comic_collect、comic_comment、comic_purchase'},
+'小说':{u:'部',cols:[['状态','s'],['曝光量','n'],['点击率','p'],['详情浏览','n'],['平均阅读时长','min'],['点赞','n'],['收藏','n'],['评论','n'],['付费次数','n']],ev:'novel_event、novel_like、novel_collect、novel_comment、novel_purchase'},
+'短剧':{u:'部',cols:[['状态','s'],['曝光量','n'],['点击率','p'],['播放量','n'],['平均播放时长','min'],['点赞','n'],['收藏','n'],['评论','n'],['付费次数','n']],ev:'drama_event、drama_like、drama_collect、drama_comment、drama_purchase、drama_status_change'},
+'帖子':{u:'条',cols:[['板块','s'],['曝光量','n'],['点击率','p'],['详情浏览','n'],['点赞','n'],['评论','n'],['收藏','n'],['解锁数','n']],ev:'post_event、post_like、post_comment、post_collect、post_unlock'}};
+const CAT={'资讯':['分类A','分类B','分类C','分类D'],'视频':['分类A','分类B','分类C'],'漫画':['连载中','已完结'],'小说':['连载中','已完结'],'短剧':['更新中','已完结'],'帖子':['板块A','板块B','板块C']};
+const CS={t:'资讯',sort:1,dir:-1,page:0,q:'',sel:null};
+function citems(t){const def=CT[t],a=[];for(let i=1;i<=36;i++){const r=rng(hash(t+i+S.fp+S.fu+S.fc)),z=1/Math.pow(i,.55),e=Math.round(260000*z*scale()*S.n/14*(1+(r()-.5)*.2));
+ const ctr=(5+r()*9)*(1+.3*(.5-i/60)),det=Math.round(e*ctr/100*.97);const cells=def.cols.map(([n,k])=>{
+  if(n==='分类'||n==='状态'||n==='板块'){const L=CAT[t];return L[Math.floor(r()*L.length)]}
+  if(n==='曝光量')return e;if(n==='有效曝光(≥5s)')return Math.round(e*(.55+r()*.2));
+  if(n==='点击率')return ctr;if(n==='详情访问'||n==='详情浏览')return det;
+  if(n==='播放量')return t==='视频'?Math.round(e*(.1+r()*.1)):Math.round(det*(.85+r()*.1));
+  if(n==='曝光播放转化率')return 8+r()*12;if(n==='完播率'||n==='完读率')return 18+r()*35;
+  if(n==='平均阅读时长'||n==='平均播放时长')return t==='小说'?6+r()*12:t==='漫画'?4+r()*8:t==='短剧'?3+r()*6:t==='视频'?1+r()*3:.8+r()*2.5;
+  if(n==='点赞')return Math.round(det*(.025+r()*.05));if(n==='评论')return Math.round(det*(.004+r()*.012));
+  if(n==='收藏')return Math.round(det*(.01+r()*.03));if(n==='分享')return Math.round(det*(.004+r()*.012));
+  if(n==='付费次数')return Math.round(det*(.005+r()*.02));if(n==='解锁数')return Math.round(det*(.008+r()*.02));return 0});
+ a.push({i,name:t+i,cells,e,det})}return a}
+function cfmt(v,k){return k==='s'?v:k==='p'?v.toFixed(1)+'%':k==='min'?v.toFixed(1)+' 分钟':Math.round(v).toLocaleString()}
+function renderContent(){const m=MODS[S.m],def=CT[CS.t];let L=citems(CS.t);
+ const tot=(n)=>L.reduce((a,x)=>a+(x.cells[def.cols.findIndex(c=>c[0]===n)]||0),0);
+ const col=def.cols.findIndex(c=>c[0]==='曝光量'),ci=def.cols.findIndex(c=>c[0]==='点击率');
+ const ex=tot('曝光量'),inter=['点赞','评论','收藏'].reduce((a,n)=>a+tot(n),0),det=L.reduce((a,x)=>a+x.det,0),pay=tot('付费次数')+tot('解锁数');
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p><div class="tabs">${Object.keys(CT).map(t=>`<button class="${t===CS.t?'on':''}" onclick="cTab('${t}')">${t}列表</button>`).join('')}</div>`;
+ h+=`<div class="tiles"><div class="tile"><div class="n">${CS.t}总曝光量</div><div class="v">${ex.toLocaleString()}</div></div><div class="tile"><div class="n">平均点击率</div><div class="v">${(det/ex*100).toFixed(1)}%</div></div><div class="tile"><div class="n">互动率（点赞+评论+收藏）</div><div class="v">${(inter/det*100).toFixed(1)}%</div></div><div class="tile"><div class="n">${CS.t==='资讯'?'分享次数':CS.t==='帖子'?'解锁数':'付费次数'}</div><div class="v">${Math.round(CS.t==='资讯'?tot('分享'):pay).toLocaleString()}</div></div></div>`;
+ if(CS.q)L=L.filter(x=>x.name.includes(CS.q));
+ const si=CS.sort;L.sort((a,b)=>{const va=a.cells[si],vb=b.cells[si];return (typeof va==='string'?va.localeCompare(vb):va-vb)*CS.dir});
+ const per=10,pages=Math.max(1,Math.ceil(L.length/per));if(CS.page>=pages)CS.page=pages-1;const pg=L.slice(CS.page*per,CS.page*per+per);
+ h+=`<div class="card"><div class="bar"><input type="text" id="cq" placeholder="搜索${CS.t}名称" value="${CS.q}" oninput="cQ(this.value)"><span class="c">共 ${L.length} ${def.u}，点表头排序，点一行看详情</span></div><div class="tw"><table class="l"><thead><tr><th class="${''}" style="text-align:left">${CS.t}名称</th>${def.cols.map((c,i)=>`<th class="${i===si?'s':''}" onclick="cSort(${i})">${c[0]}${i===si?(CS.dir<0?' ↓':' ↑'):''}</th>`).join('')}</tr></thead><tbody>${pg.map(x=>`<tr onclick="cSel(${x.i})"><td>${x.name}</td>${x.cells.map((v,i)=>`<td>${cfmt(v,def.cols[i][1])}</td>`).join('')}</tr>`).join('')}${pg.length?'':'<tr><td colspan="99" style="text-align:center;color:var(--mut);padding:24px">没有匹配的内容</td></tr>'}</tbody></table></div>
+ <div class="pg"><button ${CS.page?'':'disabled'} onclick="cPg(${CS.page-1})">上一页</button>${Array.from({length:pages},(_,i)=>`<button class="${i===CS.page?'on':''}" onclick="cPg(${i})">${i+1}</button>`).join('')}<button ${CS.page<pages-1?'':'disabled'} onclick="cPg(${CS.page+1})">下一页</button></div></div>`;
+ const ms=METRICS.filter(x=>x.menu===m.name);
+ h+=``;
+ 
+ $('#view').innerHTML=h;drawer()}
+function drawer(){let d=document.getElementById('dr');if(d)d.remove();if(CS.sel==null||MODS[S.m].name!=='内容分析')return;
+ const def=CT[CS.t],x=citems(CS.t).find(o=>o.i===CS.sel);if(!x)return;const g=n=>{const k=def.cols.findIndex(c=>c[0]===n);return k<0?null:x.cells[k]};
+ const ctr=g('点击率')??g('曝光播放转化率'),inter=(g('点赞')||0)+(g('评论')||0)+(g('收藏')||0);
+ const el=document.createElement('div');el.className='dr';el.id='dr';
+ el.innerHTML=`<button class="x" onclick="cSel(null)">关闭</button><h2>${x.name}</h2><div class="s" style="color:var(--mut);font-size:12px">${CS.t} · ${def.cols[0][1]==='s'?def.cols[0][0]+'：'+x.cells[0]:''}</div>
+ <div class="mg">${def.cols.slice(def.cols[0][1]==='s'?1:0).map((c,i)=>{const v=x.cells[i+(def.cols[0][1]==='s'?1:0)];return `<div><span>${c[0]}</span><b>${cfmt(v,c[1])}</b></div>`}).join('')}</div>
+ <div class="card" style="margin-top:12px"><h3>曝光与点击趋势</h3><div class="s">每天的曝光量与点击量。</div>${line({series:[{n:'曝光',base:x.e/S.n,vol:.12},{n:'点击',base:x.e/S.n*(ctr||8)/100,vol:.15}]},'d'+CS.t+x.i)}</div>
+ <div class="card" style="margin-top:12px"><h3>从曝光到互动</h3><div class="s">曝光 → 点击 → 进入内容 → 互动。</div><div class="fun">${[['曝光',x.e],['点击',x.det/.97],['进入内容',x.det],['互动（点赞+评论+收藏）',inter]].map((o,i,a)=>`<div class="r"><span>${o[0]}</span><div class="b" style="width:${Math.max(2,o[1]/x.e*100)}%"></div><span class="p">${Math.round(o[1]).toLocaleString()} · ${i?(o[1]/a[i-1][1]*100).toFixed(1)+'%':'起点'}</span></div>`).join('')}</div></div>`;
+ document.body.appendChild(el)}
+function cTab(t){CS.t=t;CS.sort=1;CS.dir=-1;CS.page=0;CS.q='';CS.sel=null;render()}
+function cSort(i){if(CS.sort===i)CS.dir=-CS.dir;else{CS.sort=i;CS.dir=-1}CS.page=0;render()}
+function cPg(p){CS.page=p;render()}
+function cQ(v){CS.q=v;CS.page=0;const p=document.getElementById('cq').selectionStart;render();const e=document.getElementById('cq');e.focus();e.setSelectionRange(p,p)}
+function cSel(i){CS.sel=i;drawer()}
 
-  function render(animate) {
-    var t = total();
-    var elapsed = t - st.left;
-    var idx = st.finished ? cfg.count - 1 : Math.min(cfg.count - 1, Math.floor(elapsed / per()));
-    track.style.transition = animate ? '' : 'none';
-    track.style.transform = 'translateX(-' + (440 * idx) + 'px)';
 
-    if (st.finished) {
-      cd.innerHTML = '<button type="button" class="enter" id="enterBtn">进入<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button>';
-      $('enterBtn').addEventListener('click', enter);
-    } else {
-      num.textContent = st.left;
-      $('ring').setAttribute('aria-label', '倒计时 ' + st.left + ' 秒');
-      arc.style.transition = animate ? 'stroke-dashoffset 1s linear' : 'none';
-      arc.style.strokeDashoffset = (C * (elapsed + (animate ? 1 : 0)) / t).toFixed(1);
-    }
-    log.textContent = st.finished
-      ? '倒计时结束 · 显示「进入」'
-      : '第 ' + (idx + 1) + '/' + cfg.count + ' 个广告 · 剩余 ' + st.left + 's';
-  }
+// ===== 漏斗分析：业务流程 =====
+function DV(F){return F.id==='active'?1:S.n}
+const FS={f:'active',sel:null,w:'7天内',tab:'转化概览',dim:null};
+function WF(){return {'当天内':.93,'7天内':1,'30天内':1.06}[FS.w]}
+function fWin(v){FS.w=v;render()}
+function DIMS(F){const d=[{k:F.entry,desc:F.id==='active'?'按用户类型看：新用户、老用户、回流用户、游客、会员，谁更容易看到内容。':'同一个流程，从不同'+(F.entry==='内容类型'?'内容类型':'入口')+'进来，转化差多少。',en:F.entries,sh:F.shares}];
+ d.push({k:'渠道',desc:F.id==='active'?'用户当初从哪个渠道安装的。哪个渠道带来的人更爱看内容，一目了然。':'分渠道看这个流程的转化。',en:['渠道A','渠道B','渠道C','渠道D','其他'],sh:[.34,.26,.18,.12,.1]});
+ if(F.id==='active')d.push({k:'启动来源',desc:'这一次是从哪里打开 App 的。推送、外链带来的人，意图和自己点图标进来的人不一样。',en:['点击图标','推送通知','深度链接','外部网页跳转'],sh:[.62,.14,.1,.14]});
+ return d}
+function curDim(F){const ds=DIMS(F);return ds.find(x=>x.k===FS.dim)||ds[0]}
+function flowRows(F,dm){return dm.en.map((en,ei)=>{const r=rng(hash(F.id+dm.k+en+S.fp+S.fu+S.fc));const sh=dm.sh[ei]/dm.sh.reduce((a,b)=>a+b,0);
+  let v=({active:100000,coin:5200,vip:3100,content:98000,login:9000,search:14000}[F.id])*sh*scale()*(F.id==='active'?1:S.n/14)*(1+(r()-.5)*.12);const c=[v];
+  for(let i=1;i<F.steps.length;i++){const k=Math.min(.97,F.steps[i].r*(.86+r()*.28)*WF()*(1+(ei===1&&F.id==='coin'?.1:0)));v=v*k;c.push(v)}
+  return {en,c}})}
+function flowData(F,dm){const d0=DIMS(F)[0],base=flowRows(F,d0),tot=F.steps.map((_,i)=>base.reduce((a,x)=>a+x.c[i],0));let rows=base;
+ if(dm&&dm.k!==d0.k){rows=flowRows(F,dm);const sm=tot.map((_,i)=>rows.reduce((a,x)=>a+x.c[i],0));rows=rows.map(x=>({en:x.en,c:x.c.map((v,i)=>v*tot[i]/sm[i])}))}
+ return {rows,tot}}
+function fSub(t){FS.tab=t;FS.sel=null;render()}
+function fDim(k){FS.dim=k;FS.sel=null;render()}
+function funnelViz(F,T){return `<div class="fv">${T.map((v,i)=>`${i?`<div class="fvc">↓ 转化 ${(v/T[i-1]*100).toFixed(1)}% · 流失 ${Math.round(T[i-1]-v).toLocaleString()} 人</div>`:''}<div class="fvr"><span class="fvn">${F.steps[i].n}</span><div class="fvt"><div class="fvb" style="width:${Math.max(3,v/T[0]*100)}%;opacity:${1-i*.1}"></div></div><span class="fvv"><b>${Math.round(v).toLocaleString()}</b> <em>${(v/T[0]*100).toFixed(1)}%</em></span></div>`).join('')}</div>`}
+function renderFlow(){const m=MODS[S.m];const F=FLOWS.find(x=>x.id===FS.f);const dm=curDim(F),D=flowData(F,dm),T=D.tot,last=T.length-1;
+ let worst=1,wi=1;for(let i=1;i<T.length;i++){const k=T[i]/T[i-1];if(k<worst){worst=k;wi=i}}
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p><div class="tabs">${FLOWS.map(f=>`<button class="${f.id===FS.f?'on':''}" onclick="fTab('${f.id}')">${f.name}</button>`).join('')}</div>`;
+ h+=`<div class="fbar"><div><b>${F.name}</b><span class="hint"> ${F.q}</span></div><div class="ctl" style="margin:0"><label>转化窗口期</label><select onchange="fWin(this.value)">${['当天内','7天内','30天内'].map(x=>`<option ${x===FS.w?'selected':''}>${x}</option>`).join('')}</select><span class="hint">从第一步开始，窗口期内走完后面步骤才算转化。</span></div></div>`;
+ h+=`<div class="tiles"><div class="tile"><div class="n">${F.steps[0].n}人数</div><div class="v">${Math.round(T[0]).toLocaleString()}</div></div><div class="tile"><div class="n">${F.steps[last].n}人数</div><div class="v">${Math.round(T[last]).toLocaleString()}</div></div><div class="tile"><div class="n">总转化率</div><div class="v">${(T[last]/T[0]*100).toFixed(1)}%</div><div class="d"><span>${F.steps[0].n} → ${F.steps[last].n}</span></div></div><div class="tile"><div class="n">掉得最多的一步</div><div class="v" style="font-size:18px">${F.steps[wi-1].n} → ${F.steps[wi].n}</div><div class="d"><span class="dn">这一步流失 ${((1-worst)*100).toFixed(1)}%</span></div></div></div>`;
+ h+=`<div class="stabs">${['转化概览','流失分析','来源与拆分'].map(t=>`<button class="${t===FS.tab?'on':''}" onclick="fSub('${t}')">${t}</button>`).join('')}</div>`;
+ const lost=T.slice(0,-1).map((v,i)=>({n:F.steps[i].n+' → '+F.steps[i+1].n,v:v-T[i+1]}));const lt=lost.reduce((a,b)=>a+b.v,0);
+ if(FS.tab==='转化概览'){
+  h+=`<p class="note"><b>结论：</b>${F.steps[wi-1].n} → ${F.steps[wi].n} 这一步流失最多（${((1-worst)*100).toFixed(1)}%，约 ${Math.round(T[wi-1]-T[wi]).toLocaleString()} 人）。到「流失分析」看这些人是谁、去了哪。</p>`;
+  h+=`<div class="grid"><div class="card"><h3>转化漏斗</h3><div class="s">每一步还剩多少人，占起点多少，相邻两步转化多少。</div>${funnelViz(F,T)}</div><div class="card"><h3>每天趋势</h3><div class="s">${F.steps[0].n}涨了，最终成功有没有跟着涨。</div>${line({series:[{n:F.steps[0].n,base:T[0]/DV(F),vol:.08},{n:F.steps[last].n,base:T[last]/DV(F),vol:.1}]},'fl'+F.id)}</div></div>`}
+ else if(FS.tab==='流失分析'){
+  h+=`<div class="grid"><div class="card"><h3>各步流失人数占比</h3><div class="s">没走完的人，主要掉在哪一步。点一行，看这些人是谁。</div>${(()=>{const mx=Math.max(...lost.map(o=>o.v));return `<div class="fun">${lost.map((o,li)=>`<div class="r lostrow" onclick="fLost(${li})"><span>${o.n}</span><div class="b" style="width:${o.v/mx*100}%;background:var(--c5)"></div><span class="p">${(o.v/lt*100).toFixed(1)}%</span></div>`).join('')}</div>`})()}</div>`;
+  if(F.extra==='coin_short'){const need=T[1]*.26,go=need*.46,ok=go*.7,back=ok*.62;h+=`<div class="card"><h3>金币不足的人去充值了吗</h3><div class="s">点击购买后发现金币不够的人：去充值 → 充值成功 → 回来买成功。（需在充值入口带 entry_source=content_paywall）</div><div class="fun">${[['金币不足',need],['点击去充值',go],['充值成功',ok],['回到内容购买成功',back]].map((o,i,a)=>`<div class="r"><span>${o[0]}</span><div class="b" style="width:${o[1]/need*100}%;background:var(--c2)"></div><span class="p">${Math.round(o[1]).toLocaleString()} · ${i?(o[1]/a[i-1][1]*100).toFixed(1)+'%':'起点'}</span></div>`).join('')}</div></div>`}
+  else if(F.extra==='active'){const lostN=T[0]-T[3],w=[.34,.24,.3,.12],ev=['有曝光、没有点击事件','page_leave 的 leave_type=bounce，且当天没有任何内容曝光','有页面浏览，但没有内容详情（下面表格看具体页面）','其余'];
+   h+=`<div class="card"><h3>没看内容的人去哪了</h3><div class="s">日活里没有进入内容详情的 ${Math.round(lostN).toLocaleString()} 人（${(lostN/T[0]*100).toFixed(1)}%），按他们当天的行为分成四类。</div><div class="fun">${F.drop.map((n,i)=>`<div class="r"><span>${n}</span><div class="b" style="width:${w[i]/.34*100}%;background:var(--c5)"></div><span class="p">${Math.round(lostN*w[i]).toLocaleString()} · ${(w[i]*100).toFixed(0)}%</span></div><div class="s" style="margin:-2px 0 6px 0;font-size:11px">判断依据：${ev[i]}</div>`).join('')}</div></div>`}
+  else if(F.id==='coin'||F.id==='vip'){const t=T[3]-T[4],w=[.46,.24,.2,.1];h+=`<div class="card"><h3>创建了订单但没付成功，去哪了</h3><div class="s">需要订单事件带失败原因（fail_reason）才能做，目前待研发确认。</div><div class="fun">${F.drop.map((n,i)=>`<div class="r"><span>${n}</span><div class="b" style="width:${w[i]/.46*100}%;background:var(--c5)"></div><span class="p">${Math.round(t*w[i]).toLocaleString()} · ${(w[i]*100).toFixed(0)}%</span></div>`).join('')}</div></div>`}
+  h+='</div>';
+  if(F.extra==='active'){const rr=rng(hash('actp'+S.fp+S.fu+S.fc));const PG=[['首页推荐',.97,48,.31,.12],['资讯列表',.52,64,.18,.1],['内容详情',.55,142,.2,.14],['视频列表',.3,71,.09,.08],['搜索页',.18,38,.05,.15],['我的页',.22,29,.06,.1],['金币充值页',.04,52,.015,.35],['VIP开通页',.03,57,.012,.38],['社区',.12,83,.03,.12],['登录页',.07,21,.02,.42]].map(o=>({n:o[0],uv:T[0]*o[1]*(1+(rr()-.5)*.1),sec:o[2]*(1+(rr()-.5)*.12),last:o[3]*(1+(rr()-.5)*.1),bn:o[4]*(1+(rr()-.5)*.1)}));const mxl=Math.max(...PG.map(o=>o.last));
+   h+=`<div class="card" style="margin-top:12px"><h3>用户停在了哪个页面</h3><div class="s">每个页面有多少人来过、平均待多久，以及有多少人把它当成当天最后一个页面（直接离开）。「最后页面占比」高、停留短的页面，就是用户流失的地方。</div><div class="tw"><table class="l"><thead><tr><th style="text-align:left">页面</th><th>访问人数</th><th>人均停留</th><th>跳出率</th><th>作为最后页面占比</th></tr></thead><tbody>${PG.sort((a,b)=>b.last-a.last).map(o=>`<tr><td>${o.n}</td><td>${Math.round(o.uv).toLocaleString()}</td><td>${Math.round(o.sec)} 秒</td><td>${(o.bn*100).toFixed(1)}%</td><td><span class="cv" style="width:${o.last/mxl*60}px;background:var(--c5)"></span>${(o.last*100).toFixed(1)}%</td></tr>`).join('')}</tbody></table></div></div>`;
+   const rt=rng(hash('actr'+S.fp+S.fu+S.fc)),a1=.46*(.95+rt()*.1),a7=.21*(.95+rt()*.1),b1=.22*(.95+rt()*.1),b7=.08*(.95+rt()*.1);
+   h+=`<div class="card" style="margin-top:12px"><h3>看了内容的人，更容易留下来吗</h3><div class="s">把当天的活跃用户分成「看了内容详情」和「没看」两组，对比之后的留存。差距越大，说明让更多人看到内容越值得做。</div><div class="fun">${[['看了内容 · 次日留存',a1],['没看内容 · 次日留存',b1],['看了内容 · 7日留存',a7],['没看内容 · 7日留存',b7]].map((o,i)=>`<div class="r"><span>${o[0]}</span><div class="b" style="width:${o[1]/a1*100}%;background:${i%2?'var(--c5)':'var(--c2)'}"></div><span class="p">${(o[1]*100).toFixed(1)}%</span></div>`).join('')}</div></div>`}}
+ else if(FS.tab==='来源与拆分'){
+  const ds=DIMS(F),mxc=Math.max(...D.rows.map(x=>x.c[last]/x.c[0]));
+  h+=`<div class="card"><div class="dimbar"><span class="hint">拆分维度</span><div class="chips">${ds.map(d=>`<button class="${d.k===dm.k?'on':''}" onclick="fDim('${d.k}')">${d.k}</button>`).join('')}</div></div><div class="s">${dm.desc} 点一行看这一类的详情。</div><div class="tw"><table class="l"><thead><tr><th style="text-align:left">${dm.k}</th><th>${F.steps[0].n}</th>${F.steps.slice(1).map(s=>`<th>→ ${s.n}</th>`).join('')}<th>总转化率</th></tr></thead><tbody>${D.rows.slice().sort((a,b)=>b.c[last]/b.c[0]-a.c[last]/a.c[0]).map(x=>`<tr onclick="fSel('${x.en}')"><td>${x.en}</td><td>${Math.round(x.c[0]).toLocaleString()}</td>${x.c.slice(1).map((v,i)=>`<td>${(v/x.c[i]*100).toFixed(1)}%</td>`).join('')}<td><span class="cv" style="width:${x.c[last]/x.c[0]/mxc*60}px"></span>${(x.c[last]/x.c[0]*100).toFixed(1)}%</td></tr>`).join('')}</tbody></table></div></div>`;
+  if(F.id==='active')h+=``}
+ else{
+  h+=`<div class="card"><h3>这个流程需要的埋点</h3><div class="tw"><table class="t"><tr><th>步骤</th><th>事件</th><th>状态</th><th>建议字段</th></tr>${F.steps.map(s=>`<tr><td>${s.n}</td><td>${s.ev.split(' / ').map(e=>`<code>${e}</code>`).join(' ')}</td><td><span class="src ${s.src==='建议新增'?'c':s.src==='原表已有'?'b':'a'}">${s.src}</span></td><td>${s.f}</td></tr>`).join('')}</table></div></div>`;
+  const ms=METRICS.filter(x=>x.menu===m.name&&x.sub===F.name);
+  if(ms.length)h+=`<div class="card" style="margin-top:12px"><h3>相关指标口径</h3><div class="tw"><table class="t"><tr><th>指标</th><th>计算公式</th><th>依赖事件</th></tr>${ms.map(x=>`<tr><td>${x.name}</td><td>${x.f||''}</td><td>${x.ev.split('、').map(e=>e?`<code>${e}</code>`:'').join(' ')}</td></tr>`).join('')}</table></div></div>`}
+ $('#view').innerHTML=h;fDrawer()}
+function fDrawer(){let d=document.getElementById('dr');if(d)d.remove();if(!FS.sel||MODS[S.m].name!=='漏斗分析')return;
+ const F=FLOWS.find(x=>x.id===FS.f),x=flowData(F,curDim(F)).rows.find(o=>o.en===FS.sel);if(!x)return;const last=x.c.length-1;
+ const el=document.createElement('div');el.className='dr';el.id='dr';
+ el.innerHTML=`<button class="x" onclick="fSel(null)">关闭</button><h2>${x.en}</h2><div class="s" style="color:var(--mut);font-size:12px">${F.name} · ${curDim(F).k}</div>
+ <div class="mg"><div><span>${F.steps[0].n}</span><b>${Math.round(x.c[0]).toLocaleString()}</b></div><div><span>${F.steps[last].n}</span><b>${Math.round(x.c[last]).toLocaleString()}</b></div><div><span>总转化率</span><b>${(x.c[last]/x.c[0]*100).toFixed(1)}%</b></div></div>
+ <div class="card"><h3>这一类的漏斗</h3><div class="fun">${x.c.map((v,i)=>`<div class="r"><span>${F.steps[i].n}</span><div class="b" style="width:${Math.max(2,v/x.c[0]*100)}%"></div><span class="p">${Math.round(v).toLocaleString()} · ${i?(v/x.c[i-1]*100).toFixed(1)+'%':'起点'}</span></div>`).join('')}</div></div>
+ <div class="card" style="margin-top:12px"><h3>每天趋势</h3>${line({series:[{n:F.steps[0].n,base:x.c[0]/DV(F),vol:.1},{n:F.steps[last].n,base:x.c[last]/DV(F),vol:.14}]},'fd'+F.id+x.en)}</div>`;
+ document.body.appendChild(el)}
+function fLost(i){const F=FLOWS.find(x=>x.id===FS.f),T=flowData(F).tot,lost=T[i]-T[i+1],r=rng(hash('lost'+F.id+i+S.fp+S.fu+S.fc));
+ const grp=(t,a)=>{let w=a.map(x=>x[1]*(.9+r()*.2)),s=w.reduce((x,y)=>x+y,0);return `<div class="card" style="margin-top:12px"><h3>${t}</h3><div class="fun">${a.map((x,j)=>`<div class="r"><span>${x[0]}</span><div class="b" style="width:${w[j]/s*100}%;background:var(--c5)"></div><span class="p">${(w[j]/s*100).toFixed(0)}% · ${Math.round(lost*w[j]/s).toLocaleString()}</span></div>`).join('')}</div></div>`};
+ const d=document.getElementById('dr');if(d)d.remove();const el=document.createElement('div');el.className='dr';el.id='dr';
+ el.innerHTML=`<button class="x" onclick="this.parentNode.remove()">关闭</button><h2>${F.steps[i].n} → ${F.steps[i+1].n} 的流失用户</h2><div class="s" style="color:var(--mut);font-size:12px">${F.name} · 窗口期 ${FS.w}</div><div class="mg"><div><span>流失人数</span><b>${Math.round(lost).toLocaleString()}</b></div><div><span>占上一步</span><b>${(lost/T[i]*100).toFixed(1)}%</b></div></div>`+grp('用户类型',[['新用户',.28],['老用户',.44],['游客',.28]])+grp('渠道',[['渠道A',.4],['渠道B',.3],['渠道C',.2],['其他',.1]])+`<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" onclick="toast('已提交导出任务，完成后可在下载中心查看')">导出流失用户名单</button><button class="btn" onclick="toast('已保存为用户分群')">保存为用户分群</button></div>`;document.body.appendChild(el)}
+function fTab(i){FS.f=i;FS.sel=null;render()}
+function fSel(e){FS.sel=e;fDrawer()}
 
-  function restoreRing() {
-    cd.innerHTML = '';
-    cd.appendChild(ringNode);
-  }
 
-  var ringNode = $('ring');
+// ===== 新增页面：数据概览 / 路径分析 / 事件分析 / 埋点管理 =====
+const CUSTOM={};
+CFGN['ACG分析']={tiles:[T('ACG详情到阅读转化',58,'pct',.03,'点进详情后真正开始读的人更多。','点进详情后开始读的人变少。'),T('ACG读完率',41,'pct',.03,'内容被读完的比例上升。','读到一半就退出的人变多。'),T('ACG收藏率',6.2,'pct',.05,'收藏的人更多。','收藏的人变少。'),T('人均阅读章节数',3.4,'num',.04,'读得更深了。','读得更浅了。')],
+ charts:[{t:'ACG：进入到读完',s:'ACG页 → 点卡片 → 详情 → 开始阅读 → 读完/退出。',c:{type:'funnel',base:18000,steps:[['进入ACG页',1],['点击卡片',.52],['进入详情',.96],['开始阅读',.58],['读完',.41]]}},
+ {t:'ACG快捷入口点击分布',s:'分类 / 最新 / 热门 / 完结 / 长篇 / 短篇 / 连载 / 人气。',c:{type:'hbar',items:['热门','最新','分类','完结','人气','连载','长篇','短篇'],share:true,base:100,shape:[1,.8,.6,.45,.4,.3,.22,.15]}},
+ {t:'漫画 / 小说访问占比',s:'各类型详情访问占比。',c:{type:'hbar',items:['漫画','小说'],share:true,base:100,shape:[1,.55]}},
+ {t:'分类Tab使用分布',s:'推荐 / 韩漫 / 汉化 / CG画集 等。',c:{type:'hbar',items:['推荐','韩漫','汉化','CG画集','写真&Cosplay'],share:true,base:100,shape:[1,.6,.45,.3,.2]}},
+ {t:'ACG阅读转化趋势',s:'详情页里有多少人点了开始阅读。',c:{type:'line',series:[{n:'详情到阅读转化',base:58,vol:.04,k:'pct'}],zero:false}}]};
+CFGN['AI科技分析']={tiles:[T('AI任务成功率',91,'pct',.01,'AI生成更稳定了。','AI任务失败变多，先看工具类型和失败原因。'),T('AI工具使用渗透率',31,'pct',.03,'更多人真的用了AI。','用AI的人变少。'),T('AI工具卡片点击率',14,'pct',.04,'AI入口更吸引人。','AI入口点击变少。'),T('我的AI记录回看率',22,'pct',.04,'生成结果被回看得更多。','回看变少。')],
+ charts:[{t:'AI工具：入口到成功',s:'AI科技页 → 点击工具 → 提交任务 → 生成成功。',c:{type:'funnel',base:12000,steps:[['AI科技页访问',1],['点击工具卡',.52],['提交任务',.31],['生成成功',.91]]}},
+ {t:'各AI工具使用分布',s:'图片换脸 / 视频换脸 / 图生视频 / AI绘画 等。',c:{type:'hbar',items:['图片换脸','视频换脸','图生视频','AI绘画','其他'],share:true,base:100,shape:[1,.7,.4,.3,.15]}},
+ {t:'AI任务失败原因',s:'失败的任务卡在哪。',c:{type:'hbar',items:['金币不足','处理超时','素材不合规','网络异常','其他'],share:true,base:100,shape:[1,.6,.4,.3,.15]}},
+ {t:'AI任务成功率趋势',s:'按天看生成是否稳定。',c:{type:'line',series:[{n:'成功率',base:91,vol:.01,k:'pct'}],zero:false}}]};
+CFGN['社区与我的']={tiles:[T('社区Tab点击占比',34,'pct',.04,'社区被更多人点开。','社区被点开的人变少。'),T('发帖转化率',82,'pct',.02,'点发布后真正发出去的人更多。','发帖流程掉人变多。'),T('充值按钮点击率',46,'pct',.03,'进入充值页后下单的人更多。','进入充值页后下单的人变少。'),T('我的页入口渗透',38,'pct',.03,'「我的」里的功能被更多人用到。','入口使用变少。')],
+ charts:[{t:'社区：浏览到发帖',s:'社区页访问 → 点击发布 → 发布成功。',c:{type:'funnel',base:30000,steps:[['社区页访问',1],['帖子点击',.46],['点击发布',.05],['发布成功',.82]]}},
+ {t:'「我的」功能入口分布',s:'各入口点击占比。',c:{type:'hbar',items:['金币充值','我的收藏','我的AI','我的社区','邀请好友','评论回复','我的关注','博主认证'],share:true,base:100,shape:[1,.7,.55,.4,.3,.22,.16,.1]}},
+ {t:'社区Tab分布',s:'关注 / 推荐 / 成人精选 / 吃瓜休闲区 / 实时热点。',c:{type:'hbar',items:['推荐','实时热点','吃瓜休闲区','成人精选','关注'],share:true,base:100,shape:[1,.7,.45,.35,.2]}},
+ {t:'榜单点击率趋势',s:'榜单页访问里有多少人点进了内容。',c:{type:'line',series:[{n:'榜单点击率',base:38,vol:.05,k:'pct'}],zero:false}}]};
+CFGN['质量监控']={tiles:[T('页面加载成功率',98.2,'pct',.004,'页面更稳地打开。','页面加载失败变多，先看接口和网络。'),T('接口错误率',0.8,'pct',.12,'接口报错变多。','接口更稳定。',true),T('图片加载失败率',1.6,'pct',.12,'图片域名可能有问题。','图片更稳定。',true),T('视频播放错误率',1.9,'pct',.12,'播放失败变多，先看清晰度和网络。','播放更稳定。',true)],
+ charts:[{t:'页面加载成功率',s:'按天看页面是否稳定打开。',c:{type:'line',series:[{n:'成功率',base:98.2,vol:.004,k:'pct'}],zero:false}},
+ {t:'各页面加载失败占比',s:'失败最多的页面排前面。',c:{type:'hbar',items:['首页','内容详情页','社区页','ACG页','我的页'],share:true,base:100,shape:[1,.7,.5,.35,.2]}},
+ {t:'刷新 / 加载成功率',s:'首页下拉刷新与上拉加载。',c:{type:'line',series:[{n:'成功率',base:97.5,vol:.005,k:'pct'}],zero:false}}]};
+CUSTOM['页面埋点地图']=function(){const m=MODS[S.m];const q=(PM.q||'').trim();
+ const L=PAGES.map(p=>({...p,ev:p.ev.filter(e=>!q||(e.id+e.name+e.fn+e.ms).includes(q))})).filter(p=>p.ev.length||!q);
+ const tot=PAGES.reduce((a,p)=>a+p.ev.length,0),nw=new Set(PAGES.flatMap(p=>p.ev.filter(e=>e.new).map(e=>e.id))).size,nm=new Set(PAGES.flatMap(p=>p.ev.filter(e=>e.ms.startsWith('（暂无')).map(e=>e.id))).size;
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p><div class="tiles"><div class="tile"><div class="n">页面数</div><div class="v">${PAGES.length}</div></div><div class="tile"><div class="n">页面×事件</div><div class="v">${tot}</div></div><div class="tile"><div class="n">扫描新增事件</div><div class="v">${nw}</div></div><div class="tile"><div class="n">暂无对应指标的事件</div><div class="v">${nm}</div></div></div>`;
+ h+=`<div class="ctl"><span><label>搜索</label><input value="${q}" placeholder="事件 ID / 名称 / 指标" onchange="PM.q=this.value;render()"></span></div>`;
+ h+=L.map(p=>`<details ${q||PM.open===p.page?'open':''}><summary><b>${p.page}</b>　${p.ev.length} 个事件</summary><div class="tw"><table class="t"><tr><th>功能</th><th>事件</th><th>触发动作</th><th>字段</th><th>支撑指标</th></tr>${p.ev.map(e=>`<tr><td>${e.fn}</td><td><code>${e.id}</code> ${e.name}${e.new?' <span class="tag">新增</span>':''}</td><td>${e.act}</td><td>${e.props||''}</td><td>${e.ms}</td></tr>`).join('')}</table></div></details>`).join('');
+ $('#view').innerHTML=h;const _d=document.getElementById('dr');if(_d)_d.remove()};
+var PM={q:'',open:null};
+const PRDT={
+'数据概览':{goal:'让运营/产品打开后台第一屏就知道：今天人来得多不多、留不留得住、钱有没有进来、有没有出问题。',scene:'每日晨会前查看大盘；异常时从这里点进具体菜单。',
+ layout:['核心指标卡（DAU、新增、次日留存、人均时长、付费、崩溃率）：当前值 + 较昨日/较上周同日涨跌','同环比趋势图：最近 N 天折线，可叠加「对比」周期','分时对比：今日 vs 昨日按小时柱状','核心漏斗：活跃 → 看内容 → 付费','榜单：热门内容 / 热门搜索词 Top5','今日提醒：指标偏离近 7 天均值超阈值时展示'],
+ rules:['指标卡点击 → 跳转到对应菜单并带上当前日期筛选','涨跌色：涨绿跌红；崩溃率等「越低越好」指标反色','分时对比只展示「今日」，不受日期范围控制','阈值提醒规则：偏离 ±20%'],
+ accept:['切换日期/用户/渠道，所有卡片与图表同步刷新','指标卡数值与对应菜单页同口径、同日期下一致','今日数据未到 T+1 时，卡片显示「数据更新中」而不是 0'],todo:[]},
+'新增与渠道':{goal:'看每天新来了多少人、从哪个渠道来、装完有没有打开。',scene:'投放/渠道复盘；判断某渠道质量。',
+ layout:['新增用户、安装、首次打开指标卡','新增趋势图','渠道堆叠柱图 + 渠道对比表','安装 → 首次打开 → 注册 漏斗'],
+ rules:['新增 = 当日首次使用 App 的设备（只算首次）','渠道按用户安装来源归属；无法识别的归「未知渠道」','渠道对比表支持按列排序，默认按新增降序'],
+ accept:['各渠道新增之和 = 总新增','点击渠道行可下钻看该渠道留存（跳留存分析并带 channel）'],todo:[]},
+'活跃用户':{goal:'每天有多少人在用，几点最活跃，星期几最活跃。',scene:'判断内容发布和运营的最佳时段。',
+ layout:['DAU / WAU / MAU 指标卡','活跃趋势线','星期 × 时段活跃热力图','活跃分布卡（登录/游客、新/老）'],
+ rules:['活跃 = 当日打开过 App 的去重用户（登录用户按账号、游客按设备）','WAU/MAU 为滚动 7/30 天去重','热力图颜色越深越活跃，悬浮显示具体人数'],
+ accept:['DAU ≤ WAU ≤ MAU 恒成立','分布卡各项之和 = 100%'],todo:[]},
+'留存分析':{goal:'新用户第几天还在，老用户有没有流失，流失前停在哪。',scene:'评估版本/渠道质量，定位流失原因。',
+ layout:['次日/7日/30日留存指标卡','留存矩阵（行=新增日期，列=第 N 日）','留存曲线（全部/登录/游客）','7日/30日流失用户趋势','流失前最后停留页面分布'],
+ rules:['第 N 日留存 = 第 N 日再次打开的新用户 ÷ 当日新增','流失 = 近 N 天未打开、此前活跃的用户','最后停留页面 = 流失用户最后一次离开时所在的页面'],
+ accept:['矩阵当日列（第 0 日）恒为 100%','尚未到期的格子显示「-」而不是 0%'],todo:[]},
+'注册登录':{goal:'游客有没有变成登录用户，登录注册哪一步掉人。',scene:'优化登录引导与登录方式。',
+ layout:['登录成功率、游客→登录转化、注册量指标卡','登录漏斗（入口→曝光→提交→成功）','登录失败原因分布','登录方式占比'],
+ rules:['登录成功率 = 登录成功次数 ÷ 点击登录次数','失败原因按登录失败提示归类','同一次登录流程只计一次，避免重复计入漏斗'],
+ accept:['漏斗每步 ≤ 上一步','失败原因之和 = 登录失败总数'],todo:[]},
+'页面分析':{goal:'人来了之后看了几个页面、待多久、点了哪里。',scene:'发现低效页面、判断导航与板块入口设计。',
+ layout:['PV/UV/人均时长指标卡','页面排行表 + 占比条形','页面访问趋势','导航与板块点击分布'],
+ rules:['页面名称全站统一，同一页面在各菜单中名称一致','停留时长为用户在页面的停留时间，单页上限 30 分钟。原因：用户可能打开页面后切到后台、锁屏或忘记关闭，会产生数小时的异常时长，拉高平均停留时长、使指标失真，故超出部分按上限计','底部导航点击次数按各 Tab 统计'],
+ accept:['页面 PV 之和 = 总 PV','所有页面名称命名统一、无重复'],todo:[]},
+'漏斗分析':{goal:'用户从哪个入口进来，一步步走到最终成功，掉在哪一步。',scene:'定位转化瓶颈；看不同入口/来源的质量。',
+ layout:['流程选择：活跃到看内容、金币充值、VIP 开通、内容付费、登录注册','汇总卡：总转化、最大流失步骤','漏斗 / 柱图（四个 Tab：转化漏斗、趋势、拆分表、流失去向）','拆分维度：入口来源 / 用户类型 / 内容类型','转化窗口期设置'],
+ rules:['同一用户在窗口期内按步骤顺序完成才计入下一步','窗口期默认 30 分钟，可选 1 天 / 7 天','步骤必须按顺序发生才算转化','流失去向 = 流失用户在该步之后的下一个页面/行为 Top N'],
+ accept:['每步人数 ≤ 上一步','按维度拆分后各行之和 = 总数','切换流程时指标口径表同步切换'],todo:[]},
+'内容分析':{goal:'资讯、视频、漫画、小说、短剧、帖子，什么内容被看、被读完、被喜欢。',scene:'内容运营选题与复盘；发现爆款与低质内容。',
+ layout:['汇总卡（曝光、点击率、完播/完读率、互动）','内容类型 Tab：资讯 / 视频 / 漫画 / 小说 / 短剧 / 帖子','内容资源列表（可排序、搜索、分页）','点击一行 → 右侧抽屉：单条内容详情与趋势'],
+ rules:['有效曝光 = 可见 ≥ 5 秒','完读率 = 读完人数 ÷ 进入详情人数','完播率 = 播完次数 ÷ 开始播放次数','列表默认按曝光量降序，每页 10 条'],
+ accept:['列表合计 = 汇总卡','抽屉内趋势与列表该行同日期范围一致'],todo:[]},
+'搜索分析':{goal:'用户搜什么，搜不搜得到，搜到了点不点。',scene:'优化热搜推荐与搜索结果。',
+ layout:['搜索次数、无结果率、结果点击率指标卡','搜索漏斗（入口→提交→结果曝光→点击）','热词榜','无结果词表','热词点击率、搜索历史清除率'],
+ rules:['无结果率 = 无结果的搜索次数 ÷ 全部搜索次数','热词榜按 keyword 去重用户数排序','keyword 统一转小写并去首尾空格后统计'],
+ accept:['热词榜 Top N 与明细导出一致'],todo:[]},
+'付费分析':{goal:'订单从创建到支付成功，用户选哪种支付方式，充值页哪一步掉人，金币收支如何。',scene:'看收入、转化与支付渠道质量。',
+ layout:['订单数、支付成功率、付费金额、ARPPU 指标卡','订单漏斗（创建→支付成功）','各内容类型付费金额','金币发放 / 消耗趋势','支付方式占比、充值按钮点击率、订单失败率'],
+ rules:['金额单位：元，保留 2 位','支付成功以服务端确认的支付结果为准，不以点击为准','金币收支以服务端记录为准','失败原因按支付失败提示归类'],
+ accept:['订单金额之和与财务/支付渠道对账一致（误差 < 0.1%）','支付成功率 = 支付成功订单数 ÷ 创建订单数'],todo:[]}
+};
+const COMMON=[['用户去重','登录用户按账号、游客按设备去重；同一人多天只算一次。'],['时区与更新','统一 UTC+8；数据 T+1 更新；当天数据仅在「分时对比」中实时展示。'],['日期范围','近 7 / 14 / 30 天或自定义，最长 90 天。'],['公共筛选','用户类型（新/老/游客/登录）、渠道；所有菜单共用，切换后整页刷新。'],['空态与异常','无数据显示「暂无数据」；加载失败显示重试按钮；未到期数据显示「-」。'],['导出','当前页主表导出为 CSV 文件；单次最多 10 万行。']];
+function evPg(id){return [...new Set(PAGES.filter(p=>p.ev.some(e=>e.id===id)).map(p=>p.page))].join('、')||'—'}
+function bizTxt(s){return (s||'').replace(/\b[a-z]+(?:_[a-z0-9]+)+(?:\.[a-z_]+)?(?:=[a-z0-9_]+)?\b/g,m=>{const e=EVENTS.find(x=>x.id===m.split('.')[0]);return e&&e.name?'「'+e.name+'」':''}).replace(/（登录取 ，游客取 ）/g,'（登录用户按账号、游客按设备去重）').replace(/[（(]\s*[）)]/g,'').replace(/入口事件/g,'入口').replace(/成功事件/g,'成功').replace(/类事件次数/g,'类次数').replace(/付费事件次数/g,'付费次数').replace(/\s{2,}/g,' ').replace(/、、+/g,'、').replace(/；\s*；/g,'；').trim()}
+function prdBody(name,full){const P=PRDT[name]||{goal:'',scene:'',layout:[],rules:[],accept:[],todo:[]};const ms=METRICS.filter(x=>x.menu===name);
+ const li=a=>a.length?`<ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>`:'<p class="muted">暂无</p>';
+ let h=`<h3>1 背景与目标</h3><p>${P.goal}</p><p><b>使用场景：</b>${P.scene}</p><h3>2 页面结构</h3>${li(P.layout)}<h3>3 交互与口径规则</h3>${li(P.rules)}`;
+ h+=`<h3>4 指标需求（${ms.length} 项）</h3><div class="tw"><table class="t"><tr><th>#</th><th>指标</th><th>展示形式</th><th>口径说明</th></tr>${ms.map((x,i)=>`<tr><td>${i+1}</td><td>${x.name}</td><td>${x.form}</td><td>${bizTxt(x.f)}</td></tr>`).join('')}</table></div>`;
+ h+=`<h3>5 验收标准</h3>${li(P.accept)}`;return h}
+function prdOpen(){const m=MODS[S.m];const d=document.getElementById('dr');if(d)d.remove();const el=document.createElement('div');el.className='dr prd';el.id='dr';
+ el.innerHTML=`<button class="x" onclick="this.parentNode.remove()">关闭</button><h2>PRD · ${m.name}</h2><p class="muted">产品需求文档 · v1.0 草案 · 2026-10-30 · 通用规则见「PRD 总览」</p>${prdBody(m.name)}`;document.body.appendChild(el)}
+CUSTOM['PRD 总览']=function(){const m=MODS[S.m];const USED=new Set(METRICS.flatMap(x=>x.ev.split('、').filter(Boolean)));const EV=EVENTS.filter(e=>USED.has(e.id));const PG=PAGES.map(p=>({...p,ev:p.ev.filter(e=>USED.has(e.id))})).filter(p=>p.ev.length);const nNew=EV.filter(e=>e.src==='扫描新增').length;
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p><div class="tiles"><div class="tile"><div class="n">菜单数</div><div class="v">${MODS.length-1}</div></div><div class="tile"><div class="n">指标数</div><div class="v">${METRICS.length}</div></div></div>`;
+ h+=`<div class="card" style="margin:12px 0"><h3>通用规则（所有菜单适用）</h3><div class="tw"><table class="t"><tr><th style="width:160px">项目</th><th>规则</th></tr>${COMMON.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table></div></div>`;
+ h+=`<div class="card" style="margin:12px 0"><h3>各菜单 PRD</h3><p class="s">每个菜单页右上角「PRD」按钮可直接打开该菜单 PRD；这里汇总全部。</p>${MODS.filter(x=>PRDT[x.name]).map(x=>`<details><summary><b>${x.name}</b>　${x.group}</summary><div class="prdb">${prdBody(x.name)}</div></details>`).join('')}</div>`;
+ $('#view').innerHTML=h;const _d=document.getElementById('dr');if(_d)_d.remove()};
+const PRDX={"页面分析": {"对比可用": true, "日期范围": {"变化": ["全站 PV / UV", "核心页面访问占比", "底部导航点击占比"], "不变": ["人均日打开次数", "人均单日在线时长", "页面跳出率", "全站 PV"]}, "用户类型": {"变化": ["人均日打开次数", "人均单日在线时长", "页面跳出率", "全站 PV", "全站 PV / UV", "核心页面访问占比", "底部导航点击占比"], "不变": []}, "渠道": {"变化": ["人均日打开次数", "人均单日在线时长", "页面跳出率", "全站 PV", "全站 PV / UV", "核心页面访问占比", "底部导航点击占比"], "不变": []}, "组件": [["指标卡", "人均日打开次数"], ["指标卡", "人均单日在线时长"], ["指标卡", "页面跳出率"], ["指标卡", "全站 PV"], ["图表/表格", "全站 PV / UV"], ["图表/表格", "核心页面访问占比"], ["图表/表格", "底部导航点击占比"]]}, "漏斗分析": {"对比可用": true, "日期范围": {"变化": ["每天趋势"], "不变": ["活跃用户（日活）人数", "读完 / 播放完成人数", "总转化率", "掉得最多的一步", "转化漏斗"]}, "用户类型": {"变化": ["活跃用户（日活）人数", "读完 / 播放完成人数", "总转化率", "掉得最多的一步", "转化漏斗", "每天趋势"], "不变": []}, "渠道": {"变化": ["活跃用户（日活）人数", "读完 / 播放完成人数", "总转化率", "掉得最多的一步", "转化漏斗", "每天趋势"], "不变": []}, "组件": [["指标卡", "活跃用户（日活）人数"], ["指标卡", "读完 / 播放完成人数"], ["指标卡", "总转化率"], ["指标卡", "掉得最多的一步"], ["图表/表格", "转化漏斗"], ["图表/表格", "每天趋势"]]}, "数据概览": {"对比可用": false, "日期范围": {"变化": ["DAU 日活趋势：本期 vs 上期", "核心转化：新用户从安装到付费", "内容 TOP5", "页面 TOP5"], "不变": ["DAU 日活", "新增用户", "次日留存", "人均在线时长", "订单支付数", "搜索次数", "内容总曝光", "崩溃率", "今日 vs 昨日 分时对比"]}, "用户类型": {"变化": ["DAU 日活", "新增用户", "次日留存", "人均在线时长", "订单支付数", "搜索次数", "内容总曝光", "崩溃率", "DAU 日活趋势：本期 vs 上期", "今日 vs 昨日 分时对比", "核心转化：新用户从安装到付费", "内容 TOP5", "页面 TOP5"], "不变": []}, "渠道": {"变化": ["DAU 日活", "新增用户", "次日留存", "人均在线时长", "订单支付数", "搜索次数", "内容总曝光", "崩溃率", "DAU 日活趋势：本期 vs 上期", "今日 vs 昨日 分时对比", "核心转化：新用户从安装到付费", "内容 TOP5", "页面 TOP5"], "不变": []}, "组件": [["指标卡", "DAU 日活"], ["指标卡", "新增用户"], ["指标卡", "次日留存"], ["指标卡", "人均在线时长"], ["指标卡", "订单支付数"], ["指标卡", "搜索次数"], ["指标卡", "内容总曝光"], ["指标卡", "崩溃率"], ["图表/表格", "DAU 日活趋势：本期 vs 上期"], ["图表/表格", "今日 vs 昨日 分时对比"], ["图表/表格", "核心转化：新用户从安装到付费"], ["图表/表格", "内容 TOP5"], ["图表/表格", "页面 TOP5"]]}, "新增与渠道": {"对比可用": true, "日期范围": {"变化": ["每天各渠道新来的人", "装完之后", "渠道对比"], "不变": ["新增用户", "安装→首次打开", "新增注册用户占比", "新增游客用户"]}, "用户类型": {"变化": ["新增用户", "安装→首次打开", "新增注册用户占比", "新增游客用户", "每天各渠道新来的人", "装完之后", "渠道对比"], "不变": []}, "渠道": {"变化": ["新增用户", "安装→首次打开", "新增注册用户占比", "新增游客用户", "每天各渠道新来的人", "装完之后", "渠道对比"], "不变": []}, "组件": [["指标卡", "新增用户"], ["指标卡", "安装→首次打开"], ["指标卡", "新增注册用户占比"], ["指标卡", "新增游客用户"], ["图表/表格", "每天各渠道新来的人"], ["图表/表格", "装完之后"], ["图表/表格", "渠道对比"]]}, "活跃用户": {"对比可用": true, "日期范围": {"变化": ["每天有多少人在用", "星期 × 时段活跃热力", "单次使用时长分布", "每日启动次数分布"], "不变": ["DAU 日活", "WAU 周活", "MAU 月活", "DAU ÷ MAU", "一天里几点最活跃"]}, "用户类型": {"变化": ["DAU 日活", "WAU 周活", "MAU 月活", "DAU ÷ MAU", "每天有多少人在用", "一天里几点最活跃", "星期 × 时段活跃热力", "单次使用时长分布", "每日启动次数分布"], "不变": []}, "渠道": {"变化": ["DAU 日活", "WAU 周活", "MAU 月活", "DAU ÷ MAU", "每天有多少人在用", "一天里几点最活跃", "星期 × 时段活跃热力", "单次使用时长分布", "每日启动次数分布"], "不变": []}, "组件": [["指标卡", "DAU 日活"], ["指标卡", "WAU 周活"], ["指标卡", "MAU 月活"], ["指标卡", "DAU ÷ MAU"], ["图表/表格", "每天有多少人在用"], ["图表/表格", "一天里几点最活跃"], ["图表/表格", "星期 × 时段活跃热力"], ["图表/表格", "单次使用时长分布"], ["图表/表格", "每日启动次数分布"]]}, "留存分析": {"对比可用": true, "日期范围": {"变化": ["7 日流失用户", "新用户留存", "流失前最后停留页面"], "不变": ["次日留存", "7 日留存", "30 日流失用户", "留存曲线"]}, "用户类型": {"变化": ["次日留存", "7 日留存", "7 日流失用户", "30 日流失用户", "新用户留存", "留存曲线", "流失前最后停留页面"], "不变": []}, "渠道": {"变化": ["次日留存", "7 日留存", "7 日流失用户", "30 日流失用户", "新用户留存", "留存曲线", "流失前最后停留页面"], "不变": []}, "组件": [["指标卡", "次日留存"], ["指标卡", "7 日留存"], ["指标卡", "7 日流失用户"], ["指标卡", "30 日流失用户"], ["图表/表格", "新用户留存"], ["图表/表格", "留存曲线"], ["图表/表格", "7 日流失用户"], ["图表/表格", "流失前最后停留页面"]]}, "注册登录": {"对比可用": true, "日期范围": {"变化": ["游客→登录转化率", "登录：从曝光到成功", "登录失败原因"], "不变": ["登录成功率", "注册成功率", "登录用户活跃占比"]}, "用户类型": {"变化": ["登录成功率", "注册成功率", "游客→登录转化率", "登录用户活跃占比", "登录：从曝光到成功", "登录失败原因"], "不变": []}, "渠道": {"变化": ["登录成功率", "注册成功率", "游客→登录转化率", "登录用户活跃占比", "登录：从曝光到成功", "登录失败原因"], "不变": []}, "组件": [["指标卡", "登录成功率"], ["指标卡", "注册成功率"], ["指标卡", "游客→登录转化率"], ["指标卡", "登录用户活跃占比"], ["图表/表格", "登录：从曝光到成功"], ["图表/表格", "游客→登录转化率"], ["图表/表格", "登录失败原因"]]}, "内容分析": {"对比可用": false, "日期范围": {"变化": ["资讯总曝光量", "分享次数"], "不变": ["平均点击率", "互动率（点赞+评论+收藏）"]}, "用户类型": {"变化": ["资讯总曝光量", "平均点击率", "互动率（点赞+评论+收藏）", "分享次数"], "不变": []}, "渠道": {"变化": ["资讯总曝光量", "分享次数"], "不变": ["平均点击率", "互动率（点赞+评论+收藏）"]}, "组件": [["指标卡", "资讯总曝光量"], ["指标卡", "平均点击率"], ["指标卡", "互动率（点赞+评论+收藏）"], ["指标卡", "分享次数"]]}, "搜索分析": {"对比可用": true, "日期范围": {"变化": ["搜索无结果率", "搜索：从入口到点击结果", "高频搜索词 TOP"], "不变": ["日均搜索次数", "搜索结果点击率", "人均搜索次数"]}, "用户类型": {"变化": ["日均搜索次数", "搜索无结果率", "搜索结果点击率", "人均搜索次数", "搜索：从入口到点击结果", "高频搜索词 TOP"], "不变": []}, "渠道": {"变化": ["日均搜索次数", "搜索无结果率", "搜索结果点击率", "人均搜索次数", "搜索：从入口到点击结果", "高频搜索词 TOP"], "不变": []}, "组件": [["指标卡", "日均搜索次数"], ["指标卡", "搜索无结果率"], ["指标卡", "搜索结果点击率"], ["指标卡", "人均搜索次数"], ["图表/表格", "搜索：从入口到点击结果"], ["图表/表格", "高频搜索词 TOP"], ["图表/表格", "搜索无结果率"]]}, "付费分析": {"对比可用": true, "日期范围": {"变化": ["订单：从创建到支付", "金币发放与消耗"], "不变": ["订单创建数", "支付成功率", "金币发放总量", "金币消耗率", "各类内容付费次数"]}, "用户类型": {"变化": ["订单创建数", "支付成功率", "金币发放总量", "金币消耗率", "订单：从创建到支付", "各类内容付费次数", "金币发放与消耗"], "不变": []}, "渠道": {"变化": ["订单创建数", "支付成功率", "金币发放总量", "金币消耗率", "订单：从创建到支付", "各类内容付费次数", "金币发放与消耗"], "不变": []}, "组件": [["指标卡", "订单创建数"], ["指标卡", "支付成功率"], ["指标卡", "金币发放总量"], ["指标卡", "金币消耗率"], ["图表/表格", "订单：从创建到支付"], ["图表/表格", "各类内容付费次数"], ["图表/表格", "金币发放与消耗"]]}};
+COMMON.splice(0,COMMON.length,
+['载入时显示什么','进入任一菜单即自动请求并展示数据，无需点「查询」。默认：日期＝近 14 天（2026-10-14 ~ 2026-10-27，结束日为最新完整数据日）；用户类型／渠道＝全部。各卡片先显示骨架屏，数据返回后各自渲染，单个卡片失败不影响其他卡片。'],
+['是否显示数据','默认一定显示数据；某卡片无数据时显示「暂无数据」，不显示 0 或空白坐标轴；尚未到期的数据（如留存矩阵未到期格）显示「-」。'],
+['筛选触发方式','改变日期、用户类型、渠道任一项，立即刷新整页，无「查询」按钮。刷新时已打开的详情抽屉自动关闭。'],
+['日期规则','快捷项：近 7／14／30 天（结束日固定为最新完整数据日）。自定义：开始≤结束；结束日最晚为最新完整数据日（T+1，当前为 2026-10-27）；范围最长 60 天。输入不合法时弹出提示并恢复为上一次有效日期。自定义日期后快捷项取消高亮。'],
+['数据更新','统一 UTC+8；T+1 更新；页头显示「数据更新至 …」。'],
+['用户去重','登录用户按账号、游客按设备去重；同一人多天只算一次。'],
+['指标卡口径','指标卡显示「结束日」当天的值，并给出较昨日、较上周同日的涨跌；不随日期范围长度变化，只随结束日变化。趋势图／表格按所选范围逐日展示；累计类（曝光、订单数等）随范围累加，比率类不随范围累加。'],
+['占比／分布类图表','随日期范围、用户类型、渠道变化而重算。'],
+['对比','默认在趋势图上以虚线叠加对比，无需选择：近 7 天及以内对比上周，近 28 天及以上对比上月，其他天数对比同长度的上一周期；只叠加在趋势图上，不改变指标卡。数据概览、内容分析不叠加对比。'],
+['导出','导出当前页主表为 CSV 文件；导出的是当前筛选条件下的数据；单次最多 10 万行。'],
+);
+PRDT['数据概览']={goal:PRDT['数据概览'].goal,scene:PRDT['数据概览'].scene,
+ layout:['今日提醒条：仅当有指标较昨日明显偏离时出现（数值类偏离 >6%，比率类变化 >1.2 个百分点）；否则不显示','8 张指标卡：DAU 日活、新增用户、次日留存、人均在线时长、订单支付数、搜索次数、内容总曝光、崩溃率；每张含当前值、较昨日涨跌、迷你趋势','指标趋势图：本期 vs 上期（虚线），指标随被选中的指标卡切换','今日 vs 昨日 分时对比（按小时）','核心转化漏斗：安装 → 首次打开 → 首次浏览内容 → 首次互动 → 首次付费','内容 TOP5（按曝光）、页面 TOP5（按访问）'],
+ rules:['指标卡点击：高亮该卡，并切换下方趋势图的指标；不跳转页面','「崩溃率」越低越好：下降显示绿色、上升显示红色','DAU、新增用户、次日留存的数值与「活跃用户」「新增与渠道」「留存分析」菜单同一结束日、同一筛选下完全一致','分时对比固定为「今日 vs 昨日」，不受日期范围控制，今日数据按小时实时累计'],
+ accept:['切换日期／用户／渠道，除分时对比外所有卡片刷新','DAU 与活跃用户菜单相同条件下一致','今日提醒在无偏离时不显示'],todo:[]};
+PRDT['页面分析']={goal:PRDT['页面分析'].goal,scene:PRDT['页面分析'].scene,
+ layout:['4 张指标卡：人均日打开次数、人均单日在线时长、页面跳出率、全站 PV','全站 PV / UV 趋势图（可切换「趋势图／明细表」）','核心页面访问占比（首页、热点、影视专区、短视频专区、我的、搜索页）','底部导航点击占比'],
+ rules:['页面名称全站统一','停留时长为用户在页面的停留时间，单页上限 30 分钟。原因：用户可能打开页面后切到后台、锁屏或忘记关闭，会产生数小时的异常时长，拉高平均停留时长、使指标失真，故超出部分按上限计','底部导航点击次数按各 Tab 统计','趋势图默认叠加对比（虚线，上周或上月）；占比图随日期、用户、渠道变化'],
+ accept:['页面 PV 之和 = 全站 PV','占比之和 = 100%'],todo:[]};
+PRDT['漏斗分析']={goal:PRDT['漏斗分析'].goal,scene:PRDT['漏斗分析'].scene,
+ layout:['流程切换：活跃到看内容、金币充值、VIP 开通、内容付费、登录注册','流程说明条 + 转化窗口期选择（当天内／7 天内／30 天内）','4 张汇总卡：首步人数、末步人数、总转化率、掉得最多的一步','三个 Tab：转化概览（转化漏斗 + 每天趋势 + 结论）、流失分析（流失去向、页面停留表）、来源与拆分（按入口来源／渠道拆分的表）'],
+ rules:['同一用户在窗口期内按步骤顺序完成才计入下一步','窗口期默认「7 天内」；窗口越长转化率越高（当天内 < 7 天内 < 30 天内）','步骤必须按顺序发生才算转化；每一步人数 ≤ 上一步','「活跃到看内容」按日均口径展示，不随日期范围累加；其余流程人数随日期范围累加','切换流程：保留当前 Tab 和窗口期，关闭已打开的抽屉','「来源与拆分」Tab：点击某一行打开右侧抽屉，查看该来源的流失明细；日期／筛选变化时抽屉关闭','对比（虚线，上周或上月）只作用于「每天趋势」图'],
+ accept:['每步人数 ≤ 上一步','拆分表各行之和 = 漏斗总数','窗口期变长，总转化率不降低'],todo:[]};
+PRDT['内容分析'].rules=['有效曝光 = 可见 ≥ 5 秒','完读率 = 读完人数 ÷ 进入详情人数','完播率 = 播完次数 ÷ 开始播放次数','默认：资讯列表，按曝光量降序，第 1 页，每页 10 条，搜索框为空','切换内容类型：排序、页码、搜索词重置，抽屉关闭','搜索：输入即过滤（名称包含匹配），页码回到第 1 页；无结果显示「没有匹配的内容」','点表头排序，再点同一列切换升／降序；点一行打开右侧详情抽屉；日期／筛选变化时抽屉关闭','指标卡与列表同口径：卡片＝当前类型全部内容合计（不受搜索词影响）','不叠加对比'];
+PRDT['内容分析'].layout=['内容类型 Tab：资讯／视频／漫画／小说／短剧／帖子','4 张汇总卡（曝光量、平均点击率、互动率、分享／付费／解锁次数，随类型变化）','内容资源列表（搜索、排序、分页）','右侧详情抽屉'];
+PRDT['新增与渠道'].rules=PRDT['新增与渠道'].rules.concat(['渠道对比：默认勾选前 3 个渠道，最多同时勾选 5 个，超出提示「最多同时对比 5 个渠道」']);
+const INTER={
+'数据概览':{click:['点指标卡 → 切换下方趋势图指标','趋势图／明细表切换：只改变展示形式，不重新请求','指标卡、趋势、漏斗、TOP5 随筛选刷新；分时对比不变'],
+ date:['日期范围变化：指标卡不变（取结束日）；趋势图、核心转化漏斗、内容 TOP5、页面 TOP5 随范围刷新'],empty:['单张卡片无数据显示「暂无数据」；今日数据未到 T+1 时指标卡显示「数据更新中」而不是 0']},
+'页面分析':{click:['趋势图／明细表切换','无下钻'],date:['日期范围变化：趋势图、PV 汇总类刷新；占比类图表随范围重算'],empty:['无页面数据显示「暂无数据」']},
+'漏斗分析':{click:['点流程按钮切换流程；点 Tab 切换视图；窗口期下拉改变转化口径','「来源与拆分」Tab 中点维度按钮切换拆分维度，点行打开抽屉','趋势图／明细表切换'],date:['日期范围变化：除「活跃到看内容」外，各流程人数随范围累加；转化率不随范围线性变化'],empty:['某一步人数为 0 时，后续步骤显示「-」，不显示 NaN 或 Infinity']},
+'新增与渠道':{click:['渠道对比勾选渠道（最多 5 个）','趋势图／明细表切换'],date:['日期范围变化：指标卡取结束日；趋势、渠道堆叠、渠道对比表按范围刷新'],empty:['未归因的新增用户归入「未知渠道」，不隐藏']},
+'活跃用户':{click:['趋势图／明细表切换','热力图悬停显示具体人数'],date:['日期范围变化：趋势、分布类图表按范围刷新；DAU/WAU/MAU 指标卡取结束日（WAU 滚动 7 天、MAU 滚动 30 天，与所选范围长度无关）'],empty:['无活跃数据显示「暂无数据」']},
+'留存分析':{click:['趋势图／明细表切换','留存矩阵每格悬停显示分子分母'],date:['日期范围变化：矩阵行为范围内每个新增日；尚未到期的格子显示「-」'],empty:['样本量小于 30 人的格子显示「样本不足」']},
+'注册登录':{click:['趋势图／明细表切换'],date:['日期范围变化：漏斗、趋势、失败原因按范围刷新'],empty:['无失败时失败原因显示「暂无失败」']},
+'内容分析':{click:['见 3 交互与口径规则'],date:['日期范围变化：曝光、点赞等累计类随范围累加；点击率、互动率等比率类按范围重算'],empty:['无匹配内容显示「没有匹配的内容」']},
+'搜索分析':{click:['趋势图／明细表切换','热词榜点击词条：展示该词的搜索次数趋势'],date:['日期范围变化：漏斗、趋势、热词榜、无结果词表按范围刷新'],empty:['无无结果词时显示「暂无无结果词」']},
+'付费分析':{click:['趋势图／明细表切换'],date:['日期范围变化：订单、金额、金币收支按范围累加'],empty:['当日无订单时金额显示 ¥0，转化率显示「-」']}};
+function interactSection(name){const X=PRDX[name]||{},I=INTER[name]||{click:[],date:[],empty:[]};const li=a=>a&&a.length?`<ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>`:'<p class="muted">暂无</p>';
+ const rows=['日期范围','用户类型','渠道'].map(k=>{const r=X[k];if(!r)return '';const fmt=a=>a.length?a.join('、'):'—';return `<tr><td>${k==='日期范围'?'日期范围（近7天/近30天/自定义）':k}</td><td>${fmt(r['变化'])}</td><td>${fmt(r['不变'])}</td></tr>`}).join('');
+ return `<h3>3.1 载入时显示什么</h3><ul><li>进入菜单即显示数据：日期＝近 14 天，用户类型／渠道＝全部；无需点查询</li><li>各组件独立加载；单个组件加载失败只在该组件显示「加载失败，点击重试」</li></ul><h3>3.2 筛选后哪些组件跟着变化（以原型实测为准）</h3><div class="tw"><table class="t"><tr><th style="width:150px">筛选</th><th>会刷新的组件</th><th>不变的组件</th></tr>${rows}</table></div>${li(I.date)}<h3>3.3 点击与操作</h3>${li(I.click)}<h3>3.4 空态与异常</h3>${li(I.empty.concat(['数据加载失败：对应组件显示「加载失败，点击重试」','筛选后无数据：显示「暂无数据」，指标卡显示「-」']))}`}
+const _pb=prdBody;prdBody=function(name,full){return _pb(name,full).replace('<h3>4 指标需求',interactSection(name)+'<h3>4 指标需求')};
 
-  function start() {
-    clearInterval(timer);
-    st = { left: total(), finished: false };
-    home.style.display = 'none';
-    restoreRing();
-    build();
-    render(false);
-    // 下一帧开始环形动画
-    requestAnimationFrame(function () { requestAnimationFrame(function () { render(true); }); });
-    timer = setInterval(tick, 1000);
-  }
+const STEPDEF={
+'活跃用户（日活）':'当日打开过 App 的去重用户（登录用户按账号、游客按设备）',
+'浏览内容列表（有效曝光）':'当日在资讯或视频列表里，至少有 1 条内容停留可见满 5 秒的用户',
+'点击内容':'点击了列表中任意一条内容卡片的用户',
+'进入内容详情':'打开了资讯详情页或视频播放页的用户',
+'读完 / 播放完成':'资讯读到文末，或视频播放到结尾的用户',
+'金币入口点击':'点击任意金币充值入口（我的页、付费弹窗、任务页等）的用户',
+'进入金币商品页':'打开金币充值页、看到金币套餐的用户',
+'选择金币商品':'在充值页点选了某个金币套餐的用户',
+'创建订单':'点击立即支付后，系统生成了订单的用户',
+'充值成功':'订单支付成功、金币到账的用户',
+'VIP入口点击':'点击任意 VIP 开通入口的用户',
+'进入VIP开通页':'打开 VIP 开通页、看到套餐的用户',
+'选择套餐':'在开通页点选了某个会员套餐的用户',
+'开通成功':'订单支付成功、会员生效的用户',
+'进入内容详情#内容付费':'打开视频、漫画、小说、短剧或帖子详情的用户',
+'点击购买':'点击付费内容的购买按钮的用户',
+'确认支付':'在支付确认弹窗点击确认的用户',
+'购买成功':'支付成功、内容已解锁的用户',
+'登录入口点击':'点击任意登录入口，或被操作引导到登录的用户',
+'登录页曝光':'登录页面成功展示给用户',
+'提交登录/注册':'在登录页点击登录或注册按钮的用户',
+'登录成功':'登录或注册成功、进入登录态的用户',
+'搜索入口点击':'点击搜索框或搜索图标的用户',
+'提交搜索':'输入关键词并提交搜索的用户',
+'结果曝光':'搜索结果页成功展示的用户',
+'点击结果':'点击了搜索结果中任意一条内容的用户',
+'进入ACG页':'打开 ACG 页面的用户',
+'点击内容卡片':'点击 ACG 页中任意内容卡片的用户',
+'进入详情页':'打开漫画或小说详情页的用户',
+'开始阅读':'点击开始阅读或继续阅读的用户',
+'读完 / 退出':'读完当前章节或中途退出的用户'};
+const ENTDEF={
+'新用户':'注册或首次打开 App 7 天内的用户','老用户（近7天活跃）':'注册超过 7 天，且近 7 天内打开过 App 的用户','回流用户（沉默7天以上）':'连续 7 天以上未打开 App，今天重新打开的用户','游客（未登录）':'未登录就使用 App 的用户','会员':'当前 VIP 会员有效的用户',
+'我的页金币入口':'我的页上的金币入口','内容付费弹窗（金币不足）':'购买内容时因金币不足弹出的充值提示','任务/签到页':'金币任务、签到页面里的充值入口','视频播放页顶部':'视频播放页顶部的充值入口','首页入口':'首页上的充值入口',
+'我的页VIP卡片':'我的页上的 VIP 卡片','内容付费弹窗':'购买内容时弹出的 VIP 开通提示','播放页开通提示':'视频播放页上的 VIP 开通提示','首页运营位':'首页运营位里的 VIP 入口','设置页':'设置页里的 VIP 入口',
+'视频':'视频内容','漫画':'漫画内容','小说':'小说内容','短剧':'短剧内容','帖子解锁':'社区帖子的付费解锁',
+'我的页登录入口':'我的页上的登录按钮','点赞触发':'点赞时被要求登录','评论触发':'评论时被要求登录','收藏触发':'收藏时被要求登录','付费触发':'付费时被要求登录','启动引导':'启动 App 时的登录引导',
+'点击图标':'用户自己点桌面图标打开','推送通知':'点击推送通知打开','深度链接':'从外部链接直接跳到 App 内页面打开','外部网页跳转':'从网页里的按钮跳转打开 App'};
+const STEPDEF_PAY={};
 
-  function tick() {
-    if (st.finished) return;
-    st.left -= 1;
-    if (st.left <= 0) { st.left = 0; st.finished = true; clearInterval(timer); }
-    render(true);
-  }
+const CARDCALC={
+'转化漏斗':['每一步人数 = 在窗口期内按顺序完成该步动作的去重用户数','右侧百分比 = 本步人数 ÷ 第一步人数','步与步之间的转化率 = 本步人数 ÷ 上一步人数；流失人数 = 上一步人数 − 本步人数'],
+'每天趋势':['每天第一步人数、最后一步人数，按用户进入流程的当天归属；最后一步需在窗口期内完成'],
+'各步流失人数占比':['某一步的占比 = 该步流失人数 ÷ 总流失人数','流失人数 = 上一步人数 − 本步人数；总流失人数 = 第一步人数 − 最后一步人数','点击任意一行，查看这一步流失用户的构成'],
+'没看内容的人去哪了':['对象：当天活跃、但没有进入内容详情的用户；每个用户只归入下面一类，按顺序判断','占比 = 该类用户数 ÷ 没有进入内容详情的用户数','只逛首页没点：当天有内容曝光，但没有点击任何内容','打开即退出：打开后立即退出，且当天没有任何内容曝光','去了其他页面：浏览了其他页面，但没有进入内容详情','其他：不属于以上三类'],
+'用户停在了哪个页面':['访问人数 = 当天访问过该页面的去重用户数','人均停留 = 该页面总停留时长 ÷ 访问人数，单页上限 30 分钟','跳出率 = 只看了该页面就离开的访问次数 ÷ 该页面访问次数','作为最后页面占比 = 当天最后停留在该页面的用户数 ÷ 当天活跃用户数'],
+'看了内容的人，更容易留下来吗':['看了内容 = 当天进入过内容详情的活跃用户；没看内容 = 当天活跃但没进入内容详情的用户','次日留存 = 第二天再次打开 App 的用户数 ÷ 该组用户数；7日留存 = 第 7 天再次打开的用户数 ÷ 该组用户数'],
+'全站 PV / UV':['PV = 页面被打开的总次数；UV = 打开过页面的去重用户数'],
+'核心页面访问占比':['占比 = 该页面 PV ÷ 核心页面 PV 合计'],
+'底部导航点击占比':['占比 = 该 Tab 的点击次数 ÷ 底部导航总点击次数']};
+const TILECALC={'人均日打开次数':'打开 App 的总次数 ÷ 活跃用户数','人均单日在线时长':'总在线时长 ÷ 活跃用户数（按天计）','页面跳出率':'只浏览 1 个页面就离开的访问次数 ÷ 总访问次数','全站 PV':'页面被打开的总次数','活跃用户（日活）人数':'流程第一步人数（去重）','读完 / 播放完成人数':'流程最后一步人数（去重）'};
+function calcHook(){
+ const nm=MODS[S.m].name;if(nm!=='漏斗分析'&&nm!=='页面分析')return;
+ document.querySelectorAll('#view .card>h3').forEach(h=>{const k=h.textContent.trim();const c=CARDCALC[k];if(!c||h.parentNode.querySelector(':scope>.cc'))return;h.insertAdjacentHTML('afterend','<div class="cc">'+c.map(x=>'<div>'+x+'</div>').join('')+'</div>')});
+ document.querySelectorAll('#view .tile .n').forEach(n=>{const k=n.childNodes[0]&&n.childNodes[0].textContent.trim();const c=TILECALC[k];if(c&&!n.querySelector('.df'))n.insertAdjacentHTML('beforeend','<small class="df calc">'+c+'</small>')});
+}
+function defsHook0(){
+ calcHook();
+ if(typeof FS==='undefined'||MODS[S.m].name!=='漏斗分析')return;
+ const F=FLOWS.find(x=>x.id===FS.f);if(!F)return;
+ const dn=(n)=>(F.id==='content'&&n==='进入内容详情')?STEPDEF['进入内容详情#内容付费']:STEPDEF[n];
+ document.querySelectorAll('.fvn').forEach((el,i)=>{const s=F.steps[i];if(!s||el.querySelector('.df'))return;const d=dn(s.n);if(d){el.insertAdjacentHTML('beforeend','<small class="df">'+d+'</small>')}});
+ document.querySelectorAll('table.l td:first-child,table.t td:first-child').forEach(td=>{if(td.querySelector('.df')||td.closest('.dr'))return;const k=td.textContent.trim();if(ENTDEF[k])td.insertAdjacentHTML('beforeend','<small class="df">'+ENTDEF[k]+'</small>')});
+ document.querySelectorAll('.fvc').forEach((el,i)=>{const a=F.steps[i],b=F.steps[i+1];if(!a||!b||el.querySelector('.df'))return;el.insertAdjacentHTML('beforeend','<small class="df calc">转化率 = '+b.n+'人数 ÷ '+a.n+'人数</small>')});
+ document.querySelectorAll('table.l th').forEach(th=>{if(th.querySelector('.df'))return;const x=th.textContent.trim();const i=F.steps.findIndex(s=>x==='→ '+s.n);if(i>0){th.insertAdjacentHTML('beforeend','<small class="df calc">'+F.steps[i].n+'人数 ÷ '+F.steps[i-1].n+'人数</small>')}else if(x.startsWith('总转化率')){th.insertAdjacentHTML('beforeend','<small class="df calc">'+F.steps[F.steps.length-1].n+'人数 ÷ '+F.steps[0].n+'人数</small>')}});
+ document.querySelectorAll('.tile .n').forEach(n=>{if(n.querySelector('.df'))return;const x=n.textContent.trim();if(x==='总转化率'){n.insertAdjacentHTML('beforeend','<small class="df calc">'+F.steps[F.steps.length-1].n+'人数 ÷ '+F.steps[0].n+'人数</small>')}else if(x==='掉得最多的一步'){n.insertAdjacentHTML('beforeend','<small class="df calc">流失率最大的一步；流失率 = 1 − 该步转化率</small>')}});
+}
+(function(){const pb=prdBody;prdBody=function(name,full){let h=pb(name,full);if(name!=='漏斗分析')return h;
+ const dn=(F,n)=>(F.id==='content'&&n==='进入内容详情')?STEPDEF['进入内容详情#内容付费']:(STEPDEF[n]||'');
+ h+='<h3>附：各流程步骤定义</h3><p class="muted">每一步统计的是“完成了该步动作的去重用户数”；整体转化率 = 最后一步人数 ÷ 第一步人数；同一用户须在窗口期内按顺序完成各步才计入下一步。</p>';
+ FLOWS.forEach(F=>{h+=`<h4>${F.name}</h4><div class="tw"><table class="t"><tr><th>步骤</th><th>名称</th><th>定义</th><th>如何计算</th></tr>${F.steps.map((s,i)=>`<tr><td>${i+1}</td><td>${s.n}</td><td>${dn(F,s.n)}</td><td>${i?'转化率 = '+s.n+'人数 ÷ '+F.steps[i-1].n+'人数；流失 = '+F.steps[i-1].n+'人数 − '+s.n+'人数':'流程起点，人数为去重用户数'}</td></tr>`).join('')}</table></div>`;
+  const ent=F.entries.filter(e=>ENTDEF[e]);if(ent.length)h+=`<div class="tw" style="margin-top:8px"><table class="t"><tr><th></th><th>${F.entry}</th><th>定义</th></tr>${ent.map((e,i)=>`<tr><td>${i+1}</td><td>${e}</td><td>${ENTDEF[e]}</td></tr>`).join('')}</table></div>`});
+ return h}})();
+(function(){const o=window.fLost;if(typeof o!=='function')return;window.fLost=function(i){o.apply(this,arguments);const F=FLOWS.find(x=>x.id===FS.f),a=F.steps[i].n,b=F.steps[i+1].n,d=document.getElementById('dr');if(!d)return;
+ const add=(el,t)=>{if(el&&!el.querySelector('.df'))el.insertAdjacentHTML('beforeend','<small class="df calc">'+t+'</small>')};
+ if(!d.querySelector('.cc'))d.querySelector('h2').insertAdjacentHTML('afterend','<div class="cc"><div>流失用户 = 到达「'+a+'」，但在窗口期内没有完成「'+b+'」的用户</div><div>下面各组占比 = 该组流失人数 ÷ 总流失人数</div></div>');
+ d.querySelectorAll('.mg div').forEach(x=>{const k=x.querySelector('span').textContent.trim();if(k==='流失人数')add(x,a+'人数 − '+b+'人数');if(k==='占上一步')add(x,'流失人数 ÷ '+a+'人数')});
+ d.querySelectorAll('.card h3').forEach(h=>{add(h.parentNode.querySelector('h3'),'');const t=h.textContent.trim();if(t==='用户类型'||t==='渠道'){h.insertAdjacentHTML('afterend','<div class="df calc" style="margin:-6px 0 8px">占比 = 该'+t+'的流失人数 ÷ 总流失人数</div>')}});
+ d.querySelectorAll('.df.calc:empty').forEach(e=>e.remove());tipify(d)}})();
 
-  function enter() {
-    clearInterval(timer);
-    home.style.display = 'flex';
-    log.textContent = '已进入首页';
-  }
+function tipify(root){root=root||document;
+ const put=(el,txt)=>{if(!el||!txt)return;el.dataset.tip=(el.dataset.tip?el.dataset.tip+'\n':'')+txt;if(!el.querySelector(':scope>.ti'))el.insertAdjacentHTML('beforeend','<i class="ti" aria-label="说明">i</i>')};
+ root.querySelectorAll('.card>.s').forEach(x=>{put(x.parentNode.querySelector(':scope>h3'),x.textContent.trim());x.remove()});
+ root.querySelectorAll('.fbar .hint').forEach((x,i)=>{const t=x.textContent.trim();if(i===0)put(x.parentNode.querySelector('b'),t);else put(x.parentNode.querySelector('label'),t);x.remove()});
+ root.querySelectorAll('.cc').forEach(c=>{const h=c.previousElementSibling;put(h&&/^H[1-4]$/.test(h.tagName)?h:(c.parentNode.querySelector('h3,h2')),[...c.children].map(x=>x.textContent.trim()).join('\n'));c.remove()});
+ root.querySelectorAll('.df').forEach(d=>{const p=d.parentElement;const t=d.textContent.trim();if(p&&p.classList.contains('n')||p&&p.classList.contains('fvn')||p&&p.classList.contains('fvc')||p&&(p.tagName==='TH'||p.tagName==='TD'||p.tagName==='DIV'))put(p,t);else put(p,t);d.remove()})}
+function defsHook(){defsHook0();tipify()}
+(function(){let tip=null,pin=null;
+ const show=(el)=>{if(!tip){tip=document.createElement('div');tip.id='tip';document.body.appendChild(tip)}tip.textContent=el.dataset.tip;tip.style.display='block';const r=el.getBoundingClientRect(),w=tip.offsetWidth,h=tip.offsetHeight;let x=Math.min(Math.max(8,r.left),innerWidth-w-8),y=r.bottom+8;if(y+h>innerHeight-8)y=Math.max(8,r.top-h-8);tip.style.left=x+'px';tip.style.top=y+'px'};
+ const hide=()=>{if(tip)tip.style.display='none'};
+ document.addEventListener('mouseover',e=>{if(pin)return;const t=e.target.closest&&e.target.closest('[data-tip]');if(t)show(t);else hide()});
+ document.addEventListener('click',e=>{const i=e.target.closest&&e.target.closest('.ti');if(i){const t=i.parentNode;if(pin===t){pin=null;hide()}else{pin=t;show(t)}e.stopPropagation()}else if(pin){pin=null;hide()}},true);
+ window.addEventListener('scroll',()=>{if(!pin)hide()},true)})();
 
-  function openAd() {
-    toast.style.display = 'block';
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { toast.style.display = 'none'; }, 1500);
-  }
+const OV={m:0};
+const KPI=[['DAU 日活',24000,'num',.04,0],['新增用户',2900,'num',.07,0],['次日留存',41.5,'pct',.03,0],['人均在线时长',18.5,'min',.05,0],['订单支付数',1750,'num',.07,0],['搜索次数',9800,'num',.06,0],['内容总曝光',520000,'num',.05,0],['崩溃率',0.42,'pct',.12,1]];
+CUSTOM['数据概览']=function(){const m=MODS[S.m];const k=KPI.map((t,i)=>{const LK=[['活跃用户',0],['新增与渠道',0],['留存分析',0]][i];const a=LK?ser(CFGN[LK[0]].tiles[LK[1]].base,CFGN[LK[0]].tiles[LK[1]].vol,'m'+LK[0]+'t'+LK[1],Math.max(S.n,14),t[2],0):ser(t[1],t[3],'ov'+i,Math.max(S.n,14),t[2],0),v=a[a.length-1],p=a[a.length-2];return {t,a:a.slice(-14),v,p,i}});
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p>`;
+ const al=k.filter(x=>x.t[2]==='pct'?Math.abs(x.v-x.p)>1.2:Math.abs(x.v/x.p-1)>.06);
+ if(al.length)h+=`<div class="alerts"><b>今日提醒：</b>${al.map(x=>`${x.t[0]}较昨日 <b class="${cls(x.v,x.p,x.t[4])}">${dl(x.v,x.p,x.t[2])}</b>`).join('；')}。点对应卡片看趋势。</div>`;
+ h+=`<div class="kp">${k.map(x=>`<div class="tile ${x.i===OV.m?'on':''}" onclick="ovSel(${x.i})"><div class="n">${x.t[0]}</div><div class="v">${fmt(x.v,x.t[2])}</div><div class="d"><span>较昨日 <b class="${cls(x.v,x.p,x.t[4])}">${dl(x.v,x.p,x.t[2])}</b></span></div>${spark(x.a)}</div>`).join('')}</div>`;
+ const t=KPI[OV.m];h+=`<div class="grid"><div class="card" style="grid-column:1/-1"><h3>${t[0]}趋势：本期 vs 上期</h3><div class="s">虚线是上一个同长度周期，用来判断涨跌是不是正常波动。</div>${line({series:[{n:'本期',base:t[1],vol:t[3],k:t[2]},{n:'上期',base:t[1]*.96,vol:t[3],k:t[2],dash:true}],zero:t[2]!=='pct'},'ovm'+OV.m)}</div>`;
+ h+=`<div class="card"><h3>今日 vs 昨日 分时对比</h3><div class="s">当天流量有没有异常，按小时看。</div>${line({labels:Array.from({length:24},(_,i)=>pad(i)+'时'),series:[{n:'今日',base:1200,vol:.12},{n:'昨日',base:1150,vol:.1,dash:true}]},'ovh')}</div>`;
+ h+=`<div class="card"><h3>核心转化：新用户从安装到付费</h3><div class="s">安装 → 首次打开 → 首次浏览内容 → 首次互动 → 首次付费。</div>${funnel({base:4100,steps:[['安装',1],['首次打开',.728],['首次浏览内容',.82],['首次互动',.38],['首次付费',.05]]},'ovf')}</div>`;
+ h+=`<div class="card"><h3>内容 TOP5</h3><div class="s">按曝光量。</div>${hbar({items:['资讯1','视频1','漫画1','短剧1','小说1'],base:300000,shape:[1,.82,.7,.55,.42]},'ovc')}</div>`;
+ h+=`<div class="card"><h3>页面 TOP5</h3><div class="s">按访问量。</div>${hbar({items:['首页','热点','影视专区','短视频专区','我的'],base:180000,shape:[1,.7,.52,.45,.3]},'ovp')}</div></div>`;
+ $('#view').innerHTML=h;const _d=document.getElementById('dr');if(_d)_d.remove()};
+function ovSel(i){OV.m=i;render()}
+// ---- 路径分析（桑基图）----
+const PG=['首页','热点','影视专区','短视频专区','搜索页','内容详情页','我的'];const PA={start:'首页'};
+function sankeyData(){const r=rng(hash('sk'+PA.start+S.fp+S.fu+S.fc)),T=Math.round(30000*scale()*S.n/14);
+ const w1=PG.filter(p=>p!==PA.start).map(p=>[p,.2+r()*(p==='内容详情页'?1.4:.7)]);w1.push(['退出',.45+r()*.2]);const s1=w1.reduce((a,b)=>a+b[1],0);
+ const c1=w1.map(([n,w])=>({n,v:T*w/s1}));const links=[];
+ c1.forEach(a=>{if(a.n==='退出')return;const w2=PG.filter(p=>p!==a.n).map(p=>[p,.15+r()*(p==='内容详情页'?1.2:.6)]);w2.push(['退出',.5+r()*.25]);const s2=w2.reduce((x,y)=>x+y[1],0);w2.forEach(([n,w])=>links.push({a:a.n,b:n,v:a.v*w/s2}))});
+ const c2={};links.forEach(l=>c2[l.b]=(c2[l.b]||0)+l.v);return {T,c1,links,c2:Object.entries(c2).map(([n,v])=>({n,v})).sort((a,b)=>b.v-a.v)}}
+function sankeySvg(D){const W=760,H=380,NW=14,xs=[20,350,560],gap=8,pad_=10;
+ const col=(arr)=>{const tot=arr.reduce((a,b)=>a+b.v,0),k=(H-pad_*2-gap*(arr.length-1))/tot;let y=pad_;return arr.map(o=>{const h=o.v*k;const r={...o,y,h,k,off:0};y+=h+gap;return r})};
+ const n0=col([{n:PA.start,v:D.T}]),n1=col(D.c1.slice().sort((a,b)=>b.v-a.v)),n2=col(D.c2);
+ const f=(arr,n)=>arr.find(o=>o.n===n);let sv='',nv='';
+ const ribbon=(sx,sy,tx,ty,h,c)=>{const mx=(sx+tx)/2;return `<path d="M${sx} ${sy} C${mx} ${sy} ${mx} ${ty} ${tx} ${ty}" fill="none" stroke="${c}" stroke-opacity=".32" stroke-width="${Math.max(1,h)}"/>`};
+ n1.forEach((b,i)=>{const a=n0[0],h=b.v*a.k;sv+=ribbon(xs[0]+NW,a.y+a.off+h/2,xs[1],b.y+b.off+h/2,h,COL[i%6]).replace('<path','<path><title>'+PA.start+' → '+b.n+'：'+Math.round(b.v).toLocaleString()+'</title></path><path').replace('<path><title>','<g><title>').replace('</title></path><path','</title></g><path');a.off+=h;b.off+=h});
+ const o1={};n1.forEach(b=>o1[b.n]=b);
+ D.links.slice().sort((x,y)=>y.v-x.v).forEach(l=>{const a=o1[l.a],b=f(n2,l.b);if(!a||!b)return;const h=l.v*a.k;sv+=ribbon(xs[1]+NW,a.y+a.off+h/2,xs[2],b.y+b.off+h/2,h,COL[n1.indexOf(a)%6]);a.off+=h;b.off+=h});
+ const node=(arr,x,lab)=>arr.map((o,i)=>`<rect x="${x}" y="${o.y}" width="${NW}" height="${Math.max(2,o.h)}" rx="2" fill="${o.n==='退出'?'var(--c5)':'var(--c1)'}"><title>${o.n}：${Math.round(o.v).toLocaleString()}</title></rect><text x="${lab==='l'?x-6:x+NW+6}" y="${o.y+o.h/2+4}" text-anchor="${lab==='l'?'end':'start'}" font-size="12" fill="var(--fg)" style="paint-order:stroke;stroke:var(--panel);stroke-width:4px;stroke-linejoin:round">${o.n} ${(o.v/D.T*100).toFixed(0)}%</text>`).join('');
+ return `<svg viewBox="0 0 ${W} ${H}">${sv}${node(n0,xs[0],'r')}${node(n1,xs[1],'r')}${node(n2,xs[2],'r')}</svg>`}
+CUSTOM['路径分析']=function(){const m=MODS[S.m],D=sankeyData();
+ const top=D.links.map(l=>({p:PA.start+' → '+l.a+' → '+l.b,v:l.v})).sort((a,b)=>b.v-a.v).slice(0,8);const ex1=D.c1.find(o=>o.n==='退出').v;
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p><div class="ctl"><label>起始页面</label><div class="chips" style="margin:0">${PG.map(p=>`<button class="${p===PA.start?'on':''}" onclick="paSel('${p}')">${p}</button>`).join('')}</div></div>`;
+ h+=`<div class="tiles"><div class="tile"><div class="n">从「${PA.start}」出发的访问次数</div><div class="v">${D.T.toLocaleString()}</div></div><div class="tile"><div class="n">第一步就离开</div><div class="v">${(ex1/D.T*100).toFixed(1)}%</div><div class="m"><b>涨：</b>首屏没留住人。<br><b>跌：</b>更多人愿意继续看。</div></div><div class="tile"><div class="n">最常去的下一页</div><div class="v" style="font-size:22px">${D.c1.filter(o=>o.n!=='退出').sort((a,b)=>b.v-a.v)[0].n}</div></div></div>`;
+ h+=`<div class="card"><h3>页面流转</h3><div class="s">从左到右：起点 → 第二步 → 第三步。线越粗人越多，红色是离开。鼠标放上去看人数。</div>${sankeySvg(D)}</div>`;
+ h+=`<div class="card" style="margin-top:12px"><h3>TOP 路径</h3><div class="s">从「${PA.start}」出发，最常见的三步路径。</div><div class="tw"><table class="l"><thead><tr><th style="text-align:left">路径</th><th>人数</th><th>占比</th></tr></thead><tbody>${top.map(o=>`<tr><td>${o.p}</td><td>${Math.round(o.v).toLocaleString()}</td><td>${(o.v/D.T*100).toFixed(1)}%</td></tr>`).join('')}</tbody></table></div></div>`;
+ const ms=METRICS.filter(x=>x.menu===m.name);h+=metricsBlock(ms);$('#view').innerHTML=h;const _d=document.getElementById('dr');if(_d)_d.remove()};
+function paSel(p){PA.start=p;render()}
+function metricsBlock(ms){return '';`<details><summary>本菜单包含的 ${ms.length} 个指标（含展示形式与依赖埋点）</summary><div class="tw"><table class="t"><tr><th>子模块</th><th>指标</th><th>展示形式</th><th>依赖埋点事件</th><th>计算公式</th></tr>${ms.map(x=>`<tr><td>${x.sub}</td><td>${x.name}</td><td><span class="tag">${x.form}</span></td><td>${x.ev.split('、').map(e=>e?`<code>${e}</code>`:'').join(' ')}</td><td>${x.f||''}</td></tr>`).join('')}</table></div></details>`}
+// ---- 事件分析 ----
+const EA={e:null,metric:'触发次数',group:'不分组'};
+const GRP={'不分组':[['全部',1]],'用户类型':[['老用户',.7],['新用户',.2],['游客',.1]],'渠道':[['渠道A',.45],['渠道B',.3],['渠道C',.25]],'会员身份':[['普通',.88],['VIP',.12]]};
+CUSTOM['事件分析']=function(){const m=MODS[S.m];if(!EA.e)EA.e=EVENTS[0].id;const ev=EVENTS.find(x=>x.id===EA.e)||EVENTS[0],base=2000+hash(ev.id)%60000;
+ const mk={'触发次数':[1,'num'],'触发用户数':[.42,'num'],'人均触发次数':[2.4,'x']}[EA.metric];
+ const series=GRP[EA.group].map(([n,sh])=>({n,base:EA.metric==='人均触发次数'?mk[0]*(.9+sh*.2):base*mk[0]*sh,vol:.09,k:mk[1]}));
+ const key='ea'+ev.id+EA.metric+EA.group;
+ const tot=series.map((s,i)=>{const a=ser(s.base,s.vol,key+i,S.n,s.k,0);return {n:s.n,sum:EA.metric==='人均触发次数'?a.reduce((x,y)=>x+y,0)/a.length:a.reduce((x,y)=>x+y,0),avg:a.reduce((x,y)=>x+y,0)/a.length,k:s.k}});
+ const gt=tot.reduce((a,b)=>a+b.sum,0);
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p><div class="ctl"><span><label>事件</label><select onchange="eaSet('e',this.value)">${EVENTS.map(x=>`<option value="${x.id}" ${x.id===ev.id?'selected':''}>${x.id}（${x.src}）</option>`).join('')}</select></span><span><label>指标</label><select onchange="eaSet('metric',this.value)">${['触发次数','触发用户数','人均触发次数'].map(x=>`<option ${x===EA.metric?'selected':''}>${x}</option>`).join('')}</select></span><span><label>分组</label><select onchange="eaSet('group',this.value)">${Object.keys(GRP).map(x=>`<option ${x===EA.group?'selected':''}>${x}</option>`).join('')}</select></span></div>`;
+ h+=`<div class="grid"><div class="card" style="grid-column:1/-1"><h3>${ev.id} · ${EA.metric}${EA.group!=='不分组'?'（按'+EA.group+'）':''}</h3><div class="s">${ev.src==='建议新增'?'该事件为建议新增，上线后才有数据；此处为示例。':'示例数据。'}</div>${line({series},key)}</div>`;
+ h+=`<div class="card"><h3>汇总</h3><div class="tw"><table class="l"><thead><tr><th style="text-align:left">${EA.group==='不分组'?'分组':EA.group}</th><th>${EA.metric==='人均触发次数'?'区间均值':'合计'}</th><th>日均</th>${EA.metric==='人均触发次数'?'':'<th>占比</th>'}</tr></thead><tbody>${tot.map(o=>`<tr><td>${o.n}</td><td>${fmt(o.sum,o.k)}</td><td>${fmt(o.avg,o.k)}</td>${EA.metric==='人均触发次数'?'':`<td>${(o.sum/gt*100).toFixed(1)}%</td>`}</tr>`).join('')}</tbody></table></div></div>`;
+ const rel=METRICS.filter(x=>x.ev.split('、').includes(ev.id));
+ h+=`<div class="card"><h3>这个事件用在哪些指标</h3><div class="s">共 ${rel.length} 个指标依赖它。</div>${rel.length?`<div class="leg" style="flex-direction:column;gap:3px;margin:0">${rel.slice(0,10).map(x=>`<span>${x.menu} · ${x.name}</span>`).join('')}${rel.length>10?`<span>……</span>`:''}</div>`:'<div class="s">暂无指标使用。</div>'}</div></div>`;
+ h+=metricsBlock(METRICS.filter(x=>x.menu===m.name));$('#view').innerHTML=h;const _d=document.getElementById('dr');if(_d)_d.remove()};
+function eaSet(k,v){EA[k]=v;render()}
+// ---- 埋点管理 ----
+const TM={q:'',src:'全部',sel:null,page:0};
+function evUse(id){return METRICS.filter(x=>x.ev.split('、').includes(id))}
+function evVol(e){return Math.round((3000+hash(e.id)%90000)*S.n*scale()/14)}
+function evStatus(e){if(e.src==='建议新增')return ['待开发','d'];return hash(e.id)%13===0?['触发量异常','w']:['正常','ok']}
+CUSTOM['埋点管理']=function(){const m=MODS[S.m];let L=EVENTS.map(e=>({...e,use:evUse(e.id).length,vol:evVol(e)}));
+ const cnt=s=>EVENTS.filter(e=>e.src===s).length;
+ if(TM.src!=='全部')L=L.filter(e=>e.src===TM.src);if(TM.q)L=L.filter(e=>e.id.includes(TM.q));L.sort((a,b)=>b.use-a.use||b.vol-a.vol);
+ const per=12,pages=Math.max(1,Math.ceil(L.length/per));if(TM.page>=pages)TM.page=pages-1;const pg=L.slice(TM.page*per,TM.page*per+per);
+ let h=`<h1>${m.name}</h1><p class="q">${m.q}</p><div class="tiles"><div class="tile"><div class="n">事件总数</div><div class="v">${EVENTS.length}</div></div><div class="tile"><div class="n">吃瓜网已有</div><div class="v">${cnt('吃瓜网已有')}</div></div><div class="tile"><div class="n">原表</div><div class="v">${cnt('原表')}</div></div><div class="tile"><div class="n">建议新增（待开发）</div><div class="v">${cnt('建议新增')}</div></div></div>`;
+ h+=`<div class="card"><div class="bar"><input type="text" id="tq" placeholder="搜索事件 ID" value="${TM.q}" oninput="tmQ(this.value)"><div class="chips" style="margin:0">${['全部','吃瓜网已有','原表','建议新增'].map(x=>`<button class="${x===TM.src?'on':''}" onclick="tmSrc('${x}')">${x}</button>`).join('')}</div><span class="c">共 ${L.length} 个事件，点一行看详情；触发量与状态为示例</span></div><div class="tw"><table class="l"><thead><tr><th style="text-align:left">事件 ID</th><th>来源</th><th>关联指标数</th><th>近期触发量</th><th>趋势</th><th>状态</th></tr></thead><tbody>${pg.map(e=>{const st=evStatus(e);return `<tr onclick="tmSel('${e.id}')"><td>${e.id}</td><td>${e.src}</td><td>${e.use}</td><td>${e.src==='建议新增'?'—':e.vol.toLocaleString()}</td><td style="width:120px">${e.src==='建议新增'?'':spark(ser(e.vol/S.n,.15,'tm'+e.id,14,'x',0))}</td><td><span class="st ${st[1]}">${st[0]}</span></td></tr>`}).join('')}</tbody></table></div><div class="pg"><button ${TM.page?'':'disabled'} onclick="tmPg(${TM.page-1})">上一页</button>${Array.from({length:pages},(_,i)=>`<button class="${i===TM.page?'on':''}" onclick="tmPg(${i})">${i+1}</button>`).join('')}<button ${TM.page<pages-1?'':'disabled'} onclick="tmPg(${TM.page+1})">下一页</button></div></div>`;
+ h+=metricsBlock(METRICS.filter(x=>x.menu===m.name));$('#view').innerHTML=h;tmDrawer()};
+function tmDrawer(){let d=document.getElementById('dr');if(d)d.remove();if(!TM.sel||MODS[S.m].name!=='埋点管理')return;const e=EVENTS.find(x=>x.id===TM.sel);if(!e)return;const u=evUse(e.id),st=evStatus(e);
+ const el=document.createElement('div');el.className='dr';el.id='dr';
+ el.innerHTML=`<button class="x" onclick="tmSel(null)">关闭</button><h2>${e.id}</h2><div class="s" style="color:var(--mut);font-size:12px">来源：${e.src} · 状态：<span class="st ${st[1]}">${st[0]}</span></div>
+ ${e.src==='建议新增'?'':`<div class="card" style="margin-top:12px"><h3>每天触发量</h3>${line({series:[{n:'触发次数',base:evVol(e)/S.n,vol:.12}]},'tmd'+e.id)}</div>`}
+ <div class="card" style="margin-top:12px"><h3>用在哪些指标（${u.length}）</h3>${u.length?`<div class="leg" style="flex-direction:column;gap:3px;margin:0">${u.slice(0,14).map(x=>`<span>${x.menu} · ${x.name}</span>`).join('')}${u.length>14?'<span>……</span>':''}</div>`:'<div class="s">暂无指标使用。</div>'}</div>
+ <div class="card" style="margin-top:12px"><h3>公共字段</h3><div class="s">每个事件都带：user_id、device_id、session_id、is_login、user_type、member_type、platform、os_version、app_version、device_model、channel、network_type、page_name、ref_page、event_time、server_time。业务字段待研发确认。</div></div>`;
+ document.body.appendChild(el)}
+function tmQ(v){TM.q=v;TM.page=0;const p=document.getElementById('tq').selectionStart;render();const e=document.getElementById('tq');e.focus();e.setSelectionRange(p,p)}
+function tmSrc(x){TM.src=x;TM.page=0;render()}
+function tmPg(p){TM.page=p;render()}
+function tmSel(i){TM.sel=i;tmDrawer()}
 
-  // 控件
-  document.querySelectorAll('#countSeg button').forEach(function (b) {
-    b.addEventListener('click', function () {
-      document.querySelectorAll('#countSeg button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-      b.setAttribute('aria-pressed', 'true');
-      cfg.count = parseInt(b.dataset.v, 10);
-      document.querySelectorAll('.row').forEach(function (r) {
-        r.classList.toggle('off', parseInt(r.dataset.i, 10) >= cfg.count);
-      });
-      start();
-    });
-  });
-  document.querySelectorAll('.row').forEach(function (r) {
-    var i = parseInt(r.dataset.i, 10);
-    r.querySelectorAll('button').forEach(function (b) {
-      b.addEventListener('click', function () {
-        r.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
-        b.setAttribute('aria-pressed', 'true');
-        cfg.types[i] = b.dataset.t;
-        start();
-      });
-    });
-  });
-  $('replayBtn').addEventListener('click', start);
-  $('homeReplay').addEventListener('click', start);
+// ===== 筛选 =====
+function clearSel(){CS.sel=null;FS.sel=null;TM.sel=null;const d=document.getElementById('dr');if(d)d.remove()}
+function presets(){$('#presets').innerHTML=[[7,'近7天'],[14,'近14天'],[30,'近30天']].map(p=>`<button class="pill ${S.n===p[0]?'on':''}" onclick="setN(${p[0]})">${p[1]}</button>`).join('')}
+function setN(n){S.n=n;S.end=new Date(END);clearSel();sync()}
+function sync(){const d=days();$('#d1').value=iso(d[0]);$('#d2').value=iso(d[d.length-1]);presets();render()}
+$('#d1').onchange=$('#d2').onchange=()=>{const a=new Date($('#d1').value+'T00:00:00'),b=new Date($('#d2').value+'T00:00:00');const bad=m=>{toast(m);const d=days();$('#d1').value=iso(d[0]);$('#d2').value=iso(d[d.length-1])};if(isNaN(a)||isNaN(b))return bad('请选择完整的开始和结束日期');if(a>b)return bad('开始日期不能晚于结束日期');if(b>new Date(END))return bad('结束日期最晚为 '+iso(new Date(END))+'（数据 T+1 更新）');const n=Math.round((b-a)/864e5)+1;if(n>60)return bad('查询范围最长 60 天');S.n=n;S.end=b;clearSel();presets();render()};
+for(const [id,k] of [['fu','fu'],['fc','fc']])$('#'+id).onchange=e=>{S[k]=e.target.value;clearSel();render()};
 
-  // 按窗口高度缩放手机
-  function fit() {
-    var s = Math.min(1, (window.innerHeight - 90) / 956, (window.innerWidth - 32) / 440);
-    s = Math.max(s, 0.4);
-    $('phone').style.setProperty('--s', s);
-    $('phoneWrap').style.setProperty('--s', s);
-  }
-  window.addEventListener('resize', fit);
-  fit();
-  start();
-})();
-</script>
-</body>
-</html>
+// ===== 通用页头 / 导出 / 口径 / 扩展模块 =====
+function toast(x){const o=document.querySelector('.toast');if(o)o.remove();const e=document.createElement('div');e.className='toast';e.textContent=x;document.body.appendChild(e);setTimeout(()=>e.remove(),2600)}
+function decorate(){const m=MODS[S.m],v=$('#view'),h=v.querySelector('h1');if(!h||v.querySelector('.ph'))return;
+ const ph=document.createElement('div');ph.className='ph';ph.innerHTML=`<div><div class="bc">${m.group} / ${m.name}</div></div><div class="acts"><span class="upd">数据更新至 2026-10-28 02:00（T+1）</span><button class="btn" onclick="defOpen()">指标口径</button><button class="btn" onclick="prdOpen()">PRD</button><button class="btn" onclick="csvOut()">导出 CSV</button></div>`;
+ h.parentNode.insertBefore(ph,h);ph.firstElementChild.appendChild(h);
+ const X={'新增与渠道':chanCmp,'活跃用户':distCards}[m.name];if(X){const dt=v.querySelector(':scope > details');const html=X();dt?dt.insertAdjacentHTML('beforebegin',html):v.insertAdjacentHTML('beforeend',html)}}
+function csvOut(){const t=$('#view table.l')||$('#view table.heat')||$('#view .vtb table')||$('#view table.t');if(!t){toast('当前页面没有可导出的表格');return}
+ const rows=[...t.rows].map(r=>[...r.cells].map(c=>'"'+c.innerText.replace(/\s+/g,' ').trim().replace(/"/g,'""')+'"').join(','));
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+rows.join('\n')],{type:'text/csv'}));a.download=MODS[S.m].name+'.csv';a.click();toast('已导出 '+MODS[S.m].name+'.csv')}
+function defOpen(){const m=MODS[S.m],ms=METRICS.filter(x=>x.menu===m.name);const d=document.getElementById('dr');if(d)d.remove();const el=document.createElement('div');el.className='dr';el.id='dr';
+ el.innerHTML=`<button class="x" onclick="this.parentNode.remove()">关闭</button><h2>${m.name} · 指标口径</h2><div class="s" style="color:var(--mut);font-size:12px">每个指标怎么算、依赖哪些埋点。共 ${ms.length} 个。</div>`+ms.map(x=>`<div class="card" style="margin-top:10px"><h3>${x.name} <span class="tag">${x.form}</span></h3><div class="s">${x.sub}</div><div style="font-size:13px">${x.f||'—'}</div><div style="margin-top:6px">${x.ev.split('、').map(e=>e?`<code>${e}</code>`:'').join(' ')}</div></div>`).join('');document.body.appendChild(el)}
+const CH={sel:[0,1,2]},CHN=['渠道A','渠道B','渠道C','渠道D','渠道E','渠道F','渠道G','渠道H'],CHS=[.3,.22,.15,.1,.08,.06,.05,.04];
+function chRow(i){const r=rng(hash('chr'+i+S.fp+S.fu));return {n:CHN[i],nu:Math.round(2800*scale()*S.n/14*CHS[i]*(.9+r()*.2)),d1:30+r()*18,mn:9+r()*10,pay:1.5+r()*4.5,cr:40+r()*25}}
+function chTog(i){const k=CH.sel.indexOf(i);if(k>=0){if(CH.sel.length>1)CH.sel.splice(k,1)}else if(CH.sel.length<5)CH.sel.push(i);else toast('最多同时对比 5 个渠道');render()}
+function chanCmp(){const R=CHN.map((_,i)=>chRow(i));return `<div class="card" style="margin-top:12px"><h3>渠道对比</h3><div class="s">勾选渠道（最多 5 个），对比新增趋势，并在表里比较留存和付费质量。量大不等于质量好。</div><div class="grid"><div class="tw"><table class="t" style="min-width:420px"><tr><th></th><th>渠道</th><th>新增用户</th><th>次日留存</th><th>人均时长</th><th>看内容率</th><th>付费转化率</th></tr>${R.map((o,i)=>`<tr><td><input type="checkbox" ${CH.sel.includes(i)?'checked':''} onchange="chTog(${i})"></td><td>${o.n}</td><td>${o.nu.toLocaleString()}</td><td>${o.d1.toFixed(1)}%</td><td>${o.mn.toFixed(1)} 分钟</td><td>${o.cr.toFixed(1)}%</td><td>${o.pay.toFixed(1)}%</td></tr>`).join('')}</table></div><div>${line({series:CH.sel.map(i=>({n:CHN[i],base:R[i].nu/S.n,vol:.1}))},'chc')}</div></div></div>`}
+function distCards(){const r=rng(hash('dist'+S.fp+S.fu+S.fc)),TT=Math.round(52000*scale()*S.n/14);
+ const D=(t,s,cats,w)=>{const ws=w.map(x=>x*(.92+r()*.16)),sm=ws.reduce((a,b)=>a+b,0),mx=Math.max(...ws);return `<div class="card"><h3>${t}</h3><div class="s">${s}</div><div class="fun">${cats.map((c,i)=>`<div class="r"><span>${c}</span><div class="b" style="width:${ws[i]/mx*100}%"></div><span class="p">${(ws[i]/sm*100).toFixed(1)}% · ${Math.round(TT*ws[i]/sm).toLocaleString()}</span></div>`).join('')}</div></div>`};
+ return `<div class="grid" style="margin-top:12px">`+D('单次使用时长分布','每次打开 App 用了多久。集中在 10 秒以内，说明首屏没留住人。',['不足 10 秒','10–30 秒','30 秒–1 分','1–3 分','3–10 分','10–30 分','30 分以上'],[.12,.14,.13,.22,.2,.13,.06])+D('每日启动次数分布','一个人一天打开几次。看用户是偶尔来，还是每天多次来。',['1 次','2 次','3–5 次','6–9 次','10 次以上'],[.38,.24,.25,.09,.04])+`</div>`}
+const h0=parseInt((location.hash.match(/m(\d+)/)||[])[1]);if(h0>=1&&h0<=MODS.length)S.m=h0-1;
+nav();sync();
+</script></body></html>
